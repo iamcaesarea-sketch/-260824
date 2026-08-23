@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitleTag">CineRec — 영화 리뷰 & 맞춤 추천</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="lang-switch" id="langSwitch">
+    <button type="button" data-lang="ko" id="langKo">한국어</button>
+    <button type="button" data-lang="en" id="langEn">English</button>
+  </div>
+  <div class="eyebrow" id="eyebrowText">CINEREC · TMDB 실시간 연동</div>
+  <h1>CineRec</h1>
+  <p id="taglineText">영화를 보고 별점과 리뷰를 남기면, 9가지 항목으로 분석해서<br>TMDB의 전 세계 영화 데이터베이스에서 실시간으로 취향에 맞는 다음 영화를 찾아드려요.</p>
+</header>
+
+<main>
+  <div class="status-line"><span class="dot" id="statusDot"></span><span id="statusText">서버 연동 상태 확인 중…</span></div>
+
+  <div class="steps" id="steps">
+    <span data-s="1">01 영화 선택</span>
+    <span data-s="2">02 별점 · 리뷰</span>
+    <span data-s="3">03 세부 평가</span>
+    <span data-s="4">04 추천 결과</span>
+  </div>
+
+  <!-- STEP 1 -->
+  <section class="panel" id="panel-1">
+    <h2 id="step1Title">어떤 영화를 보셨나요?</h2>
+    <div class="sub" id="step1sub">TMDB 전체 카탈로그에서 실시간으로 검색해요.</div>
+    <input type="text" id="search" placeholder="영화 제목 검색… (예: 오디세이, 기생충, Dune)">
+    <div class="movie-grid" id="movieGrid"></div>
+    <div class="btn-row">
+      <span></span>
+      <button class="primary" id="toStep2" disabled>다음</button>
+    </div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="panel" id="panel-2" style="display:none;">
+    <div class="selected-card" id="selectedCard"></div>
+    <div class="sub" id="step2sub">전체적으로 어떠셨어요? 별점을 매기고 짧게 리뷰를 남겨주세요.</div>
+    <div class="star-row" id="starRow"></div>
+    <div class="rating-label" id="ratingLabel"></div>
+    <div style="margin-top:20px;">
+      <textarea id="reviewText" placeholder="예: 배우들 연기가 정말 인상적이었고 음악도 몰입감을 더해줬어요. 다만 후반부 각본이 좀 늘어지는 느낌..."></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="ghost" id="back1">이전</button>
+      <button class="primary" id="toStep3" disabled>다음</button>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="panel" id="panel-3" style="display:none;">
+    <h2 id="step3Title">세부적으로 평가해 주세요</h2>
+    <div class="sub" id="step3sub"></div>
+    <div class="aspect-grid" id="aspectContainer"></div>
+    <div class="btn-row">
+      <button class="ghost" id="back2">이전</button>
+      <button class="primary" id="toStep4">추천 받기</button>
+    </div>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="panel" id="panel-4" style="display:none;">
+    <h2 id="step4Title">이런 영화는 어떠세요?</h2>
+    <div class="verdict" id="verdictBox"></div>
+    <div id="resultList"></div>
+    <div class="btn-row">
+      <button class="ghost" id="restart">다른 영화 리뷰하기</button>
+      <span></span>
+    </div>
+    <div class="disclaimer" id="disclaimerText"></div>
+  </section>
+
+  <div class="history" id="historyBox" style="display:none;">
+    <h3 id="historyTitle">내 리뷰 기록</h3>
+    <div id="historyList"></div>
+  </div>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
