@@ -21,17 +21,26 @@
   button.ghost:hover{color:var(--text); border-color:var(--text-dim); background:transparent;}
   button:disabled{opacity:0.5; cursor:not-allowed;}
   .error{color:var(--danger); font-size:13px; margin-top:8px;}
-  table{width:100%; border-collapse:collapse; font-size:13px; margin-top:20px;}
-  th, td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
-  th{color:var(--text-dim); font-weight:600; font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em;}
-  .stars{color:var(--accent); white-space:nowrap;}
-  .aspects{color:var(--text-dim); font-size:11.5px;}
-  .review-text{max-width:320px; white-space:pre-wrap;}
-  .meta{color:var(--text-dim); font-size:11.5px; white-space:nowrap;}
-  #dashboard{display:none;}
-  .toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:10px;}
+  #dashboard{display:none; max-width:720px; margin:0 auto;}
+  .toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; gap:10px;}
   .count{color:var(--text-dim); font-size:13px;}
   .toolbar-right{display:flex; gap:8px;}
+  .date-tabs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;}
+  .date-tab{
+    font-family:inherit; font-size:12.5px; font-weight:600; padding:7px 14px; border-radius:16px;
+    border:1px solid var(--line); background:var(--bg-alt); color:var(--text-dim); cursor:pointer;
+  }
+  .date-tab:hover{border-color:var(--text-dim); color:var(--text);}
+  .date-tab.selected{border-color:var(--accent); background:rgba(0,210,255,0.12); color:var(--text);}
+  .review-card{background:var(--card); border:1px solid var(--line); border-radius:6px; padding:16px 18px; margin-bottom:14px;}
+  .rc-head{display:flex; justify-content:space-between; align-items:baseline; gap:8px 14px; flex-wrap:wrap; margin-bottom:4px;}
+  .rc-title{font-size:16px; font-weight:700;}
+  .rc-stars{color:var(--accent); font-size:13px; white-space:nowrap;}
+  .rc-time{color:var(--text-dim); font-size:11.5px; margin-bottom:10px;}
+  .rc-text{font-size:13.5px; line-height:1.6; white-space:pre-wrap; margin:0 0 10px;}
+  .rc-aspects{color:var(--text-dim); font-size:11.5px; margin-bottom:6px;}
+  .rc-filters{color:var(--accent-dim); font-size:11.5px;}
+  .empty-note{color:var(--text-dim); font-size:13px; padding:20px 0;}
 </style>
 </head>
 <body>
@@ -52,14 +61,8 @@
       <button class="ghost" id="logoutBtn">로그아웃</button>
     </div>
   </div>
-  <table>
-    <thead>
-      <tr>
-        <th>날짜</th><th>영화</th><th>별점</th><th>리뷰</th><th>세부 평가</th><th>언어</th>
-      </tr>
-    </thead>
-    <tbody id="rows"></tbody>
-  </table>
+  <div class="date-tabs" id="dateTabs"></div>
+  <div id="reviewCards"></div>
 </div>
 
 <script>
@@ -67,6 +70,18 @@ const ASPECT_LABEL = {
   direction:'연출', script:'각본', originality:'독창성', theme:'주제', miseEnScene:'미장센',
   acting:'연기', genre:'장르', editing:'편집', music:'음악',
 };
+const TYPE_LABEL = { commercial:'상업 영화', indie:'독립 영화', short:'단편 영화' };
+
+function filtersStr(f){
+  if(!f) return '';
+  const parts = [];
+  if(f.genres && f.genres.length) parts.push('장르: '+f.genres.join(', '));
+  if(f.runtime) parts.push('러닝타임 ≤'+f.runtime+'분');
+  if(f.decade === 'classic') parts.push('고전영화(1980년 이전)');
+  else if(f.decade) parts.push(f.decade+'년대');
+  if(f.type && f.type!=='all') parts.push('유형: '+(TYPE_LABEL[f.type]||f.type));
+  return parts.join(' · ') || '(선택 안 함)';
+}
 
 function starStr(rating){
   const full = Math.floor(rating);
@@ -85,6 +100,13 @@ function showDashboard(){
   document.querySelector('#dashboard').style.display = 'block';
 }
 
+let allReviews = [];
+let selectedDate = 'all';
+
+function dateKeyOf(iso){
+  return (iso || '').slice(0, 10);
+}
+
 async function loadReviews(){
   try{
     const res = await fetch('/api/list-reviews', { credentials: 'include' });
@@ -92,7 +114,9 @@ async function loadReviews(){
     if(res.status === 429){ showLogin('너무 많이 시도했어요. 잠시 후 다시 시도해 주세요.'); return false; }
     if(!res.ok){ showLogin('데이터를 불러오지 못했어요. (서버 환경변수 설정을 확인하세요)'); return false; }
     const data = await res.json();
-    renderRows(data.reviews || []);
+    allReviews = data.reviews || [];
+    selectedDate = 'all';
+    renderReviews();
     showDashboard();
     return true;
   }catch(e){
@@ -101,24 +125,55 @@ async function loadReviews(){
   }
 }
 
-function renderRows(reviews){
-  const tbody = document.querySelector('#rows');
-  tbody.innerHTML = '';
-  document.querySelector('#count').textContent = reviews.length + '개';
-  reviews.forEach(r=>{
+function renderReviews(){
+  const tabsBox = document.querySelector('#dateTabs');
+  const cardsBox = document.querySelector('#reviewCards');
+
+  const dates = [...new Set(allReviews.map(r=> dateKeyOf(r.createdAt)))].sort((a,b)=> b.localeCompare(a));
+  tabsBox.innerHTML = '';
+  const allTab = document.createElement('button');
+  allTab.type = 'button';
+  allTab.className = 'date-tab' + (selectedDate==='all' ? ' selected' : '');
+  allTab.textContent = '전체 (' + allReviews.length + ')';
+  allTab.onclick = ()=>{ selectedDate = 'all'; renderReviews(); };
+  tabsBox.appendChild(allTab);
+  dates.forEach(d=>{
+    const count = allReviews.filter(r=> dateKeyOf(r.createdAt)===d).length;
+    const tab = document.createElement('button');
+    tab.type = 'button';
+    tab.className = 'date-tab' + (selectedDate===d ? ' selected' : '');
+    tab.textContent = d + ' (' + count + ')';
+    tab.onclick = ()=>{ selectedDate = d; renderReviews(); };
+    tabsBox.appendChild(tab);
+  });
+
+  const filtered = (selectedDate==='all' ? allReviews : allReviews.filter(r=> dateKeyOf(r.createdAt)===selectedDate))
+    .slice()
+    .sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt));
+
+  document.querySelector('#count').textContent = filtered.length + '개';
+  cardsBox.innerHTML = '';
+  if(filtered.length===0){
+    cardsBox.innerHTML = '<div class="empty-note">표시할 리뷰가 없어요.</div>';
+    return;
+  }
+  filtered.forEach(r=>{
     const aspectsStr = Object.entries(r.aspects||{})
       .map(([k,v])=> (ASPECT_LABEL[k]||k) + ' ' + v)
       .join(' · ');
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td class="meta">${new Date(r.createdAt).toLocaleString('ko-KR')}</td>
-      <td>${r.title || ''}</td>
-      <td class="stars">${starStr(r.rating)} (${r.rating})</td>
-      <td class="review-text">${(r.reviewText||'').replace(/</g,'&lt;')}</td>
-      <td class="aspects">${aspectsStr}</td>
-      <td class="meta">${r.lang || ''}</td>
+    const card = document.createElement('div');
+    card.className = 'review-card';
+    card.innerHTML = `
+      <div class="rc-head">
+        <span class="rc-title">${r.title || ''}</span>
+        <span class="rc-stars">${starStr(r.rating)} (${r.rating})</span>
+      </div>
+      <div class="rc-time">${new Date(r.createdAt).toLocaleString('ko-KR')} · ${r.lang || ''}</div>
+      ${r.reviewText ? `<div class="rc-text">${r.reviewText.replace(/</g,'&lt;')}</div>` : ''}
+      ${aspectsStr ? `<div class="rc-aspects">${aspectsStr}</div>` : ''}
+      <div class="rc-filters">${filtersStr(r.filters)}</div>
     `;
-    tbody.appendChild(tr);
+    cardsBox.appendChild(card);
   });
 }
 

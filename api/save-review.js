@@ -36,6 +36,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
+  const filters = body.filters && typeof body.filters === 'object' ? body.filters : {};
   const entry = {
     title: String(body.title || '').slice(0, 200),
     tmdbId: Number(body.tmdbId) || null,
@@ -43,6 +44,12 @@ module.exports = async function handler(req, res) {
     aspects: body.aspects && typeof body.aspects === 'object' ? body.aspects : {},
     reviewText: String(body.reviewText || '').slice(0, 1000),
     lang: body.lang === 'en' ? 'en' : 'ko',
+    filters: {
+      genres: Array.isArray(filters.genres) ? filters.genres.map((g) => String(g).slice(0, 40)).slice(0, 20) : [],
+      runtime: filters.runtime != null ? (Number(filters.runtime) || null) : null,
+      type: typeof filters.type === 'string' ? filters.type.slice(0, 20) : 'all',
+      decade: filters.decade === 'classic' ? 'classic' : (filters.decade != null ? (Number(filters.decade) || null) : null),
+    },
     createdAt: new Date().toISOString(),
   };
 
