@@ -4,8 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="pageTitleTag">CineRec — 영화 리뷰 & 맞춤 추천</title>
+<meta name="description" content="영화를 보고 별점과 리뷰를 남기면, 9가지 항목으로 분석해서 TMDB의 전 세계 영화 데이터베이스에서 실시간으로 취향에 맞는 다음 영화를 찾아드려요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cinereccc.vercel.app/">
+<meta property="og:title" content="CineRec — 영화 리뷰 & 맞춤 추천">
+<meta property="og:description" content="영화를 보고 별점과 리뷰를 남기면, TMDB 전 세계 영화 데이터베이스에서 실시간으로 취향에 맞는 다음 영화를 찾아드려요.">
+<meta property="og:image" content="https://cinereccc.vercel.app/ticket.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CineRec — 영화 리뷰 & 맞춤 추천">
+<meta name="twitter:description" content="영화를 보고 별점과 리뷰를 남기면, TMDB 전 세계 영화 데이터베이스에서 실시간으로 취향에 맞는 다음 영화를 찾아드려요.">
+<meta name="twitter:image" content="https://cinereccc.vercel.app/ticket.png">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-<link rel="stylesheet" href="style.css?v=9">
+<link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
 
@@ -31,15 +41,15 @@
   <div class="status-line"><span class="dot" id="statusDot"></span><span id="statusText">서버 연동 상태 확인 중…</span></div>
 
   <div class="steps" id="steps">
-    <span data-s="1">01 영화 선택</span>
-    <span data-s="2">02 별점 · 리뷰</span>
-    <span data-s="3">03 세부 평가</span>
-    <span data-s="4">04 추천 결과</span>
+    <span data-s="1">01 영화 선택 🎞️</span>
+    <span data-s="2">02 별점·리뷰 ⭐️</span>
+    <span data-s="3">03 세부 평가 👓</span>
+    <span data-s="4">04 추천 결과 🍿</span>
   </div>
 
   <!-- STEP 1 -->
   <section class="panel" id="panel-1">
-    <h2 id="step1Title">어떤 영화를 보셨나요?</h2>
+    <h2 id="step1Title">🎞️ 어떤 영화를 보셨나요?</h2>
     <div class="sub" id="step1sub">TMDB 전체 카탈로그에서 실시간으로 검색해요.</div>
     <input type="text" id="search" placeholder="영화 제목 검색… (예: 오디세이, 올드보이, Dune)">
     <div class="search-hint" id="searchHint">검색어에 미세한 오타가 있거나 띄어쓰기가 원본 데이터와 다르면 인식하지 못할 수 있어요.</div>
@@ -95,6 +105,6 @@
 </main>
 </div>
 
-<script src="script.js?v=4"></script>
+<script src="script.js?v=5"></script>
 </body>
 </html>

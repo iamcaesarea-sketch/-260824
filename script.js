@@ -8,14 +8,14 @@ const I18N = {
     eyebrow: '장편·독립·단편 영화 DB 수록',
     tagline: '영화를 보고 별점과 리뷰를 남기면, 9가지 항목으로 분석해서<br>TMDB의 전 세계 영화 데이터베이스에서 실시간으로 취향에 맞는 다음 영화를 찾아드려요.',
     statusChecking: '서버 연동 상태 확인 중…',
-    statusOn: '서버 연동 켜짐 — TMDB Search / Discover API로 전 세계 영화를 실시간 검색·추천합니다.',
+    statusOn: '서버 연동 켜짐 - 실시간 검색·추천합니다.',
     statusOff: '서버 연동 꺼짐 — /api/tmdb 서버 함수에 연결할 수 없어요. Vercel 또는 Netlify에 배포하고 TMDB_API_KEY 환경변수를 등록해야 이용할 수 있어요. (자세한 방법은 <a href="https://www.themoviedb.org/settings/api" target="_blank" rel="noopener">README.md</a> 참고)',
-    steps: ['01 영화 선택', '02 별점 · 리뷰', '03 세부 평가', '04 추천 결과'],
-    step1Title: '어떤 영화를 보셨나요?',
+    steps: ['01 영화 선택 🎞️', '02 별점·리뷰 ⭐️', '03 세부 평가 👓', '04 추천 결과 🍿'],
+    step1Title: '🎞️ 어떤 영화를 보셨나요?',
     step1sub: 'TMDB 전체 카탈로그에서 실시간으로 검색해요.',
     searchPlaceholder: '영화 제목 검색… (예: 오디세이, 올드보이, Dune)',
-    searchHint: '검색어에 미세한 오타가 있거나 띄어쓰기가 원본 데이터와 다르면 인식하지 못할 수 있어요.',
-    emptyNoteDefault: '영화 제목을 입력하면 TMDB 전체 카탈로그에서 실시간으로 검색해요.',
+    searchHint: '· 검색어에 미세한 오타가 있거나 띄어쓰기가 원본 데이터와 다르면 인식하지 못할 수 있어요.',
+    emptyNoteDefault: '· 영화 제목을 입력하면 TMDB 전체 카탈로그에서 실시간으로 검색해요.',
     emptyNoteNoServer: '아직 TMDB 서버 연동이 안 돼 있어서 영화를 검색할 수 없어요.<br>이 사이트를 Vercel 또는 Netlify에 배포하고 <b>TMDB_API_KEY</b> 환경변수를 등록해 주세요. (README.md 참고)',
     loadingNote: 'TMDB에서 검색 중…',
     emptyNoteNoResults: '검색 결과가 없어요.',
@@ -72,14 +72,14 @@ const I18N = {
     eyebrow: 'Feature · Indie · Short Films Included',
     tagline: 'Rate and review a movie you\'ve watched across 9 aspects,<br>and we\'ll search the entire TMDB catalog in real time for what to watch next.',
     statusChecking: 'Checking server connection…',
-    statusOn: 'Server connected — searching and recommending in real time via the TMDB Search/Discover API.',
+    statusOn: 'Server connected - searching and recommending in real time.',
     statusOff: 'Server not connected — can\'t reach the /api/tmdb function. Deploy this site on Vercel or Netlify and set a TMDB_API_KEY environment variable to use it. (See <a href="https://www.themoviedb.org/settings/api" target="_blank" rel="noopener">README.md</a> for details.)',
-    steps: ['01 Pick a Movie', '02 Rating & Review', '03 Detailed Ratings', '04 Recommendations'],
-    step1Title: 'Which movie did you watch?',
+    steps: ['01 Pick a Movie 🎞️', '02 Rating & Review ⭐️', '03 Detailed Ratings 👓', '04 Recommendations 🍿'],
+    step1Title: '🎞️ Which movie did you watch?',
     step1sub: "Search TMDB's entire catalog in real time.",
     searchPlaceholder: 'Search a movie title… (e.g. Oldboy, Parasite, Dune)',
-    searchHint: "Search may miss results if there's a small typo or the spacing doesn't match the original title.",
-    emptyNoteDefault: 'Type a movie title to search the full TMDB catalog in real time.',
+    searchHint: "· Search may miss results if there's a small typo or the spacing doesn't match the original title.",
+    emptyNoteDefault: '· Type a movie title to search the full TMDB catalog in real time.',
     emptyNoteNoServer: 'TMDB isn\'t connected yet, so you can\'t search for movies.<br>Deploy this site on Vercel or Netlify and set the <b>TMDB_API_KEY</b> environment variable. (See README.md)',
     loadingNote: 'Searching TMDB…',
     emptyNoteNoResults: 'No results found.',
@@ -327,7 +327,10 @@ function applyStaticI18n(){
 
   renderStars();
   if(state.movie) renderSelectedCard();
-  if(currentStep===1) renderMovieGrid($('#search').value);
+  if(currentStep===1){
+    if(state.movie) renderSelectedOnlyCard();
+    else renderMovieGrid($('#search').value);
+  }
   if(currentStep===3) renderAspects();
   renderHistory();
 }
@@ -364,7 +367,18 @@ function loadLang(){
 function selectMovie(movieObj){
   state.movie = movieObj;
   $('#toStep2').disabled = false;
-  renderMovieGrid($('#search').value);
+  renderSelectedOnlyCard();
+}
+
+/* 영화를 선택하면 나머지 검색 후보들은 지우고 선택한 영화 카드만 남깁니다 */
+function renderSelectedOnlyCard(){
+  const grid = $('#movieGrid');
+  const m = state.movie;
+  grid.innerHTML='';
+  const div = document.createElement('div');
+  div.className='movie-card selected';
+  div.innerHTML = `${m.poster? `<img src="${m.poster}" alt="">` : '<img alt="">'}<div class="meta"><div class="t">${m.title}</div><div class="y">${m.year}</div></div>`;
+  grid.appendChild(div);
 }
 
 async function renderTmdbGrid(filter){
