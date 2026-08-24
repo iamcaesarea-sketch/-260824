@@ -6,20 +6,20 @@ const I18N = {
   ko: {
     pageTitle: 'CineRec — 영화 리뷰 & 맞춤 추천',
     eyebrow: '장편·독립·단편 영화 DB 수록',
-    tagline: '영화를 보고 별점과 리뷰를 남기면, 9가지 항목으로 분석해서<br>TMDB의 전 세계 영화 데이터베이스에서 실시간으로 취향에 맞는 다음 영화를 찾아드려요.',
+    tagline: '시청한 영화의 별점과 리뷰를 남기면, 9가지 항목으로 분석한 후<br>전 세계 영화 데이터베이스에서 실시간으로 취향에 맞는 다음 영화를 찾아드려요.',
     statusChecking: '서버 연동 상태 확인 중…',
-    statusOn: '서버 연동 켜짐 - 실시간 검색·추천합니다.',
+    statusOn: '서버 연동 켜짐 - 실시간으로 검색하고 추천해요.',
     statusOff: '서버 연동 꺼짐 - 서버와 연결이 잠시 끊어졌어요. 잠깐의 휴식을 즐기는 동안, 곧 다시 영화를 찾을 수 있도록 복구할게요!',
-    steps: ['01 영화 선택 🎞️', '02 별점·리뷰 ⭐️', '03 세부 평가 👓', '04 추천 결과 🍿'],
+    steps: ['01 영화 선택 🎞️', '02 별점·리뷰 ⭐️', '03 세부 평가 👓', '04 추가 선택 ✅', '05 추천 결과 🍿'],
     step1Title: '🎞️ 어떤 영화를 보셨나요?',
     step1sub: 'TMDB 전체 카탈로그에서 실시간으로 검색해요.',
-    searchPlaceholder: '영화 제목 검색… (예: 오디세이, 올드보이, Dune)',
-    searchHint: '· 검색어에 미세한 오타가 있거나 띄어쓰기가 원본 데이터와 다르면 인식하지 못할 수 있어요.',
+    searchPlaceholder: '예: 오디세이, 올드보이, Dune',
+    searchHint: '· 원본 제목과 똑같이 입력하면 더 정확하게 검색돼요.',
     emptyNoteDefault: '· 영화 제목을 입력하면 TMDB 전체 카탈로그에서 실시간으로 검색해요.',
-    emptyNoteNoServer: '서버와 연결이 잠시 끊어져서 영화를 검색할 수 없어요.<br>곧 다시 찾아올 수 있도록 준비할게요!',
+    emptyNoteNoServer: '서버와 연결이 잠시 끊어졌어요.<br>곧 다시 영화를 찾을 수 있도록 준비할게요!',
     loadingNote: 'TMDB에서 검색 중…',
-    emptyNoteNoResults: '검색 결과가 없어요.',
-    emptyNoteSearchFail: '검색에 실패했어요. 잠시 후 다시 시도해 주세요.',
+    emptyNoteNoResults: '검색 결과가 없어요. 다른 검색어로 찾아보세요.',
+    emptyNoteSearchFail: '검색 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.',
     emptyNoteDetailFail: '영화 정보를 불러오지 못했어요. 다시 시도해 주세요.',
     nextBtn: '다음',
     backBtn: '이전',
@@ -28,6 +28,7 @@ const I18N = {
     unknownDirector: '정보 없음',
     step2sub: '별점을 매긴 후 짧게 리뷰를 남겨주시면 영화 추천에 반영할게요!',
     reviewPlaceholder: '예: 배우들 연기가 정말 인상적이었고 음악도 몰입감을 더해줬어요. 다만 후반부 각본이 좀 늘어지는 느낌...',
+    privacyNote: '별점·리뷰는 서비스 개선을 위해 저장돼요.',
     ratingLabels: {1:'별로였어요', 2:'아쉬웠어요', 3:'그럭저럭이었어요', 4:'좋았어요', 5:'최고였어요!'},
     step3subPositive: (title) => `“${title}”이 좋으셨다니 다행이에요. 9가지 항목 중 어떤 부분이 특히 마음에 드셨는지 알려주세요.`,
     step3subNegative: () => `아쉬우셨군요. 어떤 항목이 특히 별로였는지 알려주시면, 그 반대 성향의 영화를 찾아드릴게요.`,
@@ -39,7 +40,20 @@ const I18N = {
     scaleLow: '별로', scaleMid: '보통', scaleHigh: '아주 좋음',
     recommendBtn: '추천 받기',
     recommendLoading: 'TMDB에서 실시간 조회 중…',
-    step4Title: '이런 영화는 어떠세요?',
+    step4Title: '좀 더 내 취향에 맞는 영화를 찾고 싶어요',
+    step4Sub: '전부 선택 사항이에요. 건너뛰어도 괜찮아요.',
+    skipBtn: '건너뛰기',
+    genreLabel: '장르',
+    runtimeLabel: '러닝타임',
+    typeLabel: '영화 유형',
+    runtimeOption90: '1시간 30분 이내',
+    runtimeOption120: '2시간 이내',
+    runtimeOptionAny: '상관없어요',
+    typeOptionAll: '상관없어요',
+    typeOptionCommercial: '상업 영화',
+    typeOptionIndie: '독립 영화',
+    typeOptionShort: '단편 영화',
+    step5Title: '이런 영화는 어떠세요?',
     verdictPositive: (title, likedStr) => `“<b>${title}</b>”에서 <b>${likedStr}</b>을(를) 특히 좋게 보신 것 같아요. TMDB에서 실시간으로 비슷한 매력의 영화를 찾아봤어요.`,
     verdictNegative: (title, dislikedStr) => `“<b>${title}</b>”에서 <b>${dislikedStr}</b>이(가) 아쉬우셨던 것 같아요. 그 부분이 다른 결의 영화를 TMDB에서 찾아봤어요.`,
     verdictMismatchPositive: '영화를 재미있게 보셨군요!',
@@ -59,7 +73,7 @@ const I18N = {
     reasonSimilarUsers: '사용자님과 비슷한 별점을 준 사람들이 좋아했어요.',
     streamingNone: '스트리밍 정보 없음',
     imdbLinkText: 'IMDB에서 보기 ↗',
-    disclaimerText: '※ 영화 목록·감독/각본/편집/음악/배우·OTT 제공처(한국)·IMDB 링크는 전부 서버를 통해 실시간으로 받아온 TMDB Search/Discover 데이터입니다 (코드에 미리 저장된 영화 목록은 없습니다). "주제"와 "독창성"은 TMDB에 전용 데이터가 없어 키워드 유사도로 근사했습니다.',
+    disclaimerText: '※ 영화 목록·감독/각본/편집/음악/배우·OTT 제공처(한국)·IMDB 링크는 전부 서버를 통해 실시간으로 받아온 TMDB Search/Discover 데이터예요 (코드에 미리 저장된 영화 목록은 없어요). "주제"와 "독창성"은 TMDB에 전용 데이터가 없어서 키워드 유사도로 근사했어요.',
     restartBtn: '다른 영화 리뷰하기',
     historyTitle: '내 리뷰 기록',
     alertNoServer: '서버와 연결이 잠시 끊어져서 추천을 불러올 수 없어요. 잠시 후 다시 시도해 주세요.',
@@ -74,16 +88,16 @@ const I18N = {
     statusChecking: 'Checking server connection…',
     statusOn: 'Server connected - searching and recommending in real time.',
     statusOff: 'Server disconnected - we lost the connection for a moment. Enjoy a short break while we get things running again!',
-    steps: ['01 Pick a Movie 🎞️', '02 Rating & Review ⭐️', '03 Detailed Ratings 👓', '04 Recommendations 🍿'],
+    steps: ['01 Pick a Movie 🎞️', '02 Rating & Review ⭐️', '03 Detailed Ratings 👓', '04 Fine-Tune ✅', '05 Recommendations 🍿'],
     step1Title: '🎞️ Which movie did you watch?',
     step1sub: "Search TMDB's entire catalog in real time.",
-    searchPlaceholder: 'Search a movie title… (e.g. Oldboy, Parasite, Dune)',
-    searchHint: "· Search may miss results if there's a small typo or the spacing doesn't match the original title.",
+    searchPlaceholder: 'e.g. Oldboy, Parasite, Dune',
+    searchHint: '· Typing the original title exactly gets you more accurate results.',
     emptyNoteDefault: '· Type a movie title to search the full TMDB catalog in real time.',
-    emptyNoteNoServer: 'The connection dropped for a moment, so movie search isn\'t available.<br>We\'ll have it back up again soon!',
+    emptyNoteNoServer: 'The connection dropped for a moment.<br>We\'ll have movie search back up again soon!',
     loadingNote: 'Searching TMDB…',
-    emptyNoteNoResults: 'No results found.',
-    emptyNoteSearchFail: 'Search failed. Please try again in a moment.',
+    emptyNoteNoResults: 'No results found. Try a different search term.',
+    emptyNoteSearchFail: 'Something went wrong while searching. Please try again in a moment.',
     emptyNoteDetailFail: 'Could not load movie details. Please try again.',
     nextBtn: 'Next',
     backBtn: 'Back',
@@ -92,6 +106,7 @@ const I18N = {
     unknownDirector: 'Unknown',
     step2sub: 'Rate it and add a short review — we\'ll use it to shape your recommendations!',
     reviewPlaceholder: 'e.g. The acting was really impressive and the music pulled me in. Though the script dragged a bit in the second half...',
+    privacyNote: 'Your rating and review are stored to help improve the service.',
     ratingLabels: {1:'Not great', 2:'Meh', 3:'It was okay', 4:'I liked it', 5:'Loved it!'},
     step3subPositive: (title) => `Glad you enjoyed "${title}"! Tell us which of the 9 aspects stood out to you.`,
     step3subNegative: () => `Sorry to hear that. Tell us which aspects fell short and we'll find something with the opposite vibe.`,
@@ -103,7 +118,20 @@ const I18N = {
     scaleLow: 'Poor', scaleMid: 'Average', scaleHigh: 'Excellent',
     recommendBtn: 'Get Recommendations',
     recommendLoading: 'Fetching from TMDB…',
-    step4Title: 'How about these movies?',
+    step4Title: 'Want to fine-tune your picks?',
+    step4Sub: "These are all optional — feel free to skip.",
+    skipBtn: 'Skip',
+    genreLabel: 'Genre',
+    runtimeLabel: 'Runtime',
+    typeLabel: 'Film Type',
+    runtimeOption90: 'Under 1h 30m',
+    runtimeOption120: 'Under 2h',
+    runtimeOptionAny: 'Any length',
+    typeOptionAll: 'Any type',
+    typeOptionCommercial: 'Commercial',
+    typeOptionIndie: 'Independent',
+    typeOptionShort: 'Short film',
+    step5Title: 'How about these movies?',
     verdictPositive: (title, likedStr) => `Looks like you especially loved <b>${likedStr}</b> in "<b>${title}</b>". We searched TMDB in real time for movies with similar appeal.`,
     verdictNegative: (title, dislikedStr) => `Seems like <b>${dislikedStr}</b> fell a bit short in "<b>${title}</b>". We found TMDB movies with a different take on that.`,
     verdictMismatchPositive: 'Looks like you actually enjoyed the movie!',
@@ -267,12 +295,13 @@ let state = {
   movie:null, rating:0, reviewText:'',
   aspects: Object.fromEntries(ASPECT_KEYS.map(k=>[k,3])),
   lang:'ko', lastPositive:true,
+  manualFilters: { genres:[], runtime:null, type:'all' },
 };
 let history = [];
 let searchDebounce = null;
 
 const $ = (sel)=>document.querySelector(sel);
-const panels = [1,2,3,4].map(n=>$('#panel-'+n));
+const panels = [1,2,3,4,5].map(n=>$('#panel-'+n));
 const stepSpans = document.querySelectorAll('#steps span');
 let currentStep = 1;
 
@@ -310,14 +339,24 @@ function applyStaticI18n(){
 
   $('#step2sub').textContent = t('step2sub');
   $('#reviewText').placeholder = t('reviewPlaceholder');
+  $('#privacyNote').textContent = t('privacyNote');
   $('#back1').textContent = t('backBtn');
   $('#toStep3').textContent = t('nextBtn');
 
   $('#step3Title').textContent = t('step3Title');
   $('#back2').textContent = t('backBtn');
-  $('#toStep4').textContent = t('recommendBtn');
+  $('#toStep4').textContent = t('nextBtn');
 
   $('#step4Title').textContent = t('step4Title');
+  $('#step4sub').textContent = t('step4Sub');
+  $('#genreLabel').textContent = t('genreLabel');
+  $('#runtimeLabel').textContent = t('runtimeLabel');
+  $('#typeLabel').textContent = t('typeLabel');
+  $('#back3').textContent = t('backBtn');
+  $('#skipRefine').textContent = t('skipBtn');
+  $('#toStep5').textContent = t('recommendBtn');
+
+  $('#step5Title').textContent = t('step5Title');
   $('#restart').textContent = t('restartBtn');
 
   $('#historyTitle').textContent = t('historyTitle');
@@ -332,6 +371,7 @@ function applyStaticI18n(){
     else renderMovieGrid($('#search').value);
   }
   if(currentStep===3) renderAspects();
+  if(currentStep===4) renderRefineStep();
   renderHistory();
 }
 
@@ -512,6 +552,83 @@ function renderAspects(){
 $('#back2').onclick = ()=> showStep(2);
 
 /* =========================================================
+   STEP 4: 추가 선택 (장르 · 러닝타임 · 영화 유형) — 전부 선택 사항
+   ========================================================= */
+const RUNTIME_OPTIONS = [
+  {value:90, key:'runtimeOption90'},
+  {value:120, key:'runtimeOption120'},
+  {value:null, key:'runtimeOptionAny'},
+];
+const TYPE_OPTIONS = [
+  {value:'all', key:'typeOptionAll'},
+  {value:'commercial', key:'typeOptionCommercial'},
+  {value:'indie', key:'typeOptionIndie'},
+  {value:'short', key:'typeOptionShort'},
+];
+
+function renderRefineStep(){
+  const genreBox = $('#genreChips');
+  genreBox.innerHTML = '';
+  if(genreMap){
+    Object.entries(genreMap).forEach(([id, name])=>{
+      const gid = parseInt(id);
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip' + (state.manualFilters.genres.includes(gid) ? ' selected' : '');
+      chip.textContent = name;
+      chip.onclick = ()=>{
+        const i = state.manualFilters.genres.indexOf(gid);
+        if(i===-1) state.manualFilters.genres.push(gid);
+        else state.manualFilters.genres.splice(i,1);
+        chip.classList.toggle('selected');
+      };
+      genreBox.appendChild(chip);
+    });
+  }
+
+  const runtimeBox = $('#runtimeChips');
+  runtimeBox.innerHTML = '';
+  RUNTIME_OPTIONS.forEach(opt=>{
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'chip' + (state.manualFilters.runtime===opt.value ? ' selected' : '');
+    chip.textContent = t(opt.key);
+    chip.onclick = ()=>{
+      state.manualFilters.runtime = opt.value;
+      runtimeBox.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+      chip.classList.add('selected');
+    };
+    runtimeBox.appendChild(chip);
+  });
+
+  const typeBox = $('#typeChips');
+  typeBox.innerHTML = '';
+  TYPE_OPTIONS.forEach(opt=>{
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'chip' + (state.manualFilters.type===opt.value ? ' selected' : '');
+    chip.textContent = t(opt.key);
+    chip.onclick = ()=>{
+      state.manualFilters.type = opt.value;
+      typeBox.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+      chip.classList.add('selected');
+    };
+    typeBox.appendChild(chip);
+  });
+}
+
+$('#toStep4').onclick = ()=>{
+  renderRefineStep();
+  showStep(4);
+};
+$('#back3').onclick = ()=> showStep(3);
+$('#skipRefine').onclick = ()=>{
+  state.manualFilters = { genres:[], runtime:null, type:'all' };
+  runRecommend();
+};
+$('#toStep5').onclick = ()=> runRecommend();
+
+/* =========================================================
    키워드 기반 보조 분석 (리뷰 텍스트 → 항목별 +1/-1 보정)
    ========================================================= */
 const KEYWORDS = {
@@ -562,13 +679,32 @@ async function tmdbDiscover(params){
   return data.results || [];
 }
 
+const keywordIdCache = {};
+async function fetchKeywordId(query){
+  if(query in keywordIdCache) return keywordIdCache[query];
+  try{
+    const data = await apiGet('/search/keyword', {query});
+    const id = (data.results||[])[0] ? data.results[0].id : null;
+    keywordIdCache[query] = id;
+    return id;
+  }catch(e){
+    keywordIdCache[query] = null;
+    return null;
+  }
+}
+
 async function computeTmdbRecommendations(){
   const base = state.movie;
   const {liked, disliked} = getLikedDisliked();
+  const manual = state.manualFilters || { genres:[], runtime:null, type:'all' };
+  const hasManualFilter = manual.genres.length>0 || manual.runtime || manual.type!=='all';
 
   const params = { sort_by:'popularity.desc', 'vote_count.gte':50, page:1 };
 
-  if(base.genreIds && base.genreIds.length){
+  if(manual.genres.length){
+    // 사용자가 직접 고른 장르가 있으면 자동 추론 대신 그 장르를 우선해요
+    params.with_genres = manual.genres.join('|');
+  }else if(base.genreIds && base.genreIds.length){
     if(disliked.includes('genre')) params.without_genres = base.genreIds.join(',');
     else params.with_genres = base.genreIds.join('|');
   }
@@ -592,14 +728,31 @@ async function computeTmdbRecommendations(){
     params.without_keywords = base.keywordIds.slice(0,8).join(',');
   }
 
+  // 러닝타임 선택 (직접 선택 안 했으면 건너뜀)
+  if(manual.runtime){
+    params['with_runtime.lte'] = manual.runtime;
+  }
+
+  // 영화 유형 — 단편은 짧은 러닝타임으로, 독립영화는 TMDB 키워드로 근사해요
+  if(manual.type==='short'){
+    params['with_runtime.lte'] = Math.min(manual.runtime || 999, 40);
+    const shortKwId = await fetchKeywordId('short film');
+    if(shortKwId) params.with_keywords = params.with_keywords ? params.with_keywords+'|'+shortKwId : String(shortKwId);
+  }else if(manual.type==='indie'){
+    const indieKwId = await fetchKeywordId('independent film');
+    if(indieKwId) params.with_keywords = params.with_keywords ? params.with_keywords+'|'+indieKwId : String(indieKwId);
+  }
+
   let results = (await tmdbDiscover(params)).filter(m=> m.id !== base.tmdbId);
 
   /* 별점이 0.5·1·4·4.5·5점처럼 뚜렷한(호불호가 분명한) 경우엔, TMDB의
      "이 영화를 본 사람들이 함께 본 영화"(recommendations) 데이터도 함께 섞어서
-     "비슷한 별점을 준 사람들이 좋아한 영화" 신호로 활용합니다. */
+     "비슷한 별점을 준 사람들이 좋아한 영화" 신호로 활용합니다.
+     (러닝타임/영화 유형처럼 Discover가 직접 지원 못 하는 조건을 직접 고르셨을 땐
+     그 조건을 못 지키는 추천이 섞이지 않도록 이 신호는 건너뛰어요) */
   const SIMILAR_USER_RATINGS = [0.5, 1, 4, 4.5, 5];
   const recommendedIds = new Set();
-  if(SIMILAR_USER_RATINGS.includes(state.rating)){
+  if(SIMILAR_USER_RATINGS.includes(state.rating) && !manual.runtime && manual.type==='all'){
     try{
       const recData = await apiGet('/movie/'+base.tmdbId+'/recommendations', {page:1});
       const seen = new Set(results.map(r=>r.id));
@@ -612,9 +765,15 @@ async function computeTmdbRecommendations(){
   }
 
   // 조건이 너무 좁아 결과가 부족하면 장르만 남기고 완화해서 재조회
+  // (직접 고른 러닝타임·영화 유형·장르는 완화 단계에서도 계속 지켜요)
   if(results.length < 4){
     const loose = { sort_by:'popularity.desc', 'vote_count.gte':20, page:1 };
-    if(base.genreIds && base.genreIds.length) loose.with_genres = base.genreIds.join('|');
+    if(params.with_genres) loose.with_genres = params.with_genres;
+    else if(base.genreIds && base.genreIds.length) loose.with_genres = base.genreIds.join('|');
+    if(params['with_runtime.lte']) loose['with_runtime.lte'] = params['with_runtime.lte'];
+    if(manual.type==='indie' || manual.type==='short'){
+      if(params.with_keywords) loose.with_keywords = params.with_keywords;
+    }
     const more = (await tmdbDiscover(loose)).filter(m=> m.id !== base.tmdbId);
     const seen = new Set(results.map(r=>r.id));
     more.forEach(m=>{ if(!seen.has(m.id)){ results.push(m); seen.add(m.id); } });
@@ -734,16 +893,37 @@ function renderResult(result, positive){
   history.unshift({title: state.movie.title, rating: state.rating, date: new Date().toLocaleDateString(t('dateLocale'))});
   renderHistory();
   saveHistory();
-  showStep(4);
+  submitReviewToServer();
+  showStep(5);
 }
 
-$('#toStep4').onclick = async ()=>{
+/* 서비스 개선을 위해 리뷰(별점·세부평가·리뷰 텍스트)를 서버에도 저장해요.
+   저장이 설정 안 돼 있거나 실패해도 화면 동작에는 영향 없어요. */
+function submitReviewToServer(){
+  const payload = {
+    title: state.movie.title,
+    tmdbId: state.movie.tmdbId,
+    rating: state.rating,
+    aspects: state.aspects,
+    reviewText: state.reviewText,
+    lang: state.lang,
+  };
+  fetch('/api/save-review', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload),
+  }).catch(()=>{});
+}
+
+async function runRecommend(){
   if(!serverAvailable){
     alert(t('alertNoServer'));
     return;
   }
-  const btn = $('#toStep4');
+  const btn = $('#toStep5');
+  const skipBtn = $('#skipRefine');
   btn.disabled = true;
+  skipBtn.disabled = true;
   const originalText = btn.textContent;
   btn.textContent = t('recommendLoading');
   try{
@@ -754,9 +934,10 @@ $('#toStep4').onclick = async ()=>{
     alert(t('alertRecommendFail'));
   }finally{
     btn.disabled = false;
+    skipBtn.disabled = false;
     btn.textContent = originalText;
   }
-};
+}
 
 /* =========================================================
    기록 (개인 저장소 — 리뷰 히스토리만 저장, 영화 데이터는 저장하지 않음)
@@ -794,6 +975,7 @@ function loadHistory(){
 $('#restart').onclick = ()=>{
   state.movie=null; state.rating=0; state.reviewText='';
   state.aspects = Object.fromEntries(ASPECT_KEYS.map(k=>[k,3]));
+  state.manualFilters = { genres:[], runtime:null, type:'all' };
   $('#search').value='';
   $('#reviewText').value='';
   $('#toStep2').disabled = true;

@@ -15,7 +15,7 @@
 <meta name="twitter:description" content="리뷰로 완성되는 나만의 영화 추천, Cinerec">
 <meta name="twitter:image" content="https://cinereccc.vercel.app/ticket.png">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-<link rel="stylesheet" href="style.css?v=12">
+<link rel="stylesheet" href="style.css?v=15">
 </head>
 <body>
 
@@ -38,7 +38,7 @@
   <div class="eyebrow" id="eyebrowText">장편·독립·단편 영화 DB 수록</div>
   <h1>CINEREC</h1>
   <div class="slogan">Stop endless scrolling</div>
-  <p id="taglineText">영화를 보고 별점과 리뷰를 남기면, 9가지 항목으로 분석해서<br>TMDB의 전 세계 영화 데이터베이스에서 실시간으로 취향에 맞는 다음 영화를 찾아드려요.</p>
+  <p id="taglineText">시청한 영화의 별점과 리뷰를 남기면, 9가지 항목으로 분석한 후<br>전 세계 영화 데이터베이스에서 실시간으로 취향에 맞는 다음 영화를 찾아드려요.</p>
 </header>
 
 <main>
@@ -48,14 +48,15 @@
     <span data-s="1">01 영화 선택 🎞️</span>
     <span data-s="2">02 별점·리뷰 ⭐️</span>
     <span data-s="3">03 세부 평가 👓</span>
-    <span data-s="4">04 추천 결과 🍿</span>
+    <span data-s="4">04 추가 선택 ✅</span>
+    <span data-s="5">05 추천 결과 🍿</span>
   </div>
 
   <!-- STEP 1 -->
   <section class="panel" id="panel-1">
     <h2 id="step1Title">🎞️ 어떤 영화를 보셨나요?</h2>
     <div class="sub" id="step1sub">TMDB 전체 카탈로그에서 실시간으로 검색해요.</div>
-    <input type="text" id="search" placeholder="영화 제목 검색… (예: 오디세이, 올드보이, Dune)">
+    <input type="text" id="search" placeholder="예: 오디세이, 올드보이, Dune">
     <div class="search-hint" id="searchHint">검색어에 미세한 오타가 있거나 띄어쓰기가 원본 데이터와 다르면 인식하지 못할 수 있어요.</div>
     <div class="movie-grid" id="movieGrid"></div>
     <div class="btn-row">
@@ -72,6 +73,7 @@
     <div class="rating-label" id="ratingLabel"></div>
     <div style="margin-top:20px;">
       <textarea id="reviewText" placeholder="예: 배우들 연기가 정말 인상적이었고 음악도 몰입감을 더해줬어요. 다만 후반부 각본이 좀 늘어지는 느낌..."></textarea>
+      <div class="privacy-note" id="privacyNote">별점·리뷰는 서비스 개선을 위해 저장돼요.</div>
     </div>
     <div class="btn-row">
       <button class="ghost" id="back1">이전</button>
@@ -86,13 +88,42 @@
     <div class="aspect-grid" id="aspectContainer"></div>
     <div class="btn-row">
       <button class="ghost" id="back2">이전</button>
-      <button class="primary" id="toStep4">추천 받기</button>
+      <button class="primary" id="toStep4">다음</button>
     </div>
   </section>
 
   <!-- STEP 4 -->
   <section class="panel" id="panel-4" style="display:none;">
-    <h2 id="step4Title">이런 영화는 어떠세요?</h2>
+    <h2 id="step4Title">좀 더 내 취향에 맞는 영화를 찾고 싶어요</h2>
+    <div class="sub" id="step4sub">전부 선택 사항이에요. 건너뛰어도 괜찮아요.</div>
+
+    <div class="refine-group">
+      <div class="refine-label" id="genreLabel">장르</div>
+      <div class="chip-row" id="genreChips"></div>
+    </div>
+
+    <div class="refine-group">
+      <div class="refine-label" id="runtimeLabel">러닝타임</div>
+      <div class="chip-row" id="runtimeChips"></div>
+    </div>
+
+    <div class="refine-group">
+      <div class="refine-label" id="typeLabel">영화 유형</div>
+      <div class="chip-row" id="typeChips"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="ghost" id="back3">이전</button>
+      <div class="btn-group-right">
+        <button class="ghost" id="skipRefine">건너뛰기</button>
+        <button class="primary" id="toStep5">추천 받기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 5 -->
+  <section class="panel" id="panel-5" style="display:none;">
+    <h2 id="step5Title">이런 영화는 어떠세요?</h2>
     <div class="verdict" id="verdictBox"></div>
     <div id="resultList"></div>
     <div class="btn-row">
@@ -107,8 +138,14 @@
     <div id="historyList"></div>
   </div>
 </main>
+
+<footer class="site-footer">
+  <img src="tmdb-logo.svg" alt="TMDB" class="tmdb-logo">
+  <p>This product uses the TMDB API but is not endorsed or certified by TMDB.<br>Streaming availability data provided by JustWatch.</p>
+  <p class="copyright">© 2026 CINEREC. Data provided by TMDB, JustWatch.</p>
+</footer>
 </div>
 
-<script src="script.js?v=6"></script>
+<script src="script.js?v=8"></script>
 </body>
 </html>
