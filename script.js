@@ -5,7 +5,7 @@
 const I18N = {
   ko: {
     pageTitle: 'CineRec — 영화 리뷰 & 맞춤 추천',
-    eyebrow: 'CINEREC · TMDB 실시간 연동',
+    eyebrow: '장편·독립·단편 영화 DB 수록',
     tagline: '영화를 보고 별점과 리뷰를 남기면, 9가지 항목으로 분석해서<br>TMDB의 전 세계 영화 데이터베이스에서 실시간으로 취향에 맞는 다음 영화를 찾아드려요.',
     statusChecking: '서버 연동 상태 확인 중…',
     statusOn: '서버 연동 켜짐 — TMDB Search / Discover API로 전 세계 영화를 실시간 검색·추천합니다.',
@@ -13,7 +13,8 @@ const I18N = {
     steps: ['01 영화 선택', '02 별점 · 리뷰', '03 세부 평가', '04 추천 결과'],
     step1Title: '어떤 영화를 보셨나요?',
     step1sub: 'TMDB 전체 카탈로그에서 실시간으로 검색해요.',
-    searchPlaceholder: '영화 제목 검색… (예: 오디세이, 기생충, Dune)',
+    searchPlaceholder: '영화 제목 검색… (예: 오디세이, 올드보이, Dune)',
+    searchHint: '검색어에 미세한 오타가 있거나 띄어쓰기가 원본 데이터와 다르면 인식하지 못할 수 있어요.',
     emptyNoteDefault: '영화 제목을 입력하면 TMDB 전체 카탈로그에서 실시간으로 검색해요.',
     emptyNoteNoServer: '아직 TMDB 서버 연동이 안 돼 있어서 영화를 검색할 수 없어요.<br>이 사이트를 Vercel 또는 Netlify에 배포하고 <b>TMDB_API_KEY</b> 환경변수를 등록해 주세요. (README.md 참고)',
     loadingNote: 'TMDB에서 검색 중…',
@@ -25,7 +26,7 @@ const I18N = {
     director: '감독',
     cast: '출연',
     unknownDirector: '정보 없음',
-    step2sub: '전체적으로 어떠셨어요? 별점을 매기고 짧게 리뷰를 남겨주세요.',
+    step2sub: '별점을 매긴 후 짧게 리뷰를 남겨주시면 영화 추천에 반영할게요!',
     reviewPlaceholder: '예: 배우들 연기가 정말 인상적이었고 음악도 몰입감을 더해줬어요. 다만 후반부 각본이 좀 늘어지는 느낌...',
     ratingLabels: {1:'별로였어요', 2:'아쉬웠어요', 3:'그럭저럭이었어요', 4:'좋았어요', 5:'최고였어요!'},
     step3subPositive: (title) => `“${title}”이 좋으셨다니 다행이에요. 9가지 항목 중 어떤 부분이 특히 마음에 드셨는지 알려주세요.`,
@@ -41,6 +42,7 @@ const I18N = {
     step4Title: '이런 영화는 어떠세요?',
     verdictPositive: (title, likedStr) => `“<b>${title}</b>”에서 <b>${likedStr}</b>을(를) 특히 좋게 보신 것 같아요. TMDB에서 실시간으로 비슷한 매력의 영화를 찾아봤어요.`,
     verdictNegative: (title, dislikedStr) => `“<b>${title}</b>”에서 <b>${dislikedStr}</b>이(가) 아쉬우셨던 것 같아요. 그 부분이 다른 결의 영화를 TMDB에서 찾아봤어요.`,
+    verdictMismatchPositive: '영화를 재미있게 보셨군요!',
     noneLabel: '없음',
     noResultsFound: '조건에 맞는 추천작을 찾지 못했어요. 다른 영화로 다시 시도해보세요.',
     reasonLabel: '추천 이유',
@@ -54,6 +56,7 @@ const I18N = {
     reasonDiffActorOk: '다른 배우진의 연기를 볼 수 있어요',
     reasonThemeSimilar: '주제·소재 키워드가 비슷해요',
     reasonDiscoverMatch: 'TMDB Discover 조건에 맞아 추천됐어요',
+    reasonSimilarUsers: '사용자님과 비슷한 별점을 준 사람들이 좋아했어요.',
     streamingNone: '스트리밍 정보 없음',
     imdbLinkText: 'IMDB에서 보기 ↗',
     disclaimerText: '※ 영화 목록·감독/각본/편집/음악/배우·OTT 제공처(한국)·IMDB 링크는 전부 서버를 통해 실시간으로 받아온 TMDB Search/Discover 데이터입니다 (코드에 미리 저장된 영화 목록은 없습니다). "주제"와 "독창성"은 TMDB에 전용 데이터가 없어 키워드 유사도로 근사했습니다.',
@@ -66,7 +69,7 @@ const I18N = {
   },
   en: {
     pageTitle: 'CineRec — Movie Reviews & Picks',
-    eyebrow: 'CINEREC · LIVE TMDB SYNC',
+    eyebrow: 'Feature · Indie · Short Films Included',
     tagline: 'Rate and review a movie you\'ve watched across 9 aspects,<br>and we\'ll search the entire TMDB catalog in real time for what to watch next.',
     statusChecking: 'Checking server connection…',
     statusOn: 'Server connected — searching and recommending in real time via the TMDB Search/Discover API.',
@@ -74,7 +77,8 @@ const I18N = {
     steps: ['01 Pick a Movie', '02 Rating & Review', '03 Detailed Ratings', '04 Recommendations'],
     step1Title: 'Which movie did you watch?',
     step1sub: "Search TMDB's entire catalog in real time.",
-    searchPlaceholder: 'Search a movie title… (e.g. Oppenheimer, Parasite, Dune)',
+    searchPlaceholder: 'Search a movie title… (e.g. Oldboy, Parasite, Dune)',
+    searchHint: "Search may miss results if there's a small typo or the spacing doesn't match the original title.",
     emptyNoteDefault: 'Type a movie title to search the full TMDB catalog in real time.',
     emptyNoteNoServer: 'TMDB isn\'t connected yet, so you can\'t search for movies.<br>Deploy this site on Vercel or Netlify and set the <b>TMDB_API_KEY</b> environment variable. (See README.md)',
     loadingNote: 'Searching TMDB…',
@@ -86,7 +90,7 @@ const I18N = {
     director: 'Director',
     cast: 'Cast',
     unknownDirector: 'Unknown',
-    step2sub: 'How was it overall? Give it a star rating and a short review.',
+    step2sub: 'Rate it and add a short review — we\'ll use it to shape your recommendations!',
     reviewPlaceholder: 'e.g. The acting was really impressive and the music pulled me in. Though the script dragged a bit in the second half...',
     ratingLabels: {1:'Not great', 2:'Meh', 3:'It was okay', 4:'I liked it', 5:'Loved it!'},
     step3subPositive: (title) => `Glad you enjoyed "${title}"! Tell us which of the 9 aspects stood out to you.`,
@@ -102,6 +106,7 @@ const I18N = {
     step4Title: 'How about these movies?',
     verdictPositive: (title, likedStr) => `Looks like you especially loved <b>${likedStr}</b> in "<b>${title}</b>". We searched TMDB in real time for movies with similar appeal.`,
     verdictNegative: (title, dislikedStr) => `Seems like <b>${dislikedStr}</b> fell a bit short in "<b>${title}</b>". We found TMDB movies with a different take on that.`,
+    verdictMismatchPositive: 'Looks like you actually enjoyed the movie!',
     noneLabel: 'None',
     noResultsFound: 'No matching recommendations found. Try a different movie.',
     reasonLabel: 'Why this pick',
@@ -115,6 +120,7 @@ const I18N = {
     reasonDiffActorOk: 'A fresh cast to enjoy',
     reasonThemeSimilar: 'Similar theme/keyword match',
     reasonDiscoverMatch: 'Matched your TMDB Discover criteria',
+    reasonSimilarUsers: 'People who rated it similarly to you enjoyed this.',
     streamingNone: 'No streaming info',
     imdbLinkText: 'View on IMDB ↗',
     disclaimerText: '※ Movie listings, director/writer/editor/composer/cast, OTT availability (Korea), and IMDB links are all fetched live from TMDB Search/Discover through the server (no movie data is pre-stored in the code). "Theme" and "Originality" have no dedicated TMDB data, so they\'re approximated with keyword similarity.',
@@ -133,6 +139,14 @@ function t(key){
 
 function imdbSearchUrl(title){
   return 'https://www.imdb.com/find/?q=' + encodeURIComponent(title) + '&s=tt&ttype=ft';
+}
+
+function truncateOverview(text, max=110){
+  if(!text) return '';
+  const clean = text.trim();
+  if(clean.length<=max) return clean;
+  const cut = clean.slice(0, max).replace(/\s+\S*$/, '');
+  return (cut || clean.slice(0,max)) + '…';
 }
 
 /* =========================================================
@@ -291,6 +305,7 @@ function applyStaticI18n(){
   $('#step1Title').textContent = t('step1Title');
   $('#step1sub').textContent = t('step1sub');
   $('#search').placeholder = t('searchPlaceholder');
+  $('#searchHint').textContent = t('searchHint');
   $('#toStep2').textContent = t('nextBtn');
 
   $('#step2sub').textContent = t('step2sub');
@@ -565,6 +580,23 @@ async function computeTmdbRecommendations(){
 
   let results = (await tmdbDiscover(params)).filter(m=> m.id !== base.tmdbId);
 
+  /* 별점이 0.5·1·4·4.5·5점처럼 뚜렷한(호불호가 분명한) 경우엔, TMDB의
+     "이 영화를 본 사람들이 함께 본 영화"(recommendations) 데이터도 함께 섞어서
+     "비슷한 별점을 준 사람들이 좋아한 영화" 신호로 활용합니다. */
+  const SIMILAR_USER_RATINGS = [0.5, 1, 4, 4.5, 5];
+  const recommendedIds = new Set();
+  if(SIMILAR_USER_RATINGS.includes(state.rating)){
+    try{
+      const recData = await apiGet('/movie/'+base.tmdbId+'/recommendations', {page:1});
+      const seen = new Set(results.map(r=>r.id));
+      (recData.results||[]).forEach(m=>{
+        if(m.id===base.tmdbId) return;
+        recommendedIds.add(m.id);
+        if(!seen.has(m.id)){ results.push(m); seen.add(m.id); }
+      });
+    }catch(e){}
+  }
+
   // 조건이 너무 좁아 결과가 부족하면 장르만 남기고 완화해서 재조회
   if(results.length < 4){
     const loose = { sort_by:'popularity.desc', 'vote_count.gte':20, page:1 };
@@ -576,12 +608,13 @@ async function computeTmdbRecommendations(){
 
   const top = results.slice(0, 8);
   const detailed = await Promise.all(top.map(async (c, idx)=>{
-    const [credits, providers] = await Promise.all([
+    const [credits, providers, ext] = await Promise.all([
       apiGet('/movie/'+c.id+'/credits', {}).catch(()=>({crew:[],cast:[]})),
       tmdbWatchProviders(c.id),
+      apiGet('/movie/'+c.id+'/external_ids', {}).catch(()=>({})),
     ]);
     const cr = extractCredits(credits);
-    return {c, idx, ...cr, providers};
+    return {c, idx, ...cr, providers, imdbId: ext.imdb_id || null};
   }));
 
   detailed.forEach(d=>{
@@ -610,6 +643,7 @@ async function computeTmdbRecommendations(){
     if(!sameActor && disliked.includes('acting')){ score+=1; reasons.push(t('reasonDiffActorOk')); }
     if(sameActor && disliked.includes('acting')) score -= 2;
     if((themeLiked) && !reasons.some(r=>r===t('reasonThemeSimilar'))){ reasons.push(t('reasonThemeSimilar')); }
+    if(recommendedIds.has(d.c.id)){ score+=2; reasons.push(t('reasonSimilarUsers')); }
 
     if(reasons.length===0) reasons.push(t('reasonDiscoverMatch'));
     d.score = score;
@@ -622,7 +656,8 @@ async function computeTmdbRecommendations(){
       title:d.c.title, year:(d.c.release_date||'').slice(0,4)||'?',
       director: d.director || t('unknownDirector'), actors:d.actors||[],
       poster: d.c.poster_path ? IMG_W200+d.c.poster_path : null,
-      imdbUrl: imdbSearchUrl(d.c.title),
+      overview: d.c.overview || '',
+      imdbUrl: d.imdbId ? ('https://www.imdb.com/title/'+d.imdbId+'/') : imdbSearchUrl(d.c.title),
       ott: d.providers,
     },
     score:d.score, reasons:d.reasons,
@@ -635,13 +670,19 @@ async function computeTmdbRecommendations(){
    ========================================================= */
 function renderResult(result, positive){
   const verdict = $('#verdictBox');
-  verdict.classList.toggle('negative', !positive);
   const likedStr = result.liked.map(k=>t('aspects')[k]).join(', ') || t('noneLabel');
   const dislikedStr = result.disliked.map(k=>t('aspects')[k]).join(', ') || t('noneLabel');
 
-  verdict.innerHTML = positive
-    ? `<div>${t('verdictPositive')(state.movie.title, likedStr)}</div>`
-    : `<div>${t('verdictNegative')(state.movie.title, dislikedStr)}</div>`;
+  // 별점은 낮았지만(부정) 세부 평가에서 아쉬운 항목이 하나도 없는 경우 —
+  // 어색한 "없음이 아쉬우셨던 것 같아요" 대신 자연스러운 문구로 대체
+  const mismatch = !positive && result.disliked.length===0;
+  verdict.classList.toggle('negative', !positive && !mismatch);
+
+  verdict.innerHTML = mismatch
+    ? `<div>${t('verdictMismatchPositive')}</div>`
+    : positive
+      ? `<div>${t('verdictPositive')(state.movie.title, likedStr)}</div>`
+      : `<div>${t('verdictNegative')(state.movie.title, dislikedStr)}</div>`;
 
   const list = $('#resultList');
   list.innerHTML='';
@@ -653,10 +694,15 @@ function renderResult(result, positive){
     t2.className='ticket';
     const posterStyle = movie.poster ? `style="background-image:url('${movie.poster}')"` : '';
     t2.innerHTML = `
-      <div class="poster ${movie.poster?'':'noimg'}" ${posterStyle}></div>
-      <div class="body">
-        <div class="title-row"><h3><a href="${movie.imdbUrl}" target="_blank" rel="noopener">${movie.title}</a></h3><span class="year">${movie.year}</span></div>
-        <div class="credits"><b>${t('director')}</b> ${movie.director || t('unknownDirector')}${movie.actors && movie.actors.length ? `　<b>${t('cast')}</b> ${movie.actors.join(', ')}` : ''}</div>
+      <div class="top">
+        <div class="poster ${movie.poster?'':'noimg'}" ${posterStyle}></div>
+        <div class="head">
+          <div class="title-row"><h3><a href="${movie.imdbUrl}" target="_blank" rel="noopener">${movie.title}</a></h3><span class="year">${movie.year}</span></div>
+          <div class="credits"><b>${t('director')}</b> ${movie.director || t('unknownDirector')}${movie.actors && movie.actors.length ? `　<b>${t('cast')}</b> ${movie.actors.join(', ')}` : ''}</div>
+        </div>
+      </div>
+      <div class="full">
+        ${movie.overview ? `<div class="plot">${truncateOverview(movie.overview, 160)}</div>` : ''}
         <div class="why"><b>${t('reasonLabel')}</b> · ${reasons.slice(0,3).join(' · ')}</div>
         <div class="ott-badges">
           ${movie.ott && movie.ott.length
@@ -744,9 +790,25 @@ $('#restart').onclick = ()=>{
   showStep(1);
 };
 
+/* =========================================================
+   인트로 티켓 → 앱 화면 전환
+   ========================================================= */
+function setupIntro(){
+  const intro = $('#introScreen');
+  const ticket = $('#ticketBtn');
+  const app = $('#appRoot');
+  if(!intro || !ticket || !app) return;
+  ticket.addEventListener('click', ()=>{
+    intro.classList.add('hide');
+    app.classList.add('show');
+    setTimeout(()=>{ intro.style.display='none'; }, 450);
+  }, {once:true});
+}
+
 (function init(){
   loadLang();
   applyStaticI18n();
+  setupIntro();
   checkServer();
   loadHistory();
   showStep(1);
