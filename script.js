@@ -1171,11 +1171,14 @@ function renderHistory(){
     delBtn.className = 'delete-x';
     delBtn.setAttribute('aria-label', t('deleteBtn'));
     delBtn.textContent = '×';
-    delBtn.onclick = ()=>{
+    delBtn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
       history = history.filter(x=> x.id !== h.id);
       saveHistory();
-      renderHistory();
-    };
+      row.remove();
+      if(list.children.length===0) renderHistory();
+    }, {once:true});
     row.appendChild(delBtn);
     list.appendChild(row);
   });
@@ -1272,13 +1275,13 @@ function renderRecsGallery(){
     delBtn.className = 'delete-x rec-delete';
     delBtn.setAttribute('aria-label', t('deleteBtn'));
     delBtn.textContent = '×';
-    delBtn.onclick = (e)=>{
+    delBtn.addEventListener('click', (e)=>{
       e.preventDefault();
       e.stopPropagation();
       savedRecs = savedRecs.filter(x=> x.id !== r.id);
       saveRecs();
       renderRecsGallery();
-    };
+    }, {once:true});
     wrap.appendChild(a);
     wrap.appendChild(delBtn);
     grid.appendChild(wrap);
@@ -1295,9 +1298,12 @@ function loadRecs(){
   }catch(e){}
 }
 
+/* "추천 받았던 영화"·"내 리뷰 기록"은 아코디언처럼 동작 — 하나를 열면 다른 하나는 자동으로 닫혀요 */
 $('#recsGalleryBtn').onclick = ()=>{
   recsGalleryOpen = !recsGalleryOpen;
+  if(recsGalleryOpen) historyOpen = false;
   renderRecsGallery();
+  renderHistory();
   if(recsGalleryOpen) $('#recsGallery').scrollIntoView({behavior:'smooth', block:'start'});
 };
 $('#sortDateBtn').onclick = ()=>{ recsSortMode = 'date'; renderRecsGallery(); };
@@ -1305,7 +1311,9 @@ $('#sortGenreBtn').onclick = ()=>{ recsSortMode = 'genre'; renderRecsGallery(); 
 
 $('#historyBtn').onclick = ()=>{
   historyOpen = !historyOpen;
+  if(historyOpen) recsGalleryOpen = false;
   renderHistory();
+  renderRecsGallery();
   if(historyOpen) $('#historyBox').scrollIntoView({behavior:'smooth', block:'start'});
 };
 
