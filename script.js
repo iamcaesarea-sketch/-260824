@@ -1351,6 +1351,7 @@ function submitReviewToServer(){
     return (genreMap && genreMap[g]) || String(g);
   });
   const payload = {
+    mode: 'similar',
     title: state.movie.title,
     tmdbId: state.movie.tmdbId,
     rating: state.rating,
@@ -1752,6 +1753,23 @@ function renderSimpleTicketCard(movie, reasonText){
   return div;
 }
 
+/* 관리자 페이지에서 볼 수 있도록 모드2(설문) 결과도 서버에 저장 — 화면 동작에는 영향 없음 */
+function submitMode2ToServer(resultTitles){
+  const payload = {
+    mode: 'quiz',
+    mood: mode2State.mood,
+    runtime: mode2State.runtime,
+    decade: mode2State.decade,
+    results: resultTitles,
+    lang: state.lang,
+  };
+  fetch('/api/save-review', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload),
+  }).catch(()=>{});
+}
+
 async function runMode2Recommend(){
   if(!mode2State.mood) return;
   const btn = $('#mode2Submit');
@@ -1783,6 +1801,7 @@ async function runMode2Recommend(){
     }else{
       cards.forEach(movie=> list.appendChild(renderSimpleTicketCard(movie, t('mode2ReasonText'))));
     }
+    submitMode2ToServer(cards.map(c=>c.title));
     $('#mode2QuizPanel').style.display='none';
     $('#mode2ResultPanel').style.display='block';
     window.scrollTo({top:0, behavior:'smooth'});
@@ -1899,6 +1918,22 @@ function pickArchetype(picks){
   return best || 'freeSpirit';
 }
 
+/* 관리자 페이지에서 볼 수 있도록 모드3(인생영화 분석) 결과도 서버에 저장 — 화면 동작에는 영향 없음 */
+function submitMode3ToServer(archetypeKey, archetypeTitle){
+  const payload = {
+    mode: 'life',
+    pickedMovies: mode3Picked.map(p=>p.title),
+    archetype: archetypeKey,
+    archetypeTitle: archetypeTitle,
+    lang: state.lang,
+  };
+  fetch('/api/save-review', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload),
+  }).catch(()=>{});
+}
+
 async function runMode3Analyze(){
   if(mode3Picked.length<3){ alert(t('mode3NeedMore')); return; }
   const btn = $('#mode3Submit');
@@ -1932,6 +1967,7 @@ async function runMode3Analyze(){
       const reasonText = t('mode3ReasonTemplate')(archetype.fanTrait);
       cards.forEach(movie=> list.appendChild(renderSimpleTicketCard(movie, reasonText)));
     }
+    submitMode3ToServer(archetypeKey, archetype.title);
 
     $('#mode3PickPanel').style.display='none';
     $('#mode3ResultPanel').style.display='block';

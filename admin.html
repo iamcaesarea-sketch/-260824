@@ -32,14 +32,27 @@
   }
   .date-tab:hover{border-color:var(--text-dim); color:var(--text);}
   .date-tab.selected{border-color:var(--accent); background:rgba(0,210,255,0.12); color:var(--text);}
+  .mode-tabs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;}
+  .mode-tab{
+    font-family:inherit; font-size:12.5px; font-weight:700; padding:7px 14px; border-radius:16px;
+    border:1px solid var(--line); background:var(--bg-alt); color:var(--text-dim); cursor:pointer;
+  }
+  .mode-tab:hover{border-color:var(--text-dim); color:var(--text);}
+  .mode-tab.selected{border-color:#ff8a3d; background:rgba(255,138,61,0.14); color:var(--text);}
   .review-card{background:var(--card); border:1px solid var(--line); border-radius:6px; padding:16px 18px; margin-bottom:14px;}
   .rc-head{display:flex; justify-content:space-between; align-items:baseline; gap:8px 14px; flex-wrap:wrap; margin-bottom:4px;}
   .rc-title{font-size:16px; font-weight:700;}
   .rc-stars{color:var(--accent); font-size:13px; white-space:nowrap;}
+  .rc-badge{
+    display:inline-block; font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:10px;
+    background:rgba(255,138,61,0.16); color:#ff8a3d; margin-bottom:8px;
+  }
   .rc-time{color:var(--text-dim); font-size:11.5px; margin-bottom:10px;}
   .rc-text{font-size:13.5px; line-height:1.6; white-space:pre-wrap; margin:0 0 10px;}
   .rc-aspects{color:var(--text-dim); font-size:11.5px; margin-bottom:6px;}
   .rc-filters{color:var(--accent-dim); font-size:11.5px;}
+  .rc-quiz{font-size:13px; line-height:1.7;}
+  .rc-quiz b{color:var(--text);}
   .empty-note{color:var(--text-dim); font-size:13px; padding:20px 0;}
 </style>
 </head>
@@ -61,6 +74,7 @@
       <button class="ghost" id="logoutBtn">로그아웃</button>
     </div>
   </div>
+  <div class="mode-tabs" id="modeTabs"></div>
   <div class="date-tabs" id="dateTabs"></div>
   <div id="reviewCards"></div>
 </div>
@@ -68,9 +82,23 @@
 <script>
 const ASPECT_LABEL = {
   direction:'연출', script:'각본', originality:'독창성', theme:'주제', miseEnScene:'미장센',
-  acting:'연기', genre:'장르', editing:'편집', music:'음악',
+  acting:'연기', genre:'장르', editing:'편집', music:'음악', immersion:'몰입도',
 };
 const TYPE_LABEL = { commercial:'상업 영화', indie:'독립 영화', short:'단편 영화' };
+const MODE_LABEL = { similar:'비슷한 영화 찾기', quiz:'나와 맞는 영화 찾기', life:'인생영화 분석' };
+const MOOD_LABEL = {
+  action:'신나고 짜릿한 게 좋아요', comedy:'웃고 싶어요', thriller:'몰입해서 긴장하고 싶어요',
+  drama:'마음 울리는 이야기가 좋아요', horror:'짜릿하게 무서운 것도 좋아요', romance:'설레는 로맨스가 좋아요',
+};
+
+function modeOf(r){
+  return r.mode === 'quiz' || r.mode === 'life' ? r.mode : 'similar';
+}
+function decadeStr(decade){
+  if(decade === 'classic') return '고전영화(1980년 이전)';
+  if(decade) return decade + '년대';
+  return '상관없음';
+}
 
 function filtersStr(f){
   if(!f) return '';
@@ -102,6 +130,7 @@ function showDashboard(){
 
 let allReviews = [];
 let selectedDate = 'all';
+let selectedMode = 'all';
 
 function dateKeyOf(iso){
   return (iso || '').slice(0, 10);
@@ -116,6 +145,7 @@ async function loadReviews(){
     const data = await res.json();
     allReviews = data.reviews || [];
     selectedDate = 'all';
+    selectedMode = 'all';
     renderReviews();
     showDashboard();
     return true;
@@ -125,45 +155,40 @@ async function loadReviews(){
   }
 }
 
-function renderReviews(){
-  const tabsBox = document.querySelector('#dateTabs');
-  const cardsBox = document.querySelector('#reviewCards');
+function renderModeCard(r){
+  const mode = modeOf(r);
+  const badge = `<div class="rc-badge">${MODE_LABEL[mode]}</div>`;
+  const card = document.createElement('div');
+  card.className = 'review-card';
 
-  const dates = [...new Set(allReviews.map(r=> dateKeyOf(r.createdAt)))].sort((a,b)=> b.localeCompare(a));
-  tabsBox.innerHTML = '';
-  const allTab = document.createElement('button');
-  allTab.type = 'button';
-  allTab.className = 'date-tab' + (selectedDate==='all' ? ' selected' : '');
-  allTab.textContent = '전체 (' + allReviews.length + ')';
-  allTab.onclick = ()=>{ selectedDate = 'all'; renderReviews(); };
-  tabsBox.appendChild(allTab);
-  dates.forEach(d=>{
-    const count = allReviews.filter(r=> dateKeyOf(r.createdAt)===d).length;
-    const tab = document.createElement('button');
-    tab.type = 'button';
-    tab.className = 'date-tab' + (selectedDate===d ? ' selected' : '');
-    tab.textContent = d + ' (' + count + ')';
-    tab.onclick = ()=>{ selectedDate = d; renderReviews(); };
-    tabsBox.appendChild(tab);
-  });
-
-  const filtered = (selectedDate==='all' ? allReviews : allReviews.filter(r=> dateKeyOf(r.createdAt)===selectedDate))
-    .slice()
-    .sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt));
-
-  document.querySelector('#count').textContent = filtered.length + '개';
-  cardsBox.innerHTML = '';
-  if(filtered.length===0){
-    cardsBox.innerHTML = '<div class="empty-note">표시할 리뷰가 없어요.</div>';
-    return;
-  }
-  filtered.forEach(r=>{
+  if(mode === 'quiz'){
+    const resultsStr = (r.results||[]).join(', ') || '(없음)';
+    card.innerHTML = `
+      ${badge}
+      <div class="rc-time">${new Date(r.createdAt).toLocaleString('ko-KR')} · ${r.lang || ''}</div>
+      <div class="rc-quiz">
+        <div><b>무드</b> ${MOOD_LABEL[r.mood] || r.mood || '(없음)'}</div>
+        <div><b>러닝타임</b> ${r.runtime ? '≤'+r.runtime+'분' : '상관없음'}</div>
+        <div><b>개봉연도</b> ${decadeStr(r.decade)}</div>
+        <div><b>추천 결과</b> ${resultsStr}</div>
+      </div>
+    `;
+  }else if(mode === 'life'){
+    const pickedStr = (r.pickedMovies||[]).join(', ') || '(없음)';
+    card.innerHTML = `
+      ${badge}
+      <div class="rc-time">${new Date(r.createdAt).toLocaleString('ko-KR')} · ${r.lang || ''}</div>
+      <div class="rc-quiz">
+        <div><b>고른 영화</b> ${pickedStr}</div>
+        <div><b>분석 결과</b> ${r.archetypeTitle || r.archetype || '(없음)'}</div>
+      </div>
+    `;
+  }else{
     const aspectsStr = Object.entries(r.aspects||{})
       .map(([k,v])=> (ASPECT_LABEL[k]||k) + ' ' + v)
       .join(' · ');
-    const card = document.createElement('div');
-    card.className = 'review-card';
     card.innerHTML = `
+      ${badge}
       <div class="rc-head">
         <span class="rc-title">${r.title || ''}</span>
         <span class="rc-stars">${starStr(r.rating)} (${r.rating})</span>
@@ -173,8 +198,63 @@ function renderReviews(){
       ${aspectsStr ? `<div class="rc-aspects">${aspectsStr}</div>` : ''}
       <div class="rc-filters">${filtersStr(r.filters)}</div>
     `;
-    cardsBox.appendChild(card);
+  }
+  return card;
+}
+
+function renderReviews(){
+  const modeTabsBox = document.querySelector('#modeTabs');
+  const tabsBox = document.querySelector('#dateTabs');
+  const cardsBox = document.querySelector('#reviewCards');
+
+  const byMode = selectedMode==='all' ? allReviews : allReviews.filter(r=> modeOf(r)===selectedMode);
+
+  modeTabsBox.innerHTML = '';
+  const allModeTab = document.createElement('button');
+  allModeTab.type = 'button';
+  allModeTab.className = 'mode-tab' + (selectedMode==='all' ? ' selected' : '');
+  allModeTab.textContent = '전체 (' + allReviews.length + ')';
+  allModeTab.onclick = ()=>{ selectedMode = 'all'; selectedDate = 'all'; renderReviews(); };
+  modeTabsBox.appendChild(allModeTab);
+  ['similar','quiz','life'].forEach(m=>{
+    const count = allReviews.filter(r=> modeOf(r)===m).length;
+    const tab = document.createElement('button');
+    tab.type = 'button';
+    tab.className = 'mode-tab' + (selectedMode===m ? ' selected' : '');
+    tab.textContent = MODE_LABEL[m] + ' (' + count + ')';
+    tab.onclick = ()=>{ selectedMode = m; selectedDate = 'all'; renderReviews(); };
+    modeTabsBox.appendChild(tab);
   });
+
+  const dates = [...new Set(byMode.map(r=> dateKeyOf(r.createdAt)))].sort((a,b)=> b.localeCompare(a));
+  tabsBox.innerHTML = '';
+  const allTab = document.createElement('button');
+  allTab.type = 'button';
+  allTab.className = 'date-tab' + (selectedDate==='all' ? ' selected' : '');
+  allTab.textContent = '전체 (' + byMode.length + ')';
+  allTab.onclick = ()=>{ selectedDate = 'all'; renderReviews(); };
+  tabsBox.appendChild(allTab);
+  dates.forEach(d=>{
+    const count = byMode.filter(r=> dateKeyOf(r.createdAt)===d).length;
+    const tab = document.createElement('button');
+    tab.type = 'button';
+    tab.className = 'date-tab' + (selectedDate===d ? ' selected' : '');
+    tab.textContent = d + ' (' + count + ')';
+    tab.onclick = ()=>{ selectedDate = d; renderReviews(); };
+    tabsBox.appendChild(tab);
+  });
+
+  const filtered = (selectedDate==='all' ? byMode : byMode.filter(r=> dateKeyOf(r.createdAt)===selectedDate))
+    .slice()
+    .sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt));
+
+  document.querySelector('#count').textContent = filtered.length + '개';
+  cardsBox.innerHTML = '';
+  if(filtered.length===0){
+    cardsBox.innerHTML = '<div class="empty-note">표시할 리뷰가 없어요.</div>';
+    return;
+  }
+  filtered.forEach(r=> cardsBox.appendChild(renderModeCard(r)));
 }
 
 document.querySelector('#loginBtn').onclick = async ()=>{
