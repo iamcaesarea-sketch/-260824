@@ -6,7 +6,7 @@ const I18N = {
   ko: {
     pageTitle: 'CineRec — 영화 리뷰 & 맞춤 추천',
     eyebrow: '장편·독립·단편 영화 DB 수록',
-    tagline: '시청한 영화의 별점과 리뷰를 남기면, 9가지 항목으로 분석한 후<br>전세계 영화 데이터베이스에서 취향에 맞는 다음 영화를 찾아드려요.',
+    tagline: '시청한 영화의 별점과 리뷰를 남기면, 10가지 항목으로 분석한 후<br>전세계 영화 데이터베이스에서 취향에 맞는 다음 영화를 찾아드려요.',
     statusChecking: '서버 연동 상태 확인 중…',
     statusOn: '서버 연동 켜짐 - 실시간 검색이 가능한 상태예요.',
     statusOff: '서버 연동 꺼짐 - 서버와 연결이 잠시 끊어졌어요. 잠깐의 휴식을 즐기는 동안, 곧 다시 영화를 찾을 수 있도록 복구할게요!',
@@ -30,12 +30,12 @@ const I18N = {
     reviewPlaceholder: '예: 배우들 연기가 정말 인상적이었고 음악도 몰입감을 더해줬어요. 다만 후반부 각본이 좀 늘어지는 느낌...',
     privacyNote: '별점·리뷰는 서비스 개선을 위해 저장돼요.',
     ratingLabels: {1:'별로였어요', 2:'아쉬웠어요', 3:'그럭저럭이었어요', 4:'좋았어요', 5:'최고였어요!'},
-    step3subPositive: (title) => `“${title}”이 좋으셨다니 다행이에요. 9가지 항목 중 어떤 부분이 특히 마음에 드셨는지 알려주세요.`,
+    step3subPositive: (title) => `“${title}”이 좋으셨다니 다행이에요. 10가지 항목 중 어떤 부분이 특히 마음에 드셨는지 알려주세요.`,
     step3subNegative: () => `아쉬우셨군요. 어떤 항목이 특히 별로였는지 알려주시면, 그 반대 성향의 영화를 찾아드릴게요.`,
     step3Title: '세부적으로 평가해 주세요',
     aspects: {
       direction: '연출', script: '각본 · 대사', originality: '독창성', theme: '주제',
-      miseEnScene: '미장센', acting: '연기', genre: '장르', editing: '편집', music: '음악',
+      miseEnScene: '미장센', acting: '연기', genre: '장르', editing: '편집', music: '음악', immersion: '몰입도',
     },
     scaleLow: '별로', scaleMid: '보통', scaleHigh: '아주 좋음',
     recommendBtn: '추천 받기',
@@ -107,7 +107,7 @@ const I18N = {
   en: {
     pageTitle: 'CineRec — Movie Reviews & Picks',
     eyebrow: 'Feature · Indie · Short Films Included',
-    tagline: 'Rate and review a movie you\'ve watched across 9 aspects,<br>and we\'ll search a global movie database for what to watch next.',
+    tagline: 'Rate and review a movie you\'ve watched across 10 aspects,<br>and we\'ll search a global movie database for what to watch next.',
     statusChecking: 'Checking server connection…',
     statusOn: 'Server connected - live search is available.',
     statusOff: 'Server disconnected - we lost the connection for a moment. Enjoy a short break while we get things running again!',
@@ -131,12 +131,12 @@ const I18N = {
     reviewPlaceholder: 'e.g. The acting was really impressive and the music pulled me in. Though the script dragged a bit in the second half...',
     privacyNote: 'Your rating and review are stored to help improve the service.',
     ratingLabels: {1:'Not great', 2:'Meh', 3:'It was okay', 4:'I liked it', 5:'Loved it!'},
-    step3subPositive: (title) => `Glad you enjoyed "${title}"! Tell us which of the 9 aspects stood out to you.`,
+    step3subPositive: (title) => `Glad you enjoyed "${title}"! Tell us which of the 10 aspects stood out to you.`,
     step3subNegative: () => `Sorry to hear that. Tell us which aspects fell short and we'll find something with the opposite vibe.`,
     step3Title: 'Rate the details',
     aspects: {
       direction: 'Direction', script: 'Script & Dialogue', originality: 'Originality', theme: 'Theme',
-      miseEnScene: 'Mise-en-scène', acting: 'Acting', genre: 'Genre', editing: 'Editing', music: 'Music',
+      miseEnScene: 'Mise-en-scène', acting: 'Acting', genre: 'Genre', editing: 'Editing', music: 'Music', immersion: 'Immersion',
     },
     scaleLow: 'Poor', scaleMid: 'Average', scaleHigh: 'Excellent',
     recommendBtn: 'Get Recommendations',
@@ -351,9 +351,9 @@ async function tmdbMovieDetail(tmdbId){
 /* =========================================================
    상태
    ========================================================= */
-const ASPECT_KEYS = ['direction','script','originality','theme','miseEnScene','acting','genre','editing','music'];
-/* 03단계엔 핵심 6개만, 나머지(독창성/편집/음악)는 04단계 "세부 평가 더 보기"로 이동 — 전부 선택 사항 */
-const STEP3_ASPECT_KEYS = ['genre','direction','script','theme','miseEnScene','acting'];
+const ASPECT_KEYS = ['direction','script','originality','theme','miseEnScene','acting','genre','editing','music','immersion'];
+/* 03단계엔 핵심 7개만, 나머지(독창성/편집/음악)는 04단계 "세부 평가 더 보기"로 이동 — 전부 선택 사항 */
+const STEP3_ASPECT_KEYS = ['genre','direction','script','theme','miseEnScene','acting','immersion'];
 const EXTRA_ASPECT_KEYS = ['originality','editing','music'];
 let state = {
   movie:null, rating:0, reviewText:'',
@@ -778,6 +778,7 @@ const KEYWORDS = {
   genre: ['장르','설정'],
   editing: ['편집','템포','호흡','늘어지'],
   music: ['음악','사운드트랙','스코어','ost','O.S.T'],
+  immersion: ['몰입','몰입감','빠져들','집중'],
 };
 const NEG_WORDS = ['별로','아쉽','실망','지루','늘어지','어색','부족','산만','뻔한','진부'];
 const POS_WORDS = ['좋았','최고','인상적','몰입','훌륭','인생작','완벽','대단','참신','신선했'];
