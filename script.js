@@ -383,6 +383,9 @@ function showStep(n){
     s.classList.toggle('done', sv<n);
   });
   window.scrollTo({top:0, behavior:'smooth'});
+  if(typeof gtag === 'function'){
+    gtag('event', 'step_view', { step_number: n });
+  }
 }
 
 /* =========================================================
