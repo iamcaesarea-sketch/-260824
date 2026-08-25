@@ -107,7 +107,7 @@ const I18N = {
     modeSelectCaption: '어떤 티켓으로 시작할까요?',
     modeTicket1Label: '비슷한 영화<br>찾기',
     modeTicket2Label: '나와 맞는 영화<br>찾기',
-    modeTicket3Label: '인생영화로<br>나 분석하기',
+    modeTicket3Label: '인생영화로 보는<br>내 안의 무의식',
     backToModesText: '다른 방식으로 찾기',
 
     mode2Eyebrow: '나와 맞는 영화 찾기',
@@ -126,30 +126,78 @@ const I18N = {
       drama: '마음 울리는 이야기가 좋아요', horror: '짜릿하게 무서운 것도 좋아요', romance: '설레는 로맨스가 좋아요',
     },
 
-    mode3Eyebrow: '인생영화로 나에 대해 분석하기',
+    mode3Eyebrow: '인생영화로 보는 내 안의 무의식',
     mode3PickTitle: '🎬 인생 영화를 골라주세요',
     mode3PickSub: '3~5편 정도 고르면 더 정확하게 분석돼요. (재미로 보는 결과예요!)',
     mode3SearchPlaceholder: '예: 라라랜드, 인터스텔라, 기생충',
     mode3PickedLabel: '고른 영화',
     mode3SubmitBtn: '분석하기',
     mode3RestartBtn: '다시 고르기',
-    mode3RecLabel: '이런 영화도 잘 맞을 거예요',
+    mode3RecLabel: '나랑 잘 맞을 영화',
     mode3Disclaimer: '취향을 재미로 풀어본 결과예요. 실제 성격 분석이 아니에요 :)',
     mode3ReasonText: '분석된 취향 유형에 맞춰 추천했어요',
     mode3NeedMore: '영화를 3편 이상 골라주세요.',
     mode3VerdictTitle: (archetypeTitle) => `당신은 <b>"${archetypeTitle}"</b> 유형이에요`,
+    mode3LabelPersonality: '어떤 사람인 것 같냐면',
+    mode3LabelCompat: '이런 사람과 잘 맞아요',
+    mode3LabelStrength: '가장 큰 장점',
+    mode3LabelLifeGoal: '지향하는 삶',
     archetypes: {
-      adventurer: {title:'모험가', desc:'가만히 있는 걸 못 견디는 타입이에요. 새로운 자극과 도전 앞에서 오히려 눈이 반짝이고, 망설임보다 행동이 먼저 나가는 사람이죠.'},
-      entertainer: {title:'분위기 메이커', desc:'무거운 공기를 못 참는 타입이에요. 어디서든 웃음 포인트를 찾아내고, 사람들 사이의 분위기를 자연스럽게 풀어주는 사람이죠.'},
-      empath: {title:'감성 관찰자', desc:'사람과 감정의 결을 세심하게 들여다보는 타입이에요. 겉으로 드러나지 않는 마음까지 알아차리고, 깊이 있는 대화를 좋아하죠.'},
-      thrillSeeker: {title:'스릴 추구자', desc:'적당히 무서운 걸 오히려 즐기는 타입이에요. 긴장감 있는 상황에서 심장이 뛰는 걸 좋아하고, 예측 불가능한 전개에 끌리죠.'},
-      romantic: {title:'로맨티스트', desc:'설렘과 감정선을 소중히 여기는 타입이에요. 작은 순간에도 의미를 부여하고, 관계 속에서 진심을 나누는 걸 중요하게 생각하죠.'},
-      strategist: {title:'전략가', desc:'퍼즐이 맞춰지는 순간을 좋아하는 타입이에요. 단서를 하나씩 모아 스스로 답을 찾아내는 과정에서 짜릿함을 느끼죠.'},
-      dreamer: {title:'몽상가', desc:'현실 너머의 세계를 상상하는 걸 즐기는 타입이에요. 남들이 안 된다고 할 때, 오히려 "그럼 어떻게 되면 좋을까"를 먼저 그려보죠.'},
-      innocent: {title:'동심 지킴이', desc:'따뜻하고 단순한 것에서 진짜 행복을 찾는 타입이에요. 복잡한 것보다 소박하고 다정한 이야기에 마음이 더 크게 움직이죠.'},
-      seeker: {title:'탐구자', desc:'"진짜" 이야기에 끌리는 타입이에요. 꾸며진 것보다 사실 그 자체에 흥미를 느끼고, 궁금한 건 끝까지 파고드는 성격이죠.'},
-      warrior: {title:'신념가', desc:'역사와 대의를 소중히 여기는 타입이에요. 큰 흐름 속에서 자신의 자리를 고민하고, 옳다고 믿는 걸 위해 움직이는 사람이죠.'},
-      freeSpirit: {title:'자유로운 영혼', desc:'한 가지 장르에 갇히지 않는 타입이에요. 다양한 이야기를 골고루 즐기면서, 그때그때 끌리는 대로 선택하는 걸 좋아하죠.'},
+      adventurer: {title:'모험가',
+        personality:'가만히 있는 걸 못 견디는 타입이에요. 새로운 자극과 도전 앞에서 오히려 눈이 반짝이고, 망설임보다 행동이 먼저 나가는 사람이죠.',
+        compatibility:'계획적이고 차분한 사람과 만나면 서로의 빈틈을 잘 채워줘요. 함께 즉흥적으로 떠날 수 있는 사람이면 더할 나위 없죠.',
+        strength:'결단력과 추진력이에요. 남들이 재고 따지는 동안 이미 한 발짝 나가 있는 실행력이 최대 무기죠.',
+        lifeGoal:'안정보다 경험이 남는 삶을 지향해요. 나중에 후회하는 것보다, 일단 해보고 얻은 이야기가 더 값지다고 믿는 사람이에요.'},
+      entertainer: {title:'분위기 메이커',
+        personality:'무거운 공기를 못 참는 타입이에요. 어디서든 웃음 포인트를 찾아내고, 사람들 사이의 분위기를 자연스럽게 풀어주는 사람이죠.',
+        compatibility:'진지하고 속 깊은 사람과 있으면 서로 좋은 균형을 이뤄요. 당신의 유머에 진심으로 웃어주는 사람이면 오래갈 인연이에요.',
+        strength:'공간의 온도를 바꾸는 힘이에요. 당신이 있으면 어색함이 오래 못 버티죠.',
+        lifeGoal:'심각하게 사는 것보다 즐겁게 사는 삶을 지향해요. 매일이 재밌어야 진짜 잘 살고 있는 거라 믿는 사람이에요.'},
+      empath: {title:'감성 관찰자',
+        personality:'사람과 감정의 결을 세심하게 들여다보는 타입이에요. 겉으로 드러나지 않는 마음까지 알아차리고, 깊이 있는 대화를 좋아하죠.',
+        compatibility:'솔직하게 감정을 표현하는 사람과 잘 맞아요. 말하지 않아도 알아주길 바라기보다, 서로 표현해주는 관계에서 더 편안함을 느껴요.',
+        strength:'공감 능력이에요. 사람의 진짜 마음을 읽어내는 섬세함이 당신 곁에 사람이 모이는 이유죠.',
+        lifeGoal:'얕고 넓은 관계보다 깊고 진한 관계를 지향해요. 몇 명이어도 진심으로 통하는 사람이 있으면 충분하다고 생각하는 편이에요.'},
+      thrillSeeker: {title:'스릴 추구자',
+        personality:'적당히 무서운 걸 오히려 즐기는 타입이에요. 긴장감 있는 상황에서 심장이 뛰는 걸 좋아하고, 예측 불가능한 전개에 끌리죠.',
+        compatibility:'겁 없이 같이 달려줄 사람과 죽이 잘 맞아요. 너무 신중한 사람보다는, 그냥 같이 저지르는 사람이 편해요.',
+        strength:'위기 앞에서 오히려 침착해지는 담대함이에요. 다른 사람이 얼어있을 때 당신은 이미 움직이고 있죠.',
+        lifeGoal:'무난한 삶보다 짜릿한 삶을 지향해요. 예측 가능한 하루보다는, 무슨 일이 생길지 모르는 하루가 더 살아있다고 느껴요.'},
+      romantic: {title:'로맨티스트',
+        personality:'설렘과 감정선을 소중히 여기는 타입이에요. 작은 순간에도 의미를 부여하고, 관계 속에서 진심을 나누는 걸 중요하게 생각하죠.',
+        compatibility:'표현에 인색하지 않은 사람과 잘 맞아요. 사소한 다정함을 알아채고 되돌려주는 사람이면 관계가 오래갈 거예요.',
+        strength:'사람과 순간을 소중히 여기는 마음이에요. 당신과 함께한 기억은 유난히 더 특별하게 남죠.',
+        lifeGoal:'효율적인 삶보다 마음이 남는 삶을 지향해요. 결과보다 그 과정에서 느낀 감정을 더 오래 기억하는 사람이에요.'},
+      strategist: {title:'전략가',
+        personality:'퍼즐이 맞춰지는 순간을 좋아하는 타입이에요. 단서를 하나씩 모아 스스로 답을 찾아내는 과정에서 짜릿함을 느끼죠.',
+        compatibility:'직관적이고 자유로운 사람과 만나면 서로를 잘 보완해요. 당신의 계획에 예상 밖의 재미를 더해주는 사람이 좋은 짝이에요.',
+        strength:'논리적으로 파고드는 분석력이에요. 남들이 놓친 디테일을 당신은 이미 눈치채고 있죠.',
+        lifeGoal:'감으로 사는 삶보다 이해하고 넘어가는 삶을 지향해요. 왜 그런지 납득이 돼야 진짜 내 것이 된다고 믿는 편이에요.'},
+      dreamer: {title:'몽상가',
+        personality:'현실 너머의 세계를 상상하는 걸 즐기는 타입이에요. 남들이 안 된다고 할 때, 오히려 "그럼 어떻게 되면 좋을까"를 먼저 그려보죠.',
+        compatibility:'현실감각이 있는 사람과 함께면 상상이 진짜가 될 수 있어요. 당신의 아이디어를 비웃지 않고 함께 궁금해해 주는 사람이 좋아요.',
+        strength:'남들이 못 보는 가능성을 보는 상상력이에요. 아직 없는 걸 그려내는 힘이 당신의 무기죠.',
+        lifeGoal:'정해진 틀보다 상상한 걸 실현하는 삶을 지향해요. 남들이 다 가는 길보다, 아직 아무도 안 가본 길에 더 끌리는 사람이에요.'},
+      innocent: {title:'동심 지킴이',
+        personality:'따뜻하고 단순한 것에서 진짜 행복을 찾는 타입이에요. 복잡한 것보다 소박하고 다정한 이야기에 마음이 더 크게 움직이죠.',
+        compatibility:'꾸밈없고 다정한 사람과 편안함을 느껴요. 계산 없이 진심으로 대해주는 사람이면 마음을 활짝 열게 돼요.',
+        strength:'사람을 있는 그대로 봐주는 순수함이에요. 당신 앞에서는 다들 방어를 내려놓게 되죠.',
+        lifeGoal:'복잡하고 화려한 삶보다 따뜻하고 편안한 삶을 지향해요. 큰 성취보다 소소한 행복이 쌓인 하루하루를 더 값지게 여겨요.'},
+      seeker: {title:'탐구자',
+        personality:'"진짜" 이야기에 끌리는 타입이에요. 꾸며진 것보다 사실 그 자체에 흥미를 느끼고, 궁금한 건 끝까지 파고드는 성격이죠.',
+        compatibility:'호기심을 존중해주는 사람과 잘 맞아요. 당신의 질문을 귀찮아하지 않고 같이 답을 찾아주는 사람이 좋은 인연이에요.',
+        strength:'끝까지 파고드는 집요함이에요. 대충 아는 걸로 만족 못 하는 성격이 결국 진짜 답을 찾아내죠.',
+        lifeGoal:'믿고 넘어가는 삶보다 직접 확인하는 삶을 지향해요. 남이 알려준 답보다, 스스로 찾아낸 진실을 더 신뢰하는 사람이에요.'},
+      warrior: {title:'신념가',
+        personality:'역사와 대의를 소중히 여기는 타입이에요. 큰 흐름 속에서 자신의 자리를 고민하고, 옳다고 믿는 걸 위해 움직이는 사람이죠.',
+        compatibility:'신념이 뚜렷한 사람과 서로 존중하며 잘 지내요. 당신의 원칙을 이해해주는 사람이면 든든한 동료가 될 거예요.',
+        strength:'쉽게 흔들리지 않는 뚝심이에요. 한번 옳다고 믿으면 끝까지 밀고 나가는 힘이 있죠.',
+        lifeGoal:'그냥저냥 사는 삶보다 의미 있는 삶을 지향해요. 내가 왜 이렇게 사는지 스스로 설명할 수 있어야 한다고 믿는 사람이에요.'},
+      freeSpirit: {title:'자유로운 영혼',
+        personality:'한 가지 장르에 갇히지 않는 타입이에요. 다양한 이야기를 골고루 즐기면서, 그때그때 끌리는 대로 선택하는 걸 좋아하죠.',
+        compatibility:'당신처럼 열린 사람과 잘 맞아요. 틀에 가두지 않고 있는 그대로 봐주는 사람이면 편안한 관계가 될 거예요.',
+        strength:'어디에도 얽매이지 않는 유연함이에요. 상황에 맞게 자유자재로 바뀌는 적응력이 당신의 무기죠.',
+        lifeGoal:'한 가지 정답보다 다양한 가능성이 열린 삶을 지향해요. 하나로 규정되지 않는 삶이 당신에게는 더 자연스러워요.'},
     },
   },
   en: {
@@ -256,7 +304,7 @@ const I18N = {
     modeSelectCaption: 'Pick your ticket to start',
     modeTicket1Label: 'Find a<br>Similar Movie',
     modeTicket2Label: 'Find My<br>Movie Match',
-    modeTicket3Label: 'Analyze Me<br>by My Favorites',
+    modeTicket3Label: 'My Unconscious,<br>Through Film',
     backToModesText: 'Try another way',
 
     mode2Eyebrow: 'Find My Movie Match',
@@ -275,30 +323,78 @@ const I18N = {
       drama: 'A story that moves me', horror: 'A good scare works too', romance: 'A swoony romance',
     },
 
-    mode3Eyebrow: 'Analyze Me by My Favorites',
+    mode3Eyebrow: 'My Unconscious, Through Film',
     mode3PickTitle: '🎬 Pick your all-time favorites',
     mode3PickSub: 'Pick 3-5 for a more accurate read. (Just for fun!)',
     mode3SearchPlaceholder: 'e.g. La La Land, Interstellar, Parasite',
     mode3PickedLabel: 'Your picks',
     mode3SubmitBtn: 'Analyze',
     mode3RestartBtn: 'Start Over',
-    mode3RecLabel: 'These might fit you too',
+    mode3RecLabel: 'Your movie match',
     mode3Disclaimer: "A playful read on your taste — not a real personality analysis :)",
     mode3ReasonText: 'Matched to your analyzed type',
     mode3NeedMore: 'Pick at least 3 movies.',
     mode3VerdictTitle: (archetypeTitle) => `You're the <b>"${archetypeTitle}"</b> type`,
+    mode3LabelPersonality: 'What you seem like',
+    mode3LabelCompat: "Who you'd click with",
+    mode3LabelStrength: 'Your biggest strength',
+    mode3LabelLifeGoal: "The life you're after",
     archetypes: {
-      adventurer: {title:'The Adventurer', desc:"You can't sit still. New thrills and challenges make your eyes light up, and you act before you hesitate."},
-      entertainer: {title:'The Entertainer', desc:"You can't stand a heavy mood. You find the funny angle in any room and naturally loosen things up."},
-      empath: {title:'The Empath', desc:"You look closely at people and feelings, noticing what's left unsaid, and you love a deep conversation."},
-      thrillSeeker: {title:'The Thrill-Seeker', desc:'You actually enjoy a good scare. Tension makes your heart race, and unpredictable turns pull you in.'},
-      romantic: {title:'The Romantic', desc:'You treasure butterflies and emotional arcs, finding meaning in small moments and sincerity in relationships.'},
-      strategist: {title:'The Strategist', desc:'You love the moment a puzzle clicks into place — piecing clues together to find your own answer.'},
-      dreamer: {title:'The Dreamer', desc:"You love imagining worlds beyond this one. When others say something's impossible, you're already picturing how it could work."},
-      innocent: {title:'The Warm Heart', desc:'You find real happiness in warm, simple things. A gentle story moves you more than a complicated one.'},
-      seeker: {title:'The Seeker', desc:"You're drawn to true stories — real facts interest you more than fiction, and once curious, you dig all the way down."},
-      warrior: {title:'The Believer', desc:'You value history and cause, thinking about your place in the bigger picture and acting on what you believe is right.'},
-      freeSpirit: {title:'The Free Spirit', desc:"You're not boxed into one genre — you enjoy a wide range of stories and pick whatever calls to you in the moment."},
+      adventurer: {title:'The Adventurer',
+        personality:"You can't sit still. New thrills and challenges make your eyes light up, and you act before you hesitate.",
+        compatibility:"You balance well with someone calm and deliberate. Best of all is someone who'll drop everything and go with you on a whim.",
+        strength:"Decisiveness and drive. While others are still weighing options, you're already a step ahead.",
+        lifeGoal:'You value experience over stability — a good story beats a safe regret.'},
+      entertainer: {title:'The Entertainer',
+        personality:"You can't stand a heavy mood. You find the funny angle in any room and naturally loosen things up.",
+        compatibility:'You balance well with someone thoughtful and grounded. Someone who genuinely laughs at your jokes is a keeper.',
+        strength:"You change the temperature of a room. Awkward silences don't survive long around you.",
+        lifeGoal:"You'd rather live joyfully than seriously — every day should have some fun in it."},
+      empath: {title:'The Empath',
+        personality:"You look closely at people and feelings, noticing what's left unsaid, and you love a deep conversation.",
+        compatibility:'You do well with someone who expresses their feelings openly — mutual honesty feels safer than assumed understanding.',
+        strength:'Empathy. Your sensitivity to what people really feel is why they gravitate toward you.',
+        lifeGoal:'You value a few deep connections over many shallow ones.'},
+      thrillSeeker: {title:'The Thrill-Seeker',
+        personality:'You actually enjoy a good scare. Tension makes your heart race, and unpredictable turns pull you in.',
+        compatibility:'You click with someone fearless enough to jump in with you — overly cautious types slow you down.',
+        strength:"A calm that shows up right when things get intense — you're already moving while others freeze.",
+        lifeGoal:"You'd rather live an exciting life than a safe one — an unpredictable day feels more alive."},
+      romantic: {title:'The Romantic',
+        personality:'You treasure butterflies and emotional arcs, finding meaning in small moments and sincerity in relationships.',
+        compatibility:"You do well with someone who isn't stingy with affection — small gestures returned in kind keep things going.",
+        strength:'You cherish people and moments — memories with you tend to stay especially vivid.',
+        lifeGoal:"You'd rather live a life that leaves feeling behind than one optimized for efficiency."},
+      strategist: {title:'The Strategist',
+        personality:'You love the moment a puzzle clicks into place — piecing clues together to find your own answer.',
+        compatibility:'You\'re complemented well by someone intuitive and free — they add unexpected fun to your plans.',
+        strength:'Analytical depth — you notice the details everyone else missed.',
+        lifeGoal:"You'd rather understand your way through life than just go by gut feeling."},
+      dreamer: {title:'The Dreamer',
+        personality:"You love imagining worlds beyond this one. When others say something's impossible, you're already picturing how it could work.",
+        compatibility:'Grounded people help your ideas become real — you like someone who gets curious with you instead of laughing it off.',
+        strength:'Imagination — the ability to see possibilities no one else can yet.',
+        lifeGoal:"You'd rather chase an imagined path than follow a set one."},
+      innocent: {title:'The Warm Heart',
+        personality:'You find real happiness in warm, simple things. A gentle story moves you more than a complicated one.',
+        compatibility:'You feel at ease with someone unguarded and kind — sincerity without calculation opens you right up.',
+        strength:'A purity that sees people as they are — everyone drops their guard around you.',
+        lifeGoal:"You'd rather live warm and comfortable than complicated and grand."},
+      seeker: {title:'The Seeker',
+        personality:"You're drawn to true stories — real facts interest you more than fiction, and once curious, you dig all the way down.",
+        compatibility:'You do well with someone who respects your curiosity — a good match digs for answers with you instead of brushing you off.',
+        strength:"Persistence — you're never satisfied with a half-known answer, which is exactly how you find the real one.",
+        lifeGoal:"You'd rather verify things yourself than take them on faith."},
+      warrior: {title:'The Believer',
+        personality:'You value history and cause, thinking about your place in the bigger picture and acting on what you believe is right.',
+        compatibility:'You get along well with someone equally principled — a partner who understands your convictions becomes a steady ally.',
+        strength:"An unshakeable resolve — once you believe something's right, you follow through.",
+        lifeGoal:"You'd rather live a meaningful life than just get by — you want to be able to explain why you live the way you do."},
+      freeSpirit: {title:'The Free Spirit',
+        personality:"You're not boxed into one genre — you enjoy a wide range of stories and pick whatever calls to you in the moment.",
+        compatibility:'You do well with someone equally open — a relationship works best when neither of you tries to define the other.',
+        strength:'Flexibility — you adapt freely to whatever the moment calls for.',
+        lifeGoal:"You'd rather keep your options open than settle on one right answer."},
     },
   },
 };
@@ -536,8 +632,8 @@ function applyStaticI18n(){
   $('#historyBtn').textContent = t('historyBtn');
   $('#historyTitle').textContent = t('historyTitle');
 
-  $('#langKo').classList.toggle('active', state.lang==='ko');
-  $('#langEn').classList.toggle('active', state.lang==='en');
+  document.querySelectorAll('[data-lang="ko"]').forEach(b=> b.classList.toggle('active', state.lang==='ko'));
+  document.querySelectorAll('[data-lang="en"]').forEach(b=> b.classList.toggle('active', state.lang==='en'));
 
   renderStars();
   if(state.movie) renderSelectedCard();
@@ -591,8 +687,8 @@ async function setLang(lang){
     await checkServer();
   }catch(e){}
 }
-$('#langKo').onclick = ()=> setLang('ko');
-$('#langEn').onclick = ()=> setLang('en');
+document.querySelectorAll('[data-lang="ko"]').forEach(b=> b.onclick = ()=> setLang('ko'));
+document.querySelectorAll('[data-lang="en"]').forEach(b=> b.onclick = ()=> setLang('en'));
 
 /* 언어/기록 저장은 표준 localStorage를 사용합니다 (Vercel 등 실제 배포 환경에서도 동작). */
 function saveLang(){
@@ -1789,7 +1885,15 @@ async function runMode3Analyze(){
     const archetype = t('archetypes')[archetypeKey];
     const verdict = $('#mode3Verdict');
     verdict.classList.remove('negative');
-    verdict.innerHTML = `<div>${t('mode3VerdictTitle')(archetype.title)}<br><span style="color:var(--text-dim); font-size:13px;">${archetype.desc}</span></div>`;
+    verdict.innerHTML = `
+      <div>
+        <div>${t('mode3VerdictTitle')(archetype.title)}</div>
+        <div class="mode3-trait"><b>${t('mode3LabelPersonality')}</b> ${archetype.personality}</div>
+        <div class="mode3-trait"><b>${t('mode3LabelCompat')}</b> ${archetype.compatibility}</div>
+        <div class="mode3-trait"><b>${t('mode3LabelStrength')}</b> ${archetype.strength}</div>
+        <div class="mode3-trait"><b>${t('mode3LabelLifeGoal')}</b> ${archetype.lifeGoal}</div>
+      </div>
+    `;
 
     const bucket = ARCHETYPE_BUCKETS.find(b=>b.key===archetypeKey);
     const list = $('#mode3RecList');
@@ -1798,7 +1902,7 @@ async function runMode3Analyze(){
       const pickedIds = new Set(mode3Picked.map(p=>p.id));
       const params = { sort_by:'popularity.desc', 'vote_count.gte':50, page:1, with_genres: bucket.genres.join('|') };
       const results = (await tmdbDiscover(params)).filter(m=> !pickedIds.has(m.id));
-      const top = results.slice(0,3);
+      const top = results.slice(0,1);
       const cards = await Promise.all(top.map(detailMovieForCard));
       cards.forEach(movie=> list.appendChild(renderSimpleTicketCard(movie, t('mode3ReasonText'))));
     }

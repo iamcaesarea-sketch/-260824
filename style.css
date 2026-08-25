@@ -182,6 +182,7 @@ button:disabled{opacity:0.35; cursor:not-allowed; box-shadow:none; transform:non
 }
 .verdict b{color:var(--text);}
 .verdict.negative{border-left-color:var(--danger);}
+.mode3-trait{margin-top:10px; line-height:1.6;}
 
 .ticket{
   position:relative; display:flex; flex-direction:column; background:var(--bg-alt); border:2px solid var(--line); border-radius:var(--radius-lg);
