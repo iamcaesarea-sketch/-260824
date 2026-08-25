@@ -6,7 +6,7 @@ const I18N = {
   ko: {
     pageTitle: 'CineRec — 영화 리뷰 & 맞춤 추천',
     eyebrow: '장편·독립·단편 영화 DB 수록',
-    tagline: '시청한 영화의 별점과 리뷰를 남기면, 10가지 항목으로 분석한 후<br>전세계 영화 데이터베이스에서 취향에 맞는 다음 영화를 찾아드려요.',
+    tagline: '시청한 영화의 별점과 리뷰를 남기면, 9가지 항목으로 분석한 후<br>전세계 영화 데이터베이스에서 취향에 맞는 다음 영화를 찾아드려요.',
     statusChecking: '서버 연동 상태 확인 중…',
     statusOn: '서버 연동 켜짐 - 실시간 검색이 가능한 상태예요.',
     statusOff: '서버 연동 꺼짐 - 서버와 연결이 잠시 끊어졌어요. 잠깐의 휴식을 즐기는 동안, 곧 다시 영화를 찾을 수 있도록 복구할게요!',
@@ -30,12 +30,12 @@ const I18N = {
     reviewPlaceholder: '예: 배우들 연기가 정말 인상적이었고 음악도 몰입감을 더해줬어요. 다만 후반부 각본이 좀 늘어지는 느낌...',
     privacyNote: '별점·리뷰는 서비스 개선을 위해 저장돼요.',
     ratingLabels: {1:'별로였어요', 2:'아쉬웠어요', 3:'그럭저럭이었어요', 4:'좋았어요', 5:'최고였어요!'},
-    step3subPositive: (title) => `“${title}”이 좋으셨다니 다행이에요. 10가지 항목 중 어떤 부분이 특히 마음에 드셨는지 알려주세요.`,
+    step3subPositive: (title) => `“${title}”이 좋으셨다니 다행이에요. 9가지 항목 중 어떤 부분이 특히 마음에 드셨는지 알려주세요.`,
     step3subNegative: () => `아쉬우셨군요. 어떤 항목이 특히 별로였는지 알려주시면, 그 반대 성향의 영화를 찾아드릴게요.`,
     step3Title: '세부적으로 평가해 주세요',
     aspects: {
       direction: '연출', script: '각본 · 대사', originality: '독창성', theme: '주제',
-      miseEnScene: '미장센', acting: '연기', genre: '장르', editing: '편집', music: '음악', immersion: '몰입도',
+      miseEnScene: '미장센', genre: '장르', editing: '편집', music: '음악', immersion: '몰입도',
     },
     scaleLow: '별로', scaleMid: '보통', scaleHigh: '아주 좋음',
     recommendBtn: '추천 받기',
@@ -82,8 +82,6 @@ const I18N = {
     reasonSameWriter: (name) => `각본가(${name})가 같아요`,
     reasonSameEditor: '편집자가 같아요',
     reasonSameComposer: (name) => `음악감독(${name})이 같아요`,
-    reasonSameActor: '출연 배우가 겹쳐요',
-    reasonDiffActorOk: '다른 배우진의 연기를 볼 수 있어요',
     reasonThemeSimilar: '주제·소재 키워드가 비슷해요',
     reasonDiscoverMatch: '설정하신 조건에 맞아 추천됐어요',
     reasonSimilarUsers: '사용자님과 비슷한 별점을 준 사람들이 좋아했어요.',
@@ -105,12 +103,12 @@ const I18N = {
     tmdbLang: 'ko-KR',
 
     modeSelectCaption: '어떤 티켓으로 시작할까요?',
-    modeTicket1Label: '비슷한 영화<br>찾기',
-    modeTicket2Label: '나와 맞는 영화<br>찾기',
-    modeTicket3Label: '인생영화로 보는<br>내 안의 무의식',
+    modeTicket1Label: '방금 본 영화와<br>비슷한 영화 찾기',
+    modeTicket2Label: '내 취향 영화<br>빠르게 찾기',
+    modeTicket3Label: '인생 영화를 통해<br>나에 대해 분석하기',
     backToModesText: '다른 방식으로 찾기',
 
-    mode2Eyebrow: '나와 맞는 영화 찾기',
+    mode2Eyebrow: '내 취향 영화 빠르게 찾기',
     mode2QuizTitle: '몇 가지만 골라주세요',
     mode2QuizSub: '별점이나 리뷰 없이, 지금 취향으로 바로 찾아드려요.',
     mode2MoodLabel: '지금 어떤 영화가 끌리세요?',
@@ -126,7 +124,7 @@ const I18N = {
       drama: '마음 울리는 이야기가 좋아요', horror: '짜릿하게 무서운 것도 좋아요', romance: '설레는 로맨스가 좋아요',
     },
 
-    mode3Eyebrow: '인생영화로 보는 내 안의 무의식',
+    mode3Eyebrow: '인생 영화를 통해 나에 대해 분석하기',
     mode3PickTitle: '🎬 인생 영화를 골라주세요',
     mode3PickSub: '3~5편 정도 고르면 더 정확하게 분석돼요. (재미로 보는 결과예요!)',
     mode3SearchPlaceholder: '예: 라라랜드, 인터스텔라, 기생충',
@@ -203,7 +201,7 @@ const I18N = {
   en: {
     pageTitle: 'CineRec — Movie Reviews & Picks',
     eyebrow: 'Feature · Indie · Short Films Included',
-    tagline: 'Rate and review a movie you\'ve watched across 10 aspects,<br>and we\'ll search a global movie database for what to watch next.',
+    tagline: 'Rate and review a movie you\'ve watched across 9 aspects,<br>and we\'ll search a global movie database for what to watch next.',
     statusChecking: 'Checking server connection…',
     statusOn: 'Server connected - live search is available.',
     statusOff: 'Server disconnected - we lost the connection for a moment. Enjoy a short break while we get things running again!',
@@ -227,12 +225,12 @@ const I18N = {
     reviewPlaceholder: 'e.g. The acting was really impressive and the music pulled me in. Though the script dragged a bit in the second half...',
     privacyNote: 'Your rating and review are stored to help improve the service.',
     ratingLabels: {1:'Not great', 2:'Meh', 3:'It was okay', 4:'I liked it', 5:'Loved it!'},
-    step3subPositive: (title) => `Glad you enjoyed "${title}"! Tell us which of the 10 aspects stood out to you.`,
+    step3subPositive: (title) => `Glad you enjoyed "${title}"! Tell us which of the 9 aspects stood out to you.`,
     step3subNegative: () => `Sorry to hear that. Tell us which aspects fell short and we'll find something with the opposite vibe.`,
     step3Title: 'Rate the details',
     aspects: {
       direction: 'Direction', script: 'Script & Dialogue', originality: 'Originality', theme: 'Theme',
-      miseEnScene: 'Mise-en-scène', acting: 'Acting', genre: 'Genre', editing: 'Editing', music: 'Music', immersion: 'Immersion',
+      miseEnScene: 'Mise-en-scène', genre: 'Genre', editing: 'Editing', music: 'Music', immersion: 'Immersion',
     },
     scaleLow: 'Poor', scaleMid: 'Average', scaleHigh: 'Excellent',
     recommendBtn: 'Get Recommendations',
@@ -279,8 +277,6 @@ const I18N = {
     reasonSameWriter: (name) => `Same writer (${name})`,
     reasonSameEditor: 'Same editor',
     reasonSameComposer: (name) => `Same composer (${name})`,
-    reasonSameActor: 'Shares cast members',
-    reasonDiffActorOk: 'A fresh cast to enjoy',
     reasonThemeSimilar: 'Similar theme/keyword match',
     reasonDiscoverMatch: 'Matched your search criteria',
     reasonSimilarUsers: 'People who rated it similarly to you enjoyed this.',
@@ -302,12 +298,12 @@ const I18N = {
     tmdbLang: 'en-US',
 
     modeSelectCaption: 'Pick your ticket to start',
-    modeTicket1Label: 'Find a<br>Similar Movie',
-    modeTicket2Label: 'Find My<br>Movie Match',
-    modeTicket3Label: 'My Unconscious,<br>Through Film',
+    modeTicket1Label: 'Similar to What<br>I Just Watched',
+    modeTicket2Label: 'Quickly Find My<br>Kind of Movie',
+    modeTicket3Label: 'Analyze Me Through<br>My Favorite Films',
     backToModesText: 'Try another way',
 
-    mode2Eyebrow: 'Find My Movie Match',
+    mode2Eyebrow: 'Quickly Find My Kind of Movie',
     mode2QuizTitle: 'Just answer a few things',
     mode2QuizSub: "No rating or review needed — we'll find something for your mood right now.",
     mode2MoodLabel: 'What are you in the mood for?',
@@ -323,7 +319,7 @@ const I18N = {
       drama: 'A story that moves me', horror: 'A good scare works too', romance: 'A swoony romance',
     },
 
-    mode3Eyebrow: 'My Unconscious, Through Film',
+    mode3Eyebrow: 'Analyze Me Through My Favorite Films',
     mode3PickTitle: '🎬 Pick your all-time favorites',
     mode3PickSub: 'Pick 3-5 for a more accurate read. (Just for fun!)',
     mode3SearchPlaceholder: 'e.g. La La Land, Interstellar, Parasite',
@@ -543,9 +539,9 @@ async function tmdbMovieDetail(tmdbId){
 /* =========================================================
    상태
    ========================================================= */
-const ASPECT_KEYS = ['direction','script','originality','theme','miseEnScene','acting','genre','editing','music','immersion'];
-/* 03단계엔 핵심 7개만, 나머지(독창성/편집/음악)는 04단계 "세부 평가 더 보기"로 이동 — 전부 선택 사항 */
-const STEP3_ASPECT_KEYS = ['genre','direction','script','theme','miseEnScene','acting','immersion'];
+const ASPECT_KEYS = ['direction','script','originality','theme','miseEnScene','genre','editing','music','immersion'];
+/* 03단계엔 핵심 6개만, 나머지(독창성/편집/음악)는 04단계 "세부 평가 더 보기"로 이동 — 전부 선택 사항 */
+const STEP3_ASPECT_KEYS = ['genre','direction','script','theme','miseEnScene','immersion'];
 const EXTRA_ASPECT_KEYS = ['originality','editing','music'];
 let state = {
   movie:null, rating:0, reviewText:'',
@@ -997,7 +993,6 @@ const KEYWORDS = {
   originality: ['독창적','신선했','뻔한','진부','참신'],
   theme: ['주제','메시지','의미'],
   miseEnScene: ['미장센','영상미','색감','구도','촬영','비주얼'],
-  acting: ['연기','배우','열연','캐스팅'],
   genre: ['장르','설정'],
   editing: ['편집','템포','호흡','늘어지'],
   music: ['음악','사운드트랙','스코어','ost','O.S.T'],
@@ -1054,14 +1049,18 @@ async function fetchKeywordId(query){
   }
 }
 
-/* 예상 별점 — 1차 신호는 방금 남긴 리뷰(state.rating), 2차 신호는 사용자의 과거 리뷰 기록(history)의
-   평균 별점(평소 평점 성향). 매칭 강도(score, 장르·감독·각본·배우 등 겹침 정도)가 강할수록 방금 남긴
-   별점에 가깝게, 약할수록 무난한 중간값(3.5)으로 회귀시켜요. 과거 기록은 표본이 너무 적으면(3건 미만)
-   왜곡될 수 있어 반영하지 않고, 반영하더라도 비중은 작게(15%)만 줘요.
+/* 예상 별점 — 추천작은 항상 "이 사용자가 좋아할 만한" 후보로 고른 것이므로(장르·감독·각본 등
+   좋아한 항목과 겹치거나, 싫어한 장르는 애초에 피해서 조회함) 매칭 강도(score)가 강할수록 항상
+   높은 쪽으로 수렴시켜요. 방금 남긴 평점이 긍정적(3점 이상)이면 그 별점 자체를 목표로 삼고,
+   부정적이었다면 "그 영화의 아쉬운 점은 피하고 좋았던 점만 모은 영화"라는 뜻이므로 목표를 4.5로
+   잡아요 — 그래야 별점을 낮게 줬을 때도 예상 별점이 덩달아 낮게 나오는 일이 없어요.
+   매칭이 약할수록 무난한 중간값(3.5)으로 회귀시키고, 2차 신호로 사용자의 과거 리뷰 기록(history)
+   평균 별점(평소 평점 성향)을 표본이 3건 이상일 때만 작은 비중(15%)으로 더해요.
    ※ 추천 이유(reasons)에는 과거 기록을 전혀 쓰지 않아요 — 예상 별점 계산에서만 참고합니다. */
-function predictRating(matchScore){
+function predictRating(matchScore, positive){
   const matchStrength = Math.max(0, Math.min(1, matchScore / 8));
-  let predicted = 3.5 + (state.rating - 3.5) * matchStrength;
+  const target = positive ? state.rating : 4.5;
+  let predicted = 3.5 + (target - 3.5) * matchStrength;
   if(history.length >= 3){
     const avgHistory = history.reduce((sum,h)=> sum + h.rating, 0) / history.length;
     predicted = predicted*0.85 + avgHistory*0.15;
@@ -1072,6 +1071,7 @@ function predictRating(matchScore){
 
 async function computeTmdbRecommendations(){
   const base = state.movie;
+  const positive = state.rating >= 3;
   const {liked, disliked} = getLikedDisliked();
   const manual = state.manualFilters || { genres:[], runtime:null, type:'all' };
   const hasManualFilter = manual.genres.length>0 || manual.runtime || manual.type!=='all';
@@ -1102,10 +1102,6 @@ async function computeTmdbRecommendations(){
   if(liked.includes('editing') && base.editorId) crewLiked.push(base.editorId);
   if(liked.includes('music') && base.composerId) crewLiked.push(base.composerId);
   if(crewLiked.length) params.with_crew = [...new Set(crewLiked)].join('|');
-
-  if(liked.includes('acting') && base.actorIds && base.actorIds.length){
-    params.with_cast = base.actorIds.join('|');
-  }
 
   const themeLiked = liked.includes('theme') || liked.includes('originality');
   const themeDisliked = disliked.includes('theme') || disliked.includes('originality');
@@ -1206,22 +1202,18 @@ async function computeTmdbRecommendations(){
     const sameWriter = d.writerId && d.writerId===base.writerId;
     const sameEditor = d.editorId && d.editorId===base.editorId;
     const sameComposer = d.composerId && d.composerId===base.composerId;
-    const sameActor = (d.actorIds||[]).some(id=> base.actorIds.includes(id));
 
     if(sameDirector && (liked.includes('direction')||liked.includes('miseEnScene'))){ score+=3; reasons.push(t('reasonSameDirector')(d.director)); }
     if(sameWriter && liked.includes('script')){ score+=3; reasons.push(t('reasonSameWriter')(d.writer)); }
     if(sameEditor && liked.includes('editing')){ score+=2; reasons.push(t('reasonSameEditor')); }
     if(sameComposer && liked.includes('music')){ score+=2; reasons.push(t('reasonSameComposer')(d.composer)); }
-    if(sameActor && liked.includes('acting')){ score+=3; reasons.push(t('reasonSameActor')); }
-    if(!sameActor && disliked.includes('acting')){ score+=1; reasons.push(t('reasonDiffActorOk')); }
-    if(sameActor && disliked.includes('acting')) score -= 2;
     if((themeLiked) && !reasons.some(r=>r===t('reasonThemeSimilar'))){ reasons.push(t('reasonThemeSimilar')); }
     if(recommendedIds.has(d.c.id)){ score+=2; reasons.push(t('reasonSimilarUsers')); }
 
     if(reasons.length===0) reasons.push(t('reasonDiscoverMatch'));
     d.score = score;
     d.reasons = [...new Set(reasons)];
-    d.predictedRating = predictRating(score);
+    d.predictedRating = predictRating(score, positive);
   });
 
   detailed.sort((a,b)=> b.score-a.score);
