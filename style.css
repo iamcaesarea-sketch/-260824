@@ -182,7 +182,9 @@ button:disabled{opacity:0.35; cursor:not-allowed; box-shadow:none; transform:non
 }
 .verdict b{color:var(--text);}
 .verdict.negative{border-left-color:var(--danger);}
-.mode3-trait{margin-top:10px; line-height:1.6;}
+.mode3-verdict-title{font-size:20px; font-weight:800; color:var(--text); line-height:1.4;}
+.mode3-trait{margin-top:14px; line-height:1.6;}
+.mode3-trait b{display:block; margin-bottom:4px;}
 
 .ticket{
   position:relative; display:flex; flex-direction:column; background:var(--bg-alt); border:2px solid var(--line); border-radius:var(--radius-lg);

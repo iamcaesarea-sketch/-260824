@@ -130,18 +130,18 @@ const I18N = {
     mode3PickTitle: '🎬 인생 영화를 골라주세요',
     mode3PickSub: '3~5편 정도 고르면 더 정확하게 분석돼요. (재미로 보는 결과예요!)',
     mode3SearchPlaceholder: '예: 라라랜드, 인터스텔라, 기생충',
+    mode3MinHint: (remaining) => `영화를 ${remaining}편 더 골라주세요 (최소 3편).`,
     mode3PickedLabel: '고른 영화',
     mode3SubmitBtn: '분석하기',
     mode3RestartBtn: '다시 고르기',
     mode3RecLabel: '나랑 잘 맞을 영화',
-    mode3Disclaimer: '취향을 재미로 풀어본 결과예요. 실제 성격 분석이 아니에요 :)',
     mode3ReasonTemplate: (trait) => `${trait} 사람들이 이 영화를 좋아했어요`,
     mode3NeedMore: '영화를 3편 이상 골라주세요.',
     mode3VerdictTitle: (archetypeTitle) => `당신은 <b>"${archetypeTitle}"</b> 유형이에요`,
-    mode3LabelPersonality: '🎭 어떤 사람인 것 같냐면',
-    mode3LabelCompat: '💞 이런 사람과 잘 맞아요',
-    mode3LabelStrength: '💪 가장 큰 장점',
-    mode3LabelLifeGoal: '🧭 지향하는 삶',
+    mode3LabelPersonality: '🎭 당신은 이런 사람이에요',
+    mode3LabelCompat: '💞 이런 사람이 당신에게 잘 맞아요',
+    mode3LabelStrength: '💪 당신이 갖고 있는 큰 힘은',
+    mode3LabelLifeGoal: '🧭 당신은 이런 삶을 꿈꾸고 있어요',
     archetypes: {
       adventurer: {title:'모험가',
         personality:'가만히 있는 걸 못 견디는 타입이에요. 새로운 자극과 도전 앞에서 오히려 눈이 반짝이고, 망설임보다 행동이 먼저 나가는 사람이죠. 계획을 세우느라 시간을 쓰기보다는 일단 몸을 던지고 나서 부딪히며 배우는 쪽에 가까워요.',
@@ -338,18 +338,18 @@ const I18N = {
     mode3PickTitle: '🎬 Pick your all-time favorites',
     mode3PickSub: 'Pick 3-5 for a more accurate read. (Just for fun!)',
     mode3SearchPlaceholder: 'e.g. La La Land, Interstellar, Parasite',
+    mode3MinHint: (remaining) => `Pick ${remaining} more movie${remaining>1?'s':''} (3 minimum).`,
     mode3PickedLabel: 'Your picks',
     mode3SubmitBtn: 'Analyze',
     mode3RestartBtn: 'Start Over',
     mode3RecLabel: 'Your movie match',
-    mode3Disclaimer: "A playful read on your taste — not a real personality analysis :)",
     mode3ReasonTemplate: (trait) => `People who are ${trait} loved this movie`,
     mode3NeedMore: 'Pick at least 3 movies.',
     mode3VerdictTitle: (archetypeTitle) => `You're the <b>"${archetypeTitle}"</b> type`,
-    mode3LabelPersonality: '🎭 What you seem like',
-    mode3LabelCompat: "💞 Who you'd click with",
-    mode3LabelStrength: '💪 Your biggest strength',
-    mode3LabelLifeGoal: "🧭 The life you're after",
+    mode3LabelPersonality: "🎭 You're someone like this",
+    mode3LabelCompat: '💞 This kind of person suits you',
+    mode3LabelStrength: '💪 The strength you carry is',
+    mode3LabelLifeGoal: '🧭 This is the life you dream of',
     archetypes: {
       adventurer: {title:'The Adventurer',
         personality:"You can't sit still. New thrills and challenges make your eyes light up, and you act before you hesitate. Rather than spend time planning, you'd rather jump in and learn by doing.",
@@ -695,7 +695,6 @@ function applyStaticI18n(){
   $('#mode3Submit').textContent = t('mode3SubmitBtn');
   $('#mode3Restart').textContent = t('mode3RestartBtn');
   $('#mode3RecLabel').textContent = t('mode3RecLabel');
-  $('#mode3DisclaimerText').textContent = t('mode3Disclaimer');
   if($('#mode3Root').classList.contains('show')) renderMode3PickedChips();
 }
 
@@ -1849,6 +1848,8 @@ function renderMode3PickedChips(){
     };
     box.appendChild(chip);
   });
+  const remaining = Math.max(0, 3 - mode3Picked.length);
+  $('#mode3MinHint').textContent = remaining>0 ? t('mode3MinHint')(remaining) : '';
 }
 
 async function renderMode3Grid(filter){
@@ -1857,29 +1858,24 @@ async function renderMode3Grid(filter){
   if(!serverAvailable){ grid.innerHTML = `<div class="empty-note">${t('emptyNoteNoServer')}</div>`; return; }
   grid.innerHTML = `<div class="loading-note">${t('loadingNote')}</div>`;
   try{
-    const results = await tmdbSearch(filter);
+    const results = (await tmdbSearch(filter)).filter(m=> !mode3Picked.some(p=>p.id===m.tmdbId));
     if(results.length===0){ grid.innerHTML = `<div class="empty-note">${t('emptyNoteNoResults')}</div>`; return; }
     grid.innerHTML='';
     results.forEach(m=>{
-      const picked = mode3Picked.some(p=>p.id===m.tmdbId);
       const div = document.createElement('div');
-      div.className='movie-card' + (picked ? ' selected' : '');
+      div.className='movie-card';
       div.innerHTML = `${m.poster? `<img src="${m.poster}" alt="">` : '<img alt="">'}<div class="meta"><div class="t">${m.title}</div><div class="y">${m.year}</div></div>`;
-      if(picked){
+      div.onclick = async ()=>{
+        if(mode3Picked.length>=5) return;
         div.style.opacity='0.5';
-      }else{
-        div.onclick = async ()=>{
-          if(mode3Picked.length>=5) return;
-          div.style.opacity='0.5';
-          try{
-            const detail = await tmdbMovieDetail(m.tmdbId);
-            mode3Picked.push({id:m.tmdbId, title:detail.title, year:detail.year, genreIds:detail.genreIds});
-            renderMode3PickedChips();
-            renderMode3Grid(filter);
-            $('#mode3Submit').disabled = mode3Picked.length < 3;
-          }catch(e){ div.style.opacity='1'; }
-        };
-      }
+        try{
+          const detail = await tmdbMovieDetail(m.tmdbId);
+          mode3Picked.push({id:m.tmdbId, title:detail.title, year:detail.year, genreIds:detail.genreIds});
+          renderMode3PickedChips();
+          renderMode3Grid(filter);
+          $('#mode3Submit').disabled = mode3Picked.length < 3;
+        }catch(e){ div.style.opacity='1'; }
+      };
       grid.appendChild(div);
     });
   }catch(e){
@@ -1916,11 +1912,11 @@ async function runMode3Analyze(){
     verdict.classList.remove('negative');
     verdict.innerHTML = `
       <div>
-        <div>${t('mode3VerdictTitle')(archetype.title)}</div>
-        <div class="mode3-trait"><b>${t('mode3LabelPersonality')}</b> ${archetype.personality}</div>
-        <div class="mode3-trait"><b>${t('mode3LabelCompat')}</b> ${archetype.compatibility}</div>
-        <div class="mode3-trait"><b>${t('mode3LabelStrength')}</b> ${archetype.strength}</div>
-        <div class="mode3-trait"><b>${t('mode3LabelLifeGoal')}</b> ${archetype.lifeGoal}</div>
+        <div class="mode3-verdict-title">${t('mode3VerdictTitle')(archetype.title)}</div>
+        <div class="mode3-trait"><b>${t('mode3LabelPersonality')}</b><br>${archetype.personality}</div>
+        <div class="mode3-trait"><b>${t('mode3LabelCompat')}</b><br>${archetype.compatibility}</div>
+        <div class="mode3-trait"><b>${t('mode3LabelStrength')}</b><br>${archetype.strength}</div>
+        <div class="mode3-trait"><b>${t('mode3LabelLifeGoal')}</b><br>${archetype.lifeGoal}</div>
       </div>
     `;
 
