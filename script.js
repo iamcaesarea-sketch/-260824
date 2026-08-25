@@ -103,6 +103,54 @@ const I18N = {
     alertRecommendFail: '추천을 불러오는 중 문제가 생겼어요. 다시 시도해 주세요.',
     dateLocale: 'ko-KR',
     tmdbLang: 'ko-KR',
+
+    modeSelectCaption: '어떤 티켓으로 시작할까요?',
+    modeTicket1Label: '비슷한 영화<br>찾기',
+    modeTicket2Label: '나와 맞는 영화<br>찾기',
+    modeTicket3Label: '인생영화로<br>나 분석하기',
+    backToModesText: '다른 방식으로 찾기',
+
+    mode2Eyebrow: '나와 맞는 영화 찾기',
+    mode2QuizTitle: '몇 가지만 골라주세요',
+    mode2QuizSub: '별점이나 리뷰 없이, 지금 취향으로 바로 찾아드려요.',
+    mode2MoodLabel: '지금 어떤 영화가 끌리세요?',
+    mode2RuntimeLabel: '러닝타임',
+    mode2DecadeLabel: '개봉연도',
+    mode2SubmitBtn: '추천 받기',
+    mode2ResultTitle: '이런 영화 어때요?',
+    mode2RestartBtn: '다시 고르기',
+    mode2Disclaimer: '고르신 조건에 맞춰 실시간으로 찾은 영화예요.',
+    mode2ReasonText: '고르신 무드와 조건에 맞춰 추천했어요',
+    moodOptions: {
+      action: '신나고 짜릿한 게 좋아요', comedy: '웃고 싶어요', thriller: '몰입해서 긴장하고 싶어요',
+      drama: '마음 울리는 이야기가 좋아요', horror: '짜릿하게 무서운 것도 좋아요', romance: '설레는 로맨스가 좋아요',
+    },
+
+    mode3Eyebrow: '인생영화로 나에 대해 분석하기',
+    mode3PickTitle: '🎬 인생 영화를 골라주세요',
+    mode3PickSub: '3~5편 정도 고르면 더 정확하게 분석돼요. (재미로 보는 결과예요!)',
+    mode3SearchPlaceholder: '예: 라라랜드, 인터스텔라, 기생충',
+    mode3PickedLabel: '고른 영화',
+    mode3SubmitBtn: '분석하기',
+    mode3RestartBtn: '다시 고르기',
+    mode3RecLabel: '이런 영화도 잘 맞을 거예요',
+    mode3Disclaimer: '취향을 재미로 풀어본 결과예요. 실제 성격 분석이 아니에요 :)',
+    mode3ReasonText: '분석된 취향 유형에 맞춰 추천했어요',
+    mode3NeedMore: '영화를 3편 이상 골라주세요.',
+    mode3VerdictTitle: (archetypeTitle) => `당신은 <b>"${archetypeTitle}"</b> 유형이에요`,
+    archetypes: {
+      adventurer: {title:'모험가', desc:'가만히 있는 걸 못 견디는 타입이에요. 새로운 자극과 도전 앞에서 오히려 눈이 반짝이고, 망설임보다 행동이 먼저 나가는 사람이죠.'},
+      entertainer: {title:'분위기 메이커', desc:'무거운 공기를 못 참는 타입이에요. 어디서든 웃음 포인트를 찾아내고, 사람들 사이의 분위기를 자연스럽게 풀어주는 사람이죠.'},
+      empath: {title:'감성 관찰자', desc:'사람과 감정의 결을 세심하게 들여다보는 타입이에요. 겉으로 드러나지 않는 마음까지 알아차리고, 깊이 있는 대화를 좋아하죠.'},
+      thrillSeeker: {title:'스릴 추구자', desc:'적당히 무서운 걸 오히려 즐기는 타입이에요. 긴장감 있는 상황에서 심장이 뛰는 걸 좋아하고, 예측 불가능한 전개에 끌리죠.'},
+      romantic: {title:'로맨티스트', desc:'설렘과 감정선을 소중히 여기는 타입이에요. 작은 순간에도 의미를 부여하고, 관계 속에서 진심을 나누는 걸 중요하게 생각하죠.'},
+      strategist: {title:'전략가', desc:'퍼즐이 맞춰지는 순간을 좋아하는 타입이에요. 단서를 하나씩 모아 스스로 답을 찾아내는 과정에서 짜릿함을 느끼죠.'},
+      dreamer: {title:'몽상가', desc:'현실 너머의 세계를 상상하는 걸 즐기는 타입이에요. 남들이 안 된다고 할 때, 오히려 "그럼 어떻게 되면 좋을까"를 먼저 그려보죠.'},
+      innocent: {title:'동심 지킴이', desc:'따뜻하고 단순한 것에서 진짜 행복을 찾는 타입이에요. 복잡한 것보다 소박하고 다정한 이야기에 마음이 더 크게 움직이죠.'},
+      seeker: {title:'탐구자', desc:'"진짜" 이야기에 끌리는 타입이에요. 꾸며진 것보다 사실 그 자체에 흥미를 느끼고, 궁금한 건 끝까지 파고드는 성격이죠.'},
+      warrior: {title:'신념가', desc:'역사와 대의를 소중히 여기는 타입이에요. 큰 흐름 속에서 자신의 자리를 고민하고, 옳다고 믿는 걸 위해 움직이는 사람이죠.'},
+      freeSpirit: {title:'자유로운 영혼', desc:'한 가지 장르에 갇히지 않는 타입이에요. 다양한 이야기를 골고루 즐기면서, 그때그때 끌리는 대로 선택하는 걸 좋아하죠.'},
+    },
   },
   en: {
     pageTitle: 'CineRec — Movie Reviews & Picks',
@@ -204,6 +252,54 @@ const I18N = {
     alertRecommendFail: 'Something went wrong while fetching recommendations. Please try again.',
     dateLocale: 'en-US',
     tmdbLang: 'en-US',
+
+    modeSelectCaption: 'Pick your ticket to start',
+    modeTicket1Label: 'Find a<br>Similar Movie',
+    modeTicket2Label: 'Find My<br>Movie Match',
+    modeTicket3Label: 'Analyze Me<br>by My Favorites',
+    backToModesText: 'Try another way',
+
+    mode2Eyebrow: 'Find My Movie Match',
+    mode2QuizTitle: 'Just answer a few things',
+    mode2QuizSub: "No rating or review needed — we'll find something for your mood right now.",
+    mode2MoodLabel: 'What are you in the mood for?',
+    mode2RuntimeLabel: 'Runtime',
+    mode2DecadeLabel: 'Release Era',
+    mode2SubmitBtn: 'Get Recommendations',
+    mode2ResultTitle: 'How about these?',
+    mode2RestartBtn: 'Start Over',
+    mode2Disclaimer: 'Found live, right now, based on what you picked.',
+    mode2ReasonText: 'Matched to your mood and picks',
+    moodOptions: {
+      action: 'Something exciting and thrilling', comedy: 'I want to laugh', thriller: 'Something tense and gripping',
+      drama: 'A story that moves me', horror: 'A good scare works too', romance: 'A swoony romance',
+    },
+
+    mode3Eyebrow: 'Analyze Me by My Favorites',
+    mode3PickTitle: '🎬 Pick your all-time favorites',
+    mode3PickSub: 'Pick 3-5 for a more accurate read. (Just for fun!)',
+    mode3SearchPlaceholder: 'e.g. La La Land, Interstellar, Parasite',
+    mode3PickedLabel: 'Your picks',
+    mode3SubmitBtn: 'Analyze',
+    mode3RestartBtn: 'Start Over',
+    mode3RecLabel: 'These might fit you too',
+    mode3Disclaimer: "A playful read on your taste — not a real personality analysis :)",
+    mode3ReasonText: 'Matched to your analyzed type',
+    mode3NeedMore: 'Pick at least 3 movies.',
+    mode3VerdictTitle: (archetypeTitle) => `You're the <b>"${archetypeTitle}"</b> type`,
+    archetypes: {
+      adventurer: {title:'The Adventurer', desc:"You can't sit still. New thrills and challenges make your eyes light up, and you act before you hesitate."},
+      entertainer: {title:'The Entertainer', desc:"You can't stand a heavy mood. You find the funny angle in any room and naturally loosen things up."},
+      empath: {title:'The Empath', desc:"You look closely at people and feelings, noticing what's left unsaid, and you love a deep conversation."},
+      thrillSeeker: {title:'The Thrill-Seeker', desc:'You actually enjoy a good scare. Tension makes your heart race, and unpredictable turns pull you in.'},
+      romantic: {title:'The Romantic', desc:'You treasure butterflies and emotional arcs, finding meaning in small moments and sincerity in relationships.'},
+      strategist: {title:'The Strategist', desc:'You love the moment a puzzle clicks into place — piecing clues together to find your own answer.'},
+      dreamer: {title:'The Dreamer', desc:"You love imagining worlds beyond this one. When others say something's impossible, you're already picturing how it could work."},
+      innocent: {title:'The Warm Heart', desc:'You find real happiness in warm, simple things. A gentle story moves you more than a complicated one.'},
+      seeker: {title:'The Seeker', desc:"You're drawn to true stories — real facts interest you more than fiction, and once curious, you dig all the way down."},
+      warrior: {title:'The Believer', desc:'You value history and cause, thinking about your place in the bigger picture and acting on what you believe is right.'},
+      freeSpirit: {title:'The Free Spirit', desc:"You're not boxed into one genre — you enjoy a wide range of stories and pick whatever calls to you in the moment."},
+    },
   },
 };
 
@@ -453,6 +549,34 @@ function applyStaticI18n(){
   if(currentStep===4) renderRefineStep();
   renderRecsGallery();
   renderHistory();
+
+  $('#modeSelectCaption').textContent = t('modeSelectCaption');
+  $('#modeTicket1Label').innerHTML = t('modeTicket1Label');
+  $('#modeTicket2Label').innerHTML = t('modeTicket2Label');
+  $('#modeTicket3Label').innerHTML = t('modeTicket3Label');
+  ['1','2','3'].forEach(n=> $('#backToModes'+n+'Text').textContent = t('backToModesText'));
+
+  $('#mode2Eyebrow').textContent = t('mode2Eyebrow');
+  $('#mode2QuizTitle').textContent = t('mode2QuizTitle');
+  $('#mode2QuizSub').textContent = t('mode2QuizSub');
+  $('#mode2MoodLabel').textContent = t('mode2MoodLabel');
+  $('#mode2RuntimeLabel').textContent = t('mode2RuntimeLabel');
+  $('#mode2DecadeLabel').textContent = t('mode2DecadeLabel');
+  $('#mode2Submit').textContent = t('mode2SubmitBtn');
+  $('#mode2ResultTitle').textContent = t('mode2ResultTitle');
+  $('#mode2Restart').textContent = t('mode2RestartBtn');
+  $('#mode2DisclaimerText').textContent = t('mode2Disclaimer');
+  if($('#mode2Root').classList.contains('show')) renderMode2Quiz();
+
+  $('#mode3Eyebrow').textContent = t('mode3Eyebrow');
+  $('#mode3PickTitle').textContent = t('mode3PickTitle');
+  $('#mode3PickSub').textContent = t('mode3PickSub');
+  $('#mode3Search').placeholder = t('mode3SearchPlaceholder');
+  $('#mode3Submit').textContent = t('mode3SubmitBtn');
+  $('#mode3Restart').textContent = t('mode3RestartBtn');
+  $('#mode3RecLabel').textContent = t('mode3RecLabel');
+  $('#mode3DisclaimerText').textContent = t('mode3Disclaimer');
+  if($('#mode3Root').classList.contains('show')) renderMode3PickedChips();
 }
 
 async function setLang(lang){
@@ -1339,18 +1463,377 @@ $('#restart').onclick = ()=>{
 };
 
 /* =========================================================
-   인트로 티켓 → 앱 화면 전환
+   appRoot / mode2Root / mode3Root — 셋 중 하나만 보이도록 전환
+   ========================================================= */
+function showRoot(id){
+  ['appRoot','mode2Root','mode3Root'].forEach(rid=>{
+    const el = $('#'+rid);
+    if(!el) return;
+    if(rid===id){
+      el.style.display='block';
+      void el.offsetHeight; // 강제 리플로우 — display:none→block 직후에도 opacity 트랜지션이 실제로 애니메이션되도록
+      el.classList.add('show');
+    }else{
+      el.classList.remove('show');
+      el.style.display='none';
+    }
+  });
+  window.scrollTo(0,0);
+}
+
+/* =========================================================
+   인트로 티켓 → 3장 모드 티켓 선택 → 앱 화면 전환
    ========================================================= */
 function setupIntro(){
   const intro = $('#introScreen');
   const ticket = $('#ticketBtn');
-  const app = $('#appRoot');
-  if(!intro || !ticket || !app) return;
+  const modeSelect = $('#modeSelect');
+  if(!intro || !ticket || !modeSelect) return;
+
   ticket.addEventListener('click', ()=>{
-    intro.classList.add('hide');
-    app.classList.add('show');
-    setTimeout(()=>{ intro.style.display='none'; }, 450);
+    $('#introCaption').style.display='none';
+    ticket.style.display='none';
+    modeSelect.style.display='flex';
   }, {once:true});
+
+  function enterMode(rootId, modeNumber, onFirstEnter){
+    intro.classList.add('hide');
+    setTimeout(()=>{ intro.style.display='none'; }, 450);
+    showRoot(rootId);
+    if(onFirstEnter) onFirstEnter();
+    if(typeof gtag === 'function') gtag('event', 'mode_select', {mode: modeNumber});
+  }
+
+  $('#modeTicket1').addEventListener('click', ()=> enterMode('appRoot', 1));
+  $('#modeTicket2').addEventListener('click', ()=> enterMode('mode2Root', 2, setupMode2));
+  $('#modeTicket3').addEventListener('click', ()=> enterMode('mode3Root', 3, setupMode3));
+
+  ['1','2','3'].forEach(n=>{
+    const btn = $('#backToModes'+n);
+    if(!btn) return;
+    btn.addEventListener('click', ()=>{
+      showRoot(null);
+      intro.style.display='flex';
+      requestAnimationFrame(()=> intro.classList.remove('hide'));
+    });
+  });
+}
+
+/* =========================================================
+   모드 2: 나와 맞는 영화 찾기 — 별점·리뷰 없이 짧은 설문으로 바로 추천
+   ========================================================= */
+const MOOD_OPTIONS = [
+  {value:'action', genres:[28,12]},
+  {value:'comedy', genres:[35]},
+  {value:'thriller', genres:[53,9648]},
+  {value:'drama', genres:[18]},
+  {value:'horror', genres:[27]},
+  {value:'romance', genres:[10749]},
+];
+let mode2State = { mood:null, runtime:null, decade:null };
+let mode2Setup = false;
+
+function mode2RenderChipGroup(container, options, getLabel, isSelected, onSelect){
+  container.innerHTML='';
+  options.forEach(opt=>{
+    const chip = document.createElement('button');
+    chip.type='button';
+    chip.className = 'chip' + (isSelected(opt) ? ' selected' : '');
+    chip.textContent = getLabel(opt);
+    chip.onclick = ()=>{
+      onSelect(opt);
+      container.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+      chip.classList.add('selected');
+      $('#mode2Submit').disabled = !mode2State.mood;
+    };
+    container.appendChild(chip);
+  });
+}
+
+function renderMode2Quiz(){
+  mode2RenderChipGroup($('#mode2MoodChips'), MOOD_OPTIONS,
+    (opt)=> t('moodOptions')[opt.value],
+    (opt)=> mode2State.mood===opt.value,
+    (opt)=>{ mode2State.mood = opt.value; });
+  mode2RenderChipGroup($('#mode2RuntimeChips'), RUNTIME_OPTIONS,
+    (opt)=> t(opt.key),
+    (opt)=> mode2State.runtime===opt.value,
+    (opt)=>{ mode2State.runtime = opt.value; });
+  mode2RenderChipGroup($('#mode2DecadeChips'), DECADE_OPTIONS,
+    (opt)=> t(opt.key),
+    (opt)=> mode2State.decade===opt.value,
+    (opt)=>{ mode2State.decade = opt.value; });
+  $('#mode2Submit').disabled = !mode2State.mood;
+}
+
+/* discover 후보(raw candidate)를 credits·제공처·외부ID·러닝타임까지 채운 카드 데이터로 확장.
+   computeTmdbRecommendations()의 상세 조회 패턴과 동일 — 기준 영화(base) 없이 단독으로 사용 가능하게 뺀 버전 */
+async function detailMovieForCard(c){
+  const [credits, providers, ext, detail] = await Promise.all([
+    apiGet('/movie/'+c.id+'/credits', {}).catch(()=>({crew:[],cast:[]})),
+    tmdbWatchProviders(c.id),
+    apiGet('/movie/'+c.id+'/external_ids', {}).catch(()=>({})),
+    apiGet('/movie/'+c.id, {}).catch(()=>({})),
+  ]);
+  const cr = extractCredits(credits);
+  return {
+    id: c.id, title:c.title, year:(c.release_date||'').slice(0,4)||'?',
+    director: cr.director || t('unknownDirector'), actors:cr.actors||[],
+    poster: c.poster_path ? IMG_W200+c.poster_path : null,
+    overview: c.overview || '',
+    genreIds: c.genre_ids || (detail.genres||[]).map(g=>g.id) || [],
+    runtime: detail.runtime || null,
+    imdbUrl: ext.imdb_id ? ('https://www.imdb.com/title/'+ext.imdb_id+'/') : imdbSearchUrl(c.title),
+    ott: providers,
+  };
+}
+
+/* STEP5 .ticket 카드와 같은 마크업을 재사용 — 예상 별점 줄만 없는 간소 버전 (모드2·모드3 공용) */
+function renderSimpleTicketCard(movie, reasonText){
+  const div = document.createElement('div');
+  div.className='ticket';
+  const posterStyle = movie.poster ? `style="background-image:url('${movie.poster}')"` : '';
+  div.innerHTML = `
+    <div class="top">
+      <div class="poster ${movie.poster?'':'noimg'}" ${posterStyle}></div>
+      <div class="head">
+        <span class="year">${movie.year}${movie.runtime ? ' · '+formatRuntime(movie.runtime) : ''}</span>
+        <h3><a href="${movie.imdbUrl}" target="_blank" rel="noopener">${movie.title}</a></h3>
+        <div class="credits"><b>${t('director')}</b> ${movie.director || t('unknownDirector')}${movie.actors && movie.actors.length ? `　<b>${t('cast')}</b> ${movie.actors.join(', ')}` : ''}</div>
+      </div>
+    </div>
+    <div class="full">
+      ${movie.overview ? `<div class="plot">${truncateOverview(movie.overview, 160)}</div>` : ''}
+      <div class="why"><b>${t('reasonLabel')}</b> · ${reasonText}</div>
+      <div class="ott-badges">
+        ${movie.ott && movie.ott.length
+          ? movie.ott.map(o=>`<span class="ott-badge">${o}</span>`).join('')
+          : `<span class="ott-badge none">${t('streamingNone')}</span>`}
+      </div>
+      <div class="ticket-actions">
+        <a class="imdb-link" href="${movie.imdbUrl}" target="_blank" rel="noopener">${t('imdbLinkText')}</a>
+        <button type="button" class="save-btn">${t('saveBtn')}</button>
+      </div>
+    </div>
+  `;
+  const saveBtnEl = div.querySelector('.save-btn');
+  saveBtnEl.onclick = ()=>{
+    saveRecToGallery(movie, [reasonText]);
+    saveRecs();
+    renderRecsGallery();
+    saveBtnEl.textContent = t('savedBtn');
+    saveBtnEl.classList.add('saved');
+    saveBtnEl.disabled = true;
+  };
+  return div;
+}
+
+async function runMode2Recommend(){
+  if(!mode2State.mood) return;
+  const btn = $('#mode2Submit');
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = t('loadingNote');
+  try{
+    const mood = MOOD_OPTIONS.find(m=>m.value===mode2State.mood);
+    const params = { sort_by:'popularity.desc', 'vote_count.gte':50, page:1, with_genres: mood.genres.join('|') };
+    if(mode2State.runtime) params['with_runtime.lte'] = mode2State.runtime;
+    if(mode2State.decade==='classic') params['primary_release_date.lte'] = '1979-12-31';
+    else if(mode2State.decade){
+      params['primary_release_date.gte'] = mode2State.decade + '-01-01';
+      params['primary_release_date.lte'] = (mode2State.decade + 9) + '-12-31';
+    }
+    let results = await tmdbDiscover(params);
+    if(results.length < 4){
+      const loose = { sort_by:'popularity.desc', 'vote_count.gte':20, page:1, with_genres: mood.genres.join('|') };
+      const more = await tmdbDiscover(loose);
+      const seen = new Set(results.map(r=>r.id));
+      more.forEach(m=>{ if(!seen.has(m.id)){ results.push(m); seen.add(m.id); } });
+    }
+    const top = results.slice(0,4);
+    const cards = await Promise.all(top.map(detailMovieForCard));
+    const list = $('#mode2ResultList');
+    list.innerHTML='';
+    if(cards.length===0){
+      list.innerHTML = `<div class="sub">${t('noResultsFound')}</div>`;
+    }else{
+      cards.forEach(movie=> list.appendChild(renderSimpleTicketCard(movie, t('mode2ReasonText'))));
+    }
+    $('#mode2QuizPanel').style.display='none';
+    $('#mode2ResultPanel').style.display='block';
+    window.scrollTo({top:0, behavior:'smooth'});
+    if(typeof gtag === 'function') gtag('event', 'mode2_result', {mood: mode2State.mood});
+  }catch(e){
+    alert(t('alertRecommendFail'));
+  }finally{
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+
+function setupMode2(){
+  if(mode2Setup) return;
+  mode2Setup = true;
+  renderMode2Quiz();
+  $('#mode2Submit').onclick = runMode2Recommend;
+  $('#mode2Restart').onclick = ()=>{
+    mode2State = { mood:null, runtime:null, decade:null };
+    $('#mode2ResultPanel').style.display='none';
+    $('#mode2QuizPanel').style.display='block';
+    renderMode2Quiz();
+  };
+}
+
+/* =========================================================
+   모드 3: 인생영화로 나에 대해 분석하기 — 재미로 보는 결과 (실제 성격 분석 아님)
+   ========================================================= */
+const ARCHETYPE_BUCKETS = [
+  {key:'adventurer', genres:[28,12]},
+  {key:'entertainer', genres:[35]},
+  {key:'empath', genres:[18]},
+  {key:'thrillSeeker', genres:[27]},
+  {key:'romantic', genres:[10749]},
+  {key:'strategist', genres:[53,9648,80]},
+  {key:'dreamer', genres:[878,14]},
+  {key:'innocent', genres:[16,10751]},
+  {key:'seeker', genres:[99]},
+  {key:'warrior', genres:[10752,36]},
+];
+let mode3Picked = [];
+let mode3Setup = false;
+let mode3SearchDebounce = null;
+
+function updateMode3PickedLabel(){
+  $('#mode3PickedLabel').innerHTML = `${t('mode3PickedLabel')} (<span id="mode3PickedCount">${mode3Picked.length}</span>/5)`;
+}
+
+function renderMode3PickedChips(){
+  updateMode3PickedLabel();
+  const box = $('#mode3PickedChips');
+  box.innerHTML='';
+  mode3Picked.forEach(m=>{
+    const chip = document.createElement('button');
+    chip.type='button';
+    chip.className='chip selected';
+    chip.textContent = `${m.title} (${m.year}) ×`;
+    chip.onclick = ()=>{
+      mode3Picked = mode3Picked.filter(p=>p.id!==m.id);
+      renderMode3PickedChips();
+      renderMode3Grid($('#mode3Search').value);
+      $('#mode3Submit').disabled = mode3Picked.length < 3;
+    };
+    box.appendChild(chip);
+  });
+}
+
+async function renderMode3Grid(filter){
+  const grid = $('#mode3Grid');
+  if(!filter || !filter.trim()){ grid.innerHTML=''; return; }
+  if(!serverAvailable){ grid.innerHTML = `<div class="empty-note">${t('emptyNoteNoServer')}</div>`; return; }
+  grid.innerHTML = `<div class="loading-note">${t('loadingNote')}</div>`;
+  try{
+    const results = await tmdbSearch(filter);
+    if(results.length===0){ grid.innerHTML = `<div class="empty-note">${t('emptyNoteNoResults')}</div>`; return; }
+    grid.innerHTML='';
+    results.forEach(m=>{
+      const picked = mode3Picked.some(p=>p.id===m.tmdbId);
+      const div = document.createElement('div');
+      div.className='movie-card' + (picked ? ' selected' : '');
+      div.innerHTML = `${m.poster? `<img src="${m.poster}" alt="">` : '<img alt="">'}<div class="meta"><div class="t">${m.title}</div><div class="y">${m.year}</div></div>`;
+      if(picked){
+        div.style.opacity='0.5';
+      }else{
+        div.onclick = async ()=>{
+          if(mode3Picked.length>=5) return;
+          div.style.opacity='0.5';
+          try{
+            const detail = await tmdbMovieDetail(m.tmdbId);
+            mode3Picked.push({id:m.tmdbId, title:detail.title, year:detail.year, genreIds:detail.genreIds});
+            renderMode3PickedChips();
+            renderMode3Grid(filter);
+            $('#mode3Submit').disabled = mode3Picked.length < 3;
+          }catch(e){ div.style.opacity='1'; }
+        };
+      }
+      grid.appendChild(div);
+    });
+  }catch(e){
+    grid.innerHTML = `<div class="empty-note">${t('emptyNoteSearchFail')}</div>`;
+  }
+}
+
+function pickArchetype(picks){
+  const scores = {};
+  picks.forEach(m=>{
+    (m.genreIds||[]).forEach(gid=>{
+      const bucket = ARCHETYPE_BUCKETS.find(b=> b.genres.includes(gid));
+      if(bucket) scores[bucket.key] = (scores[bucket.key]||0) + 1;
+    });
+  });
+  let best=null, bestScore=0;
+  ARCHETYPE_BUCKETS.forEach(b=>{
+    const s = scores[b.key]||0;
+    if(s>bestScore){ bestScore=s; best=b.key; }
+  });
+  return best || 'freeSpirit';
+}
+
+async function runMode3Analyze(){
+  if(mode3Picked.length<3){ alert(t('mode3NeedMore')); return; }
+  const btn = $('#mode3Submit');
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = t('loadingNote');
+  try{
+    const archetypeKey = pickArchetype(mode3Picked);
+    const archetype = t('archetypes')[archetypeKey];
+    const verdict = $('#mode3Verdict');
+    verdict.classList.remove('negative');
+    verdict.innerHTML = `<div>${t('mode3VerdictTitle')(archetype.title)}<br><span style="color:var(--text-dim); font-size:13px;">${archetype.desc}</span></div>`;
+
+    const bucket = ARCHETYPE_BUCKETS.find(b=>b.key===archetypeKey);
+    const list = $('#mode3RecList');
+    list.innerHTML='';
+    if(bucket){
+      const pickedIds = new Set(mode3Picked.map(p=>p.id));
+      const params = { sort_by:'popularity.desc', 'vote_count.gte':50, page:1, with_genres: bucket.genres.join('|') };
+      const results = (await tmdbDiscover(params)).filter(m=> !pickedIds.has(m.id));
+      const top = results.slice(0,3);
+      const cards = await Promise.all(top.map(detailMovieForCard));
+      cards.forEach(movie=> list.appendChild(renderSimpleTicketCard(movie, t('mode3ReasonText'))));
+    }
+
+    $('#mode3PickPanel').style.display='none';
+    $('#mode3ResultPanel').style.display='block';
+    window.scrollTo({top:0, behavior:'smooth'});
+    if(typeof gtag === 'function') gtag('event', 'mode3_result', {archetype: archetypeKey});
+  }catch(e){
+    alert(t('alertRecommendFail'));
+  }finally{
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+
+function setupMode3(){
+  if(mode3Setup) return;
+  mode3Setup = true;
+  renderMode3PickedChips();
+  $('#mode3Search').addEventListener('input', e=>{
+    clearTimeout(mode3SearchDebounce);
+    const val = e.target.value;
+    mode3SearchDebounce = setTimeout(()=> renderMode3Grid(val), 400);
+  });
+  $('#mode3Submit').onclick = runMode3Analyze;
+  $('#mode3Restart').onclick = ()=>{
+    mode3Picked = [];
+    $('#mode3Search').value='';
+    $('#mode3Grid').innerHTML='';
+    renderMode3PickedChips();
+    $('#mode3Submit').disabled = true;
+    $('#mode3ResultPanel').style.display='none';
+    $('#mode3PickPanel').style.display='block';
+  };
 }
 
 (function init(){
