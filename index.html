@@ -23,7 +23,7 @@
   gtag('config', 'G-QWPLQLJECT');
 </script>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-<link rel="stylesheet" href="style.css?v=37">
+<link rel="stylesheet" href="style.css?v=38">
 </head>
 <body>
 
@@ -54,6 +54,14 @@
       </button>
       <button type="button" class="mode-ticket" id="modeTicket2">
         <span class="mode-ticket-label" id="modeTicket2Label">내 취향 영화<br>빠르게 찾기</span>
+      </button>
+    </div>
+    <div class="mode-snacks">
+      <button type="button" class="mode-snack" id="modeSnackRecs">
+        <span class="mode-snack-label" id="modeSnackRecsLabel">🍿<br>추천 받았던 영화</span>
+      </button>
+      <button type="button" class="mode-snack" id="modeSnackHistory">
+        <span class="mode-snack-label" id="modeSnackHistoryLabel">🥤<br>내 리뷰 기록</span>
       </button>
     </div>
   </div>
@@ -87,7 +95,10 @@
   <section class="panel" id="panel-1">
     <h2 id="step1Title">🎞️ 어떤 영화를 보셨나요?</h2>
     <div class="sub" id="step1sub">전체 카탈로그에서 실시간으로 검색해요.</div>
-    <input type="text" id="search" placeholder="예: 오디세이, 올드보이, Dune">
+    <div class="search-wrap">
+      <input type="text" id="search" placeholder="예: 오디세이, 올드보이, Dune">
+      <button type="button" id="searchClear" class="search-clear" aria-label="검색어 지우기" style="display:none;">×</button>
+    </div>
     <div class="movie-grid" id="movieGrid"></div>
     <div class="search-hint" id="searchHint">검색어에 미세한 오타가 있거나 띄어쓰기가 원본 데이터와 다르면 인식하지 못할 수 있어요.</div>
     <div class="search-status" id="searchStatus">영화를 실시간으로 검색하고 있어요.</div>
@@ -105,6 +116,7 @@
     <div class="rating-label" id="ratingLabel"></div>
     <div style="margin-top:20px;">
       <textarea id="reviewText" placeholder="예: 배우들 연기가 정말 인상적이었고 음악도 몰입감을 더해줬어요. 다만 후반부 각본이 좀 늘어지는 느낌..."></textarea>
+      <div class="search-hint" id="reviewNegativeHint"></div>
       <div class="privacy-note" id="privacyNote">별점·리뷰는 서비스 개선을 위해 저장돼요.</div>
     </div>
     <div class="btn-row">
@@ -150,6 +162,11 @@
     </div>
 
     <div class="refine-group">
+      <div class="refine-label" id="ottLabel">OTT</div>
+      <div class="chip-row" id="ottChips"></div>
+    </div>
+
+    <div class="refine-group">
       <div class="aspect-grid" id="extraAspectContainer"></div>
     </div>
 
@@ -184,6 +201,7 @@
     <div class="recs-sort" id="recsSort">
       <button type="button" class="sort-btn" id="sortDateBtn">날짜별로 보기</button>
       <button type="button" class="sort-btn" id="sortGenreBtn">장르별로 보기</button>
+      <button type="button" class="sort-btn" id="sortOttBtn">OTT별로 보기</button>
     </div>
     <div class="genre-tabs" id="recsGenreTabs"></div>
     <div class="recs-grid" id="recsGrid"></div>
@@ -231,6 +249,18 @@
       <div class="refine-label" id="mode2DecadeLabel">개봉연도</div>
       <div class="chip-row" id="mode2DecadeChips"></div>
     </div>
+    <div class="refine-group">
+      <div class="refine-label" id="mode2OttLabel">OTT (복수 선택 가능)</div>
+      <div class="chip-row" id="mode2OttChips"></div>
+    </div>
+    <div class="refine-group">
+      <div class="refine-label" id="mode2FameLabel">이런 영화가 좋아요</div>
+      <div class="chip-row" id="mode2FameChips"></div>
+    </div>
+    <div class="refine-group">
+      <div class="refine-label" id="mode2CastLabel">이런 캐스팅이 좋아요</div>
+      <div class="chip-row" id="mode2CastChips"></div>
+    </div>
 
     <div class="btn-row">
       <span></span>
@@ -265,7 +295,10 @@
   <section class="panel" id="mode3PickPanel">
     <h2 id="mode3PickTitle">🎬 인생 영화를 골라주세요</h2>
     <div class="sub" id="mode3PickSub">3~5편 정도 고르면 더 정확하게 분석돼요. (재미로 보는 결과예요!)</div>
-    <input type="text" id="mode3Search" placeholder="예: 라라랜드, 인터스텔라, 기생충">
+    <div class="search-wrap">
+      <input type="text" id="mode3Search" placeholder="예: 라라랜드, 인터스텔라, 기생충">
+      <button type="button" id="mode3SearchClear" class="search-clear" aria-label="검색어 지우기" style="display:none;">×</button>
+    </div>
     <div class="movie-grid" id="mode3Grid"></div>
     <div class="search-hint" id="mode3SearchHint">검색어에 미세한 오타가 있거나 띄어쓰기가 원본 데이터와 다르면 인식하지 못할 수 있어요.</div>
     <div class="search-status" id="mode3SearchStatus">영화를 실시간으로 검색하고 있어요.</div>
@@ -283,7 +316,12 @@
   </section>
 
   <section class="panel" id="mode3ResultPanel" style="display:none;">
+    <div class="mode3-common" id="mode3Common"></div>
     <div class="verdict" id="mode3Verdict"></div>
+    <div class="btn-row">
+      <button type="button" class="ghost" id="mode3ShareBtn">📤 친구에게 공유해보기</button>
+      <span></span>
+    </div>
     <div class="refine-label" id="mode3RecLabel">이런 영화도 잘 맞을 거예요</div>
     <div id="mode3RecList"></div>
     <div class="btn-row">
@@ -294,6 +332,6 @@
 </main>
 </div>
 
-<script src="script.js?v=24"></script>
+<script src="script.js?v=26"></script>
 </body>
 </html>

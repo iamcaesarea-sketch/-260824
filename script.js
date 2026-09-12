@@ -14,6 +14,7 @@ const I18N = {
     step1Title: '🎞️ 어떤 영화를 보셨나요?',
     step1sub: '전체 카탈로그에서 실시간으로 검색해요.',
     searchPlaceholder: '예: 오디세이, 올드보이, Dune',
+    clearSearchAria: '검색어 지우기',
     searchHint: '💡 원본 제목과 똑같이 입력하면 더 정확하게 검색돼요.',
     searchStatusNote: '🔄 영화를 실시간으로 검색하고 있어요.',
     emptyNoteNoServer: '서버와 연결이 잠시 끊어졌어요.<br>곧 다시 영화를 찾을 수 있도록 준비할게요!',
@@ -29,6 +30,7 @@ const I18N = {
     step2sub: '별점을 매긴 후 짧게 리뷰를 남겨주시면 영화 추천에 반영할게요!',
     reviewPlaceholder: '예: 배우들 연기가 정말 인상적이었고 음악도 몰입감을 더해줬어요. 다만 후반부 각본이 좀 늘어지는 느낌...',
     privacyNote: '별점·리뷰는 서비스 개선을 위해 저장돼요.',
+    reviewNegativeHint: '💡 좋았던 점이든 아쉬웠던 점이든 구체적으로 적어주시면 더 정확해져요. 예를 들어 "편집이 늘어지고 지루했어요"처럼 아쉬운 점을 적으시면, 오히려 그 반대 매력(호흡이 빠르고 몰입감 있는 편집)을 가진 영화를 찾아드려요.',
     ratingLabels: {1:'별로였어요', 2:'아쉬웠어요', 3:'그럭저럭이었어요', 4:'좋았어요', 5:'최고였어요!'},
     step3subPositive: (title) => `“${title}”이 좋으셨다니 다행이에요. 10가지 항목 중 어떤 부분이 특히 마음에 드셨는지 알려주세요.`,
     step3subNegative: () => `아쉬우셨군요. 어떤 항목이 특히 별로였는지 알려주시면, 그 반대 성향의 영화를 찾아드릴게요.`,
@@ -36,6 +38,18 @@ const I18N = {
     aspects: {
       direction: '연출', script: '각본 · 대사', originality: '독창성', theme: '주제',
       miseEnScene: '미장센', acting: '연기', genre: '장르', editing: '편집', music: '음악', immersion: '몰입도',
+    },
+    aspectDescs: {
+      direction: '높게 주시면 연출력이 뛰어난 영화가 추천돼요.',
+      script: '높게 주시면 대사와 각본이 탄탄한 영화가 추천돼요.',
+      originality: '높게 주시면 독창적이고 신선한 소재의 영화가 추천돼요.',
+      theme: '높게 주시면 비슷한 주제·메시지를 다루는 영화가 추천돼요.',
+      miseEnScene: '높게 주시면 영상미·색감·구도가 돋보이는 영화가 추천돼요.',
+      acting: '높게 주시면 같은 배우가 출연한 영화가 추천돼요.',
+      genre: '높게 주시면 같은 장르의 영화가 추천돼요.',
+      editing: '높게 주시면 같은 편집자가 작업한, 호흡이 비슷한 영화가 추천돼요.',
+      music: '높게 주시면 같은 음악감독이 참여한 영화가 추천돼요.',
+      immersion: '높게 주시면 몰입감이 강한 영화가 추천돼요.',
     },
     scaleLow: '별로', scaleMid: '보통', scaleHigh: '아주 좋음',
     recommendBtn: '추천 받기',
@@ -61,6 +75,13 @@ const I18N = {
     decadeOption2010: '2010년대',
     decadeOption2020: '2020년대',
     decadeOptionAny: '상관없어요',
+    ottLabel: 'OTT',
+    ottOptionAny: '상관없어요',
+    ottOptionNetflix: '넷플릭스',
+    ottOptionWatcha: '왓챠',
+    ottOptionTving: '티빙',
+    ottOptionDisney: '디즈니플러스',
+    ottOptionApple: '애플TV',
     runtimeHourUnit: '시간',
     runtimeMinutesUnit: '분',
     saveBtn: '저장하기',
@@ -94,6 +115,8 @@ const I18N = {
     recsGalleryBtn: '📝 추천 받았던 영화',
     recsSortDate: '날짜별로 보기',
     recsSortGenre: '장르별로 보기',
+    recsSortOtt: 'OTT별로 보기',
+    recsFilterNoOtt: '스트리밍 정보 없음',
     recsEmptyAll: '아직 추천받은 영화가 없어요.',
     recsTitle: '내가 추천받은 영화',
     recsFilterAll: '전체',
@@ -109,21 +132,41 @@ const I18N = {
     modeTicket2Label: '내 취향 영화<br>빠르게 찾기',
     modeTicket3Label: '인생 영화를 통해<br>나에 대해 분석하기',
     backToModesText: '다른 방식으로 찾기',
+    modeSnackRecsLabel: '🍿<br>추천 받았던 영화',
+    modeSnackHistoryLabel: '🥤<br>내 리뷰 기록',
 
     mode2Eyebrow: '내 취향 영화 빠르게 찾기',
     mode2QuizTitle: '몇 가지만 골라주세요',
     mode2QuizSub: '별점이나 리뷰 없이, 지금 취향으로 바로 찾아드려요.',
-    mode2MoodLabel: '지금 어떤 영화가 끌리세요?',
+    mode2MoodLabel: '지금 어떤 영화가 끌리세요? (복수 선택 가능)',
     mode2RuntimeLabel: '러닝타임',
     mode2DecadeLabel: '개봉연도',
+    mode2OttLabel: 'OTT (복수 선택 가능)',
+    mode2FameLabel: '이런 영화가 좋아요',
+    mode2CastLabel: '이런 캐스팅이 좋아요',
     mode2SubmitBtn: '추천 받기',
     mode2ResultTitle: '이런 영화 어때요?',
     mode2RestartBtn: '다시 고르기',
     mode2Disclaimer: '고르신 조건에 맞춰 실시간으로 찾은 영화예요.',
     mode2ReasonText: '고르신 무드와 조건에 맞춰 추천했어요',
+    mode2ReasonMood: (mood) => `"${mood}"는 분위기에 잘 맞아요`,
+    mode2ReasonFameMain: '나만 안 본 것 같은, 많이 알려진 영화예요',
+    mode2ReasonFameHidden: '아무도 안 본 것 같은, 숨은 영화예요',
+    mode2ReasonCastFamous: '유명한 배우들이 출연해요',
+    mode2ReasonCastNew: '신예 배우들 위주로 출연해요',
     moodOptions: {
       action: '신나고 짜릿한 게 좋아요', comedy: '웃고 싶어요', thriller: '몰입해서 긴장하고 싶어요',
       drama: '마음 울리는 이야기가 좋아요', horror: '짜릿하게 무서운 것도 좋아요', romance: '설레는 로맨스가 좋아요',
+    },
+    fameOptions: {
+      any: '상관없어요',
+      mainstream: '나만 안 본 것 같은 영화',
+      hidden: '아무도 안 본 것 같은 영화',
+    },
+    castOptions: {
+      any: '상관없어요',
+      famous: '유명한 배우들이 많은 영화',
+      newcomer: '신예 배우들이 나오는 영화',
     },
 
     mode3Eyebrow: '인생 영화를 통해 나에 대해 분석하기',
@@ -137,78 +180,96 @@ const I18N = {
     mode3RecLabel: '나랑 잘 맞을 영화',
     mode3ReasonTemplate: (trait) => `${trait} 사람들이 이 영화를 좋아했어요`,
     mode3NeedMore: '영화를 3편 이상 골라주세요.',
-    mode3VerdictTitle: (archetypeTitle) => `당신은 <b>"${archetypeTitle}"</b> 유형이에요`,
+    mode3VerdictTitle: (charName) => `당신은 <b>${charName}</b> 유형이에요`,
+    mode3CommonIntro: (titlesStr, traitStr) => `고르신 <b>${titlesStr}</b>의 공통점은 <b>${traitStr}</b> 장르를 좋아하신다는 점이에요.`,
+    mode3CommonIntroFallback: (titlesStr) => `고르신 <b>${titlesStr}</b>에는 뚜렷한 공통점이 있었어요.`,
+    mode3CharBlurbTemplate: (charName, charFilm, blurb) => `<b>${charName}</b> — 영화 &lt;${charFilm}&gt;의 인물로, ${blurb}`,
     mode3LabelPersonality: '🎭 당신은 이런 사람이에요',
-    mode3LabelCompat: '💞 이런 사람이 당신에게 잘 맞아요',
+    mode3LabelCompat: (charName) => `💞 당신과 잘 맞는 유형은 <b>${charName}</b> 유형이에요`,
     mode3LabelStrength: '💪 당신이 갖고 있는 큰 힘은',
     mode3LabelLifeGoal: '🧭 당신은 이런 삶을 꿈꾸고 있어요',
+    mode3ShareBtn: '📤 친구에게 공유해보기',
+    mode3ShareText: (charName) => `저는 CineRec에서 인생 영화로 분석해봤더니 "${charName}" 유형이 나왔어요! 당신은 어떤 유형일까요?`,
+    shareCopiedMsg: '링크가 복사됐어요! 카카오톡이나 메시지에 붙여넣어서 공유해보세요.',
+    shareFailMsg: '공유하는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.',
     archetypes: {
       adventurer: {title:'모험가',
         personality:'가만히 있는 걸 못 견디는 타입이에요. 새로운 자극과 도전 앞에서 오히려 눈이 반짝이고, 망설임보다 행동이 먼저 나가는 사람이죠. 계획을 세우느라 시간을 쓰기보다는 일단 몸을 던지고 나서 부딪히며 배우는 쪽에 가까워요.',
         compatibility:'계획적이고 차분한 사람과 만나면 서로의 빈틈을 잘 채워줘요. 함께 즉흥적으로 떠날 수 있는 사람이면 더할 나위 없고, 당신의 무모해 보이는 결정을 믿고 따라와 주는 사람과는 평생 갈 파트너가 될 수 있어요.',
         strength:'결단력과 추진력이에요. 남들이 재고 따지는 동안 이미 한 발짝 나가 있는 실행력이 최대 무기고, 위기 상황에서도 남들보다 빠르게 다음 선택을 내리는 순발력도 돋보이죠.',
         lifeGoal:'안정보다 경험이 남는 삶을 지향해요. 나중에 후회하는 것보다, 일단 해보고 얻은 이야기가 더 값지다고 믿는 사람이에요. 인생을 통틀어 "해봤다"는 말을 더 많이 하고 싶은 쪽이죠.',
-        fanTrait:'모험심이 많고 망설임 없이 행동하는'},
+        fanTrait:'모험심이 많고 망설임 없이 행동하는',
+        charName:'고니', charFilm:'타짜', charBlurb:'노름판에 뛰어들어 승부를 보는 사람이에요. 두려움보다 재미를 먼저 느끼고, 판이 커질수록 오히려 눈이 빛나는 타입이죠.'},
       entertainer: {title:'분위기 메이커',
         personality:'무거운 공기를 못 참는 타입이에요. 어디서든 웃음 포인트를 찾아내고, 사람들 사이의 분위기를 자연스럽게 풀어주는 사람이죠. 정작 본인은 힘들어도 그 티를 잘 안 내고, 주변 사람들 기분부터 살피는 편이에요.',
         compatibility:'진지하고 속 깊은 사람과 있으면 서로 좋은 균형을 이뤄요. 당신의 유머에 진심으로 웃어주는 사람이면 오래갈 인연이고, 가끔은 당신의 진짜 속마음까지 물어봐주는 사람이 곁에 있으면 더 편안해질 거예요.',
         strength:'공간의 온도를 바꾸는 힘이에요. 당신이 있으면 어색함이 오래 못 버티고, 처음 만난 사람들 사이에서도 자연스럽게 대화의 물꼬를 트는 능력이 있죠.',
         lifeGoal:'심각하게 사는 것보다 즐겁게 사는 삶을 지향해요. 매일이 재밌어야 진짜 잘 살고 있는 거라 믿는 사람이에요. 훗날 돌아봤을 때 "그래도 많이 웃었다"는 기억을 남기고 싶어 하죠.',
-        fanTrait:'유머 감각이 좋고 분위기를 잘 살리는'},
+        fanTrait:'유머 감각이 좋고 분위기를 잘 살리는',
+        charName:'김반장', charFilm:'극한직업', charBlurb:'어떤 상황에서도 분위기를 살리는 사람이에요. 위기 속에서도 농담을 잃지 않고, 옆에 있으면 다들 저절로 웃게 되는 타입이죠.'},
       empath: {title:'감성 관찰자',
         personality:'사람과 감정의 결을 세심하게 들여다보는 타입이에요. 겉으로 드러나지 않는 마음까지 알아차리고, 깊이 있는 대화를 좋아하죠. 누군가 말투가 평소와 조금만 달라도 금방 눈치채는 편이에요.',
         compatibility:'솔직하게 감정을 표현하는 사람과 잘 맞아요. 말하지 않아도 알아주길 바라기보다, 서로 표현해주는 관계에서 더 편안함을 느껴요. 당신의 세심함을 당연하게 여기지 않고 고마워하는 사람이면 관계가 훨씬 깊어질 거예요.',
         strength:'공감 능력이에요. 사람의 진짜 마음을 읽어내는 섬세함이 당신 곁에 사람이 모이는 이유고, 힘든 이야기를 털어놓기에 가장 편한 사람으로 꼽히는 경우가 많아요.',
         lifeGoal:'얕고 넓은 관계보다 깊고 진한 관계를 지향해요. 몇 명이어도 진심으로 통하는 사람이 있으면 충분하다고 생각하는 편이에요. 관계의 숫자보다 밀도를 더 중요하게 여기죠.',
-        fanTrait:'감정을 세심하게 살피고 깊은 대화를 좋아하는'},
+        fanTrait:'감정을 세심하게 살피고 깊은 대화를 좋아하는',
+        charName:'미자', charFilm:'시', charBlurb:'주변 사람들의 마음을 섬세하게 들여다보는 사람이에요. 작은 감정 변화도 놓치지 않고, 조용히 곁을 지켜주는 타입이죠.'},
       thrillSeeker: {title:'스릴 추구자',
         personality:'적당히 무서운 걸 오히려 즐기는 타입이에요. 긴장감 있는 상황에서 심장이 뛰는 걸 좋아하고, 예측 불가능한 전개에 끌리죠. 뻔한 결말보다는 끝까지 어떻게 될지 모르는 이야기에 훨씬 몰입해요.',
         compatibility:'겁 없이 같이 달려줄 사람과 죽이 잘 맞아요. 너무 신중한 사람보다는, 그냥 같이 저지르는 사람이 편해요. 당신의 즉흥적인 제안에 "콜"이라고 바로 답해주는 사람이 최고의 짝이죠.',
         strength:'위기 앞에서 오히려 침착해지는 담대함이에요. 다른 사람이 얼어있을 때 당신은 이미 움직이고 있고, 예상 밖의 상황을 오히려 재미있는 변수로 받아들이는 여유도 있어요.',
         lifeGoal:'무난한 삶보다 짜릿한 삶을 지향해요. 예측 가능한 하루보다는, 무슨 일이 생길지 모르는 하루가 더 살아있다고 느껴요. 안전벨트를 매고도 늘 창밖 풍경보다 다음 모퉁이가 더 궁금한 사람이에요.',
-        fanTrait:'긴장감을 즐기고 두려움 없이 부딪히는'},
+        fanTrait:'긴장감을 즐기고 두려움 없이 부딪히는',
+        charName:'서도철', charFilm:'베테랑', charBlurb:'위험 앞에서 오히려 몸이 먼저 움직이는 사람이에요. 물러서기보다 정면으로 부딪히고, 긴장되는 순간을 즐길 줄 아는 타입이죠.'},
       romantic: {title:'로맨티스트',
         personality:'설렘과 감정선을 소중히 여기는 타입이에요. 작은 순간에도 의미를 부여하고, 관계 속에서 진심을 나누는 걸 중요하게 생각하죠. 기념일이나 사소한 디테일을 잘 챙기고, 잘 기억하는 편이에요.',
         compatibility:'표현에 인색하지 않은 사람과 잘 맞아요. 사소한 다정함을 알아채고 되돌려주는 사람이면 관계가 오래갈 거예요. 무뚝뚝해도 마음이 깊은 사람보다는, 표현이 자연스러운 사람과 더 오래 편안하게 지낼 수 있어요.',
         strength:'사람과 순간을 소중히 여기는 마음이에요. 당신과 함께한 기억은 유난히 더 특별하게 남고, 상대방이 자신이 소중한 사람이라고 느끼게 만드는 재주가 있죠.',
         lifeGoal:'효율적인 삶보다 마음이 남는 삶을 지향해요. 결과보다 그 과정에서 느낀 감정을 더 오래 기억하는 사람이에요. 남는 건 성과가 아니라 그때 느꼈던 감정이라고 믿는 편이죠.',
-        fanTrait:'감성적이고 솔직하게 마음을 표현하는'},
+        fanTrait:'감성적이고 솔직하게 마음을 표현하는',
+        charName:'상우', charFilm:'봄날은 간다', charBlurb:'사소한 순간에도 마음을 다해 진심을 담는 사람이에요. 사랑에 있어서만큼은 계산하지 않고, 감정에 솔직한 타입이죠.'},
       strategist: {title:'전략가',
         personality:'퍼즐이 맞춰지는 순간을 좋아하는 타입이에요. 단서를 하나씩 모아 스스로 답을 찾아내는 과정에서 짜릿함을 느끼죠. 결론만 듣는 것보다 그 과정을 직접 추리해보는 걸 훨씬 좋아해요.',
         compatibility:'직관적이고 자유로운 사람과 만나면 서로를 잘 보완해요. 당신의 계획에 예상 밖의 재미를 더해주는 사람이 좋은 짝이에요. 너무 즉흥적이기만 한 사람보다는, 가끔은 당신의 논리를 존중해주는 사람과 더 잘 맞아요.',
         strength:'논리적으로 파고드는 분석력이에요. 남들이 놓친 디테일을 당신은 이미 눈치채고 있고, 복잡한 상황을 차근차근 정리해서 설명하는 능력도 뛰어나죠.',
         lifeGoal:'감으로 사는 삶보다 이해하고 넘어가는 삶을 지향해요. 왜 그런지 납득이 돼야 진짜 내 것이 된다고 믿는 편이에요. 대충 아는 채로 넘어가는 걸 유난히 못 견디는 편이죠.',
-        fanTrait:'논리적이고 차근차근 답을 찾아가는'},
+        fanTrait:'논리적이고 차근차근 답을 찾아가는',
+        charName:'평경장', charFilm:'타짜', charBlurb:'판을 읽고 흐름을 미리 계산하는 사람이에요. 감이 아니라 관찰과 분석으로 다음 수를 준비하는 타입이죠.'},
       dreamer: {title:'몽상가',
         personality:'현실 너머의 세계를 상상하는 걸 즐기는 타입이에요. 남들이 안 된다고 할 때, 오히려 "그럼 어떻게 되면 좋을까"를 먼저 그려보죠. 머릿속에 늘 몇 가지 다른 세계가 동시에 펼쳐져 있는 편이에요.',
         compatibility:'현실감각이 있는 사람과 함께면 상상이 진짜가 될 수 있어요. 당신의 아이디어를 비웃지 않고 함께 궁금해해 주는 사람이 좋아요. 엉뚱한 이야기에도 눈을 반짝이며 끝까지 들어주는 사람과 유난히 잘 맞아요.',
         strength:'남들이 못 보는 가능성을 보는 상상력이에요. 아직 없는 걸 그려내는 힘이 당신의 무기고, 남들이 지루해하는 것에서도 새로운 이야기를 뽑아내는 재능이 있죠.',
         lifeGoal:'정해진 틀보다 상상한 걸 실현하는 삶을 지향해요. 남들이 다 가는 길보다, 아직 아무도 안 가본 길에 더 끌리는 사람이에요. 남들이 정해놓은 답보다 스스로 그린 지도를 더 믿는 편이죠.',
-        fanTrait:'상상력이 풍부하고 새로운 가능성을 그리는'},
+        fanTrait:'상상력이 풍부하고 새로운 가능성을 그리는',
+        charName:'미소', charFilm:'소공녀', charBlurb:'남들이 정해놓은 기준보다 자신이 그린 삶을 따라가는 사람이에요. 가진 게 적어도 원하는 걸 포기하지 않는 타입이죠.'},
       innocent: {title:'동심 지킴이',
         personality:'따뜻하고 단순한 것에서 진짜 행복을 찾는 타입이에요. 복잡한 것보다 소박하고 다정한 이야기에 마음이 더 크게 움직이죠. 작은 친절이나 사소한 배려에도 오래 마음이 머무는 편이에요.',
         compatibility:'꾸밈없고 다정한 사람과 편안함을 느껴요. 계산 없이 진심으로 대해주는 사람이면 마음을 활짝 열게 돼요. 복잡한 관계보다는, 있는 그대로 편하게 대해줄 수 있는 사람과 훨씬 잘 맞아요.',
         strength:'사람을 있는 그대로 봐주는 순수함이에요. 당신 앞에서는 다들 방어를 내려놓게 되고, 꾸미지 않은 진심이 오히려 사람들의 마음을 여는 열쇠가 되죠.',
         lifeGoal:'복잡하고 화려한 삶보다 따뜻하고 편안한 삶을 지향해요. 큰 성취보다 소소한 행복이 쌓인 하루하루를 더 값지게 여겨요. 특별한 날이 아니어도 평범한 하루에서 행복을 찾을 줄 아는 사람이에요.',
-        fanTrait:'따뜻하고 꾸밈없이 진심을 나누는'},
+        fanTrait:'따뜻하고 꾸밈없이 진심을 나누는',
+        charName:'초원', charFilm:'말아톤', charBlurb:'꾸밈없이 순수한 마음으로 세상을 대하는 사람이에요. 복잡한 계산 없이, 좋아하는 것에 온전히 몰입하는 타입이죠.'},
       seeker: {title:'탐구자',
         personality:'"진짜" 이야기에 끌리는 타입이에요. 꾸며진 것보다 사실 그 자체에 흥미를 느끼고, 궁금한 건 끝까지 파고드는 성격이죠. 하나를 알게 되면 그 뒤에 숨은 배경까지 찾아보는 편이에요.',
         compatibility:'호기심을 존중해주는 사람과 잘 맞아요. 당신의 질문을 귀찮아하지 않고 같이 답을 찾아주는 사람이 좋은 인연이에요. 대충 아는 척하는 사람보다는, 모르면 모른다고 솔직히 말하는 사람과 더 신뢰가 쌓여요.',
         strength:'끝까지 파고드는 집요함이에요. 대충 아는 걸로 만족 못 하는 성격이 결국 진짜 답을 찾아내고, 남들이 지나친 사실 하나까지 놓치지 않는 꼼꼼함도 있죠.',
         lifeGoal:'믿고 넘어가는 삶보다 직접 확인하는 삶을 지향해요. 남이 알려준 답보다, 스스로 찾아낸 진실을 더 신뢰하는 사람이에요. 누가 뭐라 해도 결국 제 눈으로 확인해야 직성이 풀리는 편이죠.',
-        fanTrait:'호기심이 많고 끝까지 파고드는'},
+        fanTrait:'호기심이 많고 끝까지 파고드는',
+        charName:'서태윤', charFilm:'살인의 추억', charBlurb:'하나의 단서도 놓치지 않고 끝까지 파고드는 사람이에요. 답을 찾을 때까지 멈추지 않는 집요함을 가진 타입이죠.'},
       warrior: {title:'신념가',
         personality:'역사와 대의를 소중히 여기는 타입이에요. 큰 흐름 속에서 자신의 자리를 고민하고, 옳다고 믿는 걸 위해 움직이는 사람이죠. 눈앞의 이익보다 원칙을 먼저 따지는 편이에요.',
         compatibility:'신념이 뚜렷한 사람과 서로 존중하며 잘 지내요. 당신의 원칙을 이해해주는 사람이면 든든한 동료가 될 거예요. 의견이 달라도 진지하게 논쟁해줄 수 있는 사람과 오히려 더 깊은 신뢰가 쌓이죠.',
         strength:'쉽게 흔들리지 않는 뚝심이에요. 한번 옳다고 믿으면 끝까지 밀고 나가는 힘이 있고, 다수의 의견에도 쉽게 휩쓸리지 않는 소신도 갖고 있죠.',
         lifeGoal:'그냥저냥 사는 삶보다 의미 있는 삶을 지향해요. 내가 왜 이렇게 사는지 스스로 설명할 수 있어야 한다고 믿는 사람이에요. 편한 길보다 옳다고 믿는 길을 택하는 쪽에 더 가깝죠.',
-        fanTrait:'신념이 뚜렷하고 옳다고 믿는 걸 밀고 나가는'},
+        fanTrait:'신념이 뚜렷하고 옳다고 믿는 걸 밀고 나가는',
+        charName:'송우석', charFilm:'변호인', charBlurb:'옳다고 믿는 것 앞에서 물러서지 않는 사람이에요. 손해를 보더라도 원칙을 지키는 쪽을 택하는 타입이죠.'},
       freeSpirit: {title:'자유로운 영혼',
         personality:'한 가지 장르에 갇히지 않는 타입이에요. 다양한 이야기를 골고루 즐기면서, 그때그때 끌리는 대로 선택하는 걸 좋아하죠. 정해진 취향보다 그 순간의 기분을 더 따르는 편이에요.',
         compatibility:'당신처럼 열린 사람과 잘 맞아요. 틀에 가두지 않고 있는 그대로 봐주는 사람이면 편안한 관계가 될 거예요. 관계에 규칙을 너무 많이 정하지 않는 사람과 오히려 더 자연스럽게 오래갈 수 있어요.',
         strength:'어디에도 얽매이지 않는 유연함이에요. 상황에 맞게 자유자재로 바뀌는 적응력이 당신의 무기고, 새로운 환경에도 크게 스트레스받지 않고 잘 녹아드는 편이죠.',
         lifeGoal:'한 가지 정답보다 다양한 가능성이 열린 삶을 지향해요. 하나로 규정되지 않는 삶이 당신에게는 더 자연스러워요. 지금의 선택이 평생 갈 필요는 없다고 믿는, 유연한 인생관을 가진 사람이에요.',
-        fanTrait:'틀에 얽매이지 않고 자유롭게 선택하는'},
+        fanTrait:'틀에 얽매이지 않고 자유롭게 선택하는',
+        charName:'혜원', charFilm:'리틀 포레스트', charBlurb:'정해진 틀에 자신을 맞추지 않는 사람이에요. 그때그때 마음이 이끄는 대로 삶의 속도를 스스로 정하는 타입이죠.'},
     },
   },
   en: {
@@ -222,6 +283,7 @@ const I18N = {
     step1Title: '🎞️ Which movie did you watch?',
     step1sub: "Search the entire catalog in real time.",
     searchPlaceholder: 'e.g. Oldboy, Parasite, Dune',
+    clearSearchAria: 'Clear search',
     searchHint: '💡 Typing the original title exactly gets you more accurate results.',
     searchStatusNote: '🔄 Movies are searched in real time.',
     emptyNoteNoServer: 'The connection dropped for a moment.<br>We\'ll have movie search back up again soon!',
@@ -237,6 +299,7 @@ const I18N = {
     step2sub: 'Rate it and add a short review — we\'ll use it to shape your recommendations!',
     reviewPlaceholder: 'e.g. The acting was really impressive and the music pulled me in. Though the script dragged a bit in the second half...',
     privacyNote: 'Your rating and review are stored to help improve the service.',
+    reviewNegativeHint: '💡 Being specific — good or bad — helps a lot. If you write about what fell short (e.g. "the editing dragged and felt boring"), we\'ll actually search for movies with the opposite quality (tight, immersive editing).',
     ratingLabels: {1:'Not great', 2:'Meh', 3:'It was okay', 4:'I liked it', 5:'Loved it!'},
     step3subPositive: (title) => `Glad you enjoyed "${title}"! Tell us which of the 10 aspects stood out to you.`,
     step3subNegative: () => `Sorry to hear that. Tell us which aspects fell short and we'll find something with the opposite vibe.`,
@@ -244,6 +307,18 @@ const I18N = {
     aspects: {
       direction: 'Direction', script: 'Script & Dialogue', originality: 'Originality', theme: 'Theme',
       miseEnScene: 'Mise-en-scène', acting: 'Acting', genre: 'Genre', editing: 'Editing', music: 'Music', immersion: 'Immersion',
+    },
+    aspectDescs: {
+      direction: 'Score it high and you\'ll get movies with strong direction.',
+      script: 'Score it high and you\'ll get movies with a tight script and dialogue.',
+      originality: 'Score it high and you\'ll get movies with original, fresh ideas.',
+      theme: 'Score it high and you\'ll get movies with a similar theme or message.',
+      miseEnScene: 'Score it high and you\'ll get movies with striking visuals, color, and composition.',
+      acting: 'Score it high and you\'ll get movies featuring the same actors.',
+      genre: 'Score it high and you\'ll get movies in the same genre.',
+      editing: 'Score it high and you\'ll get movies from the same editor, with a similar pace.',
+      music: 'Score it high and you\'ll get movies with the same composer.',
+      immersion: 'Score it high and you\'ll get movies that are especially immersive.',
     },
     scaleLow: 'Poor', scaleMid: 'Average', scaleHigh: 'Excellent',
     recommendBtn: 'Get Recommendations',
@@ -269,6 +344,13 @@ const I18N = {
     decadeOption2010: '2010s',
     decadeOption2020: '2020s',
     decadeOptionAny: 'Any decade',
+    ottLabel: 'Streaming Service',
+    ottOptionAny: 'Any',
+    ottOptionNetflix: 'Netflix',
+    ottOptionWatcha: 'Watcha',
+    ottOptionTving: 'TVING',
+    ottOptionDisney: 'Disney+',
+    ottOptionApple: 'Apple TV+',
     runtimeHourUnit: 'h',
     runtimeMinutesUnit: 'm',
     saveBtn: 'Save',
@@ -302,6 +384,8 @@ const I18N = {
     recsGalleryBtn: '📝 Movies Recommended to You',
     recsSortDate: 'Sort by date',
     recsSortGenre: 'Sort by genre',
+    recsSortOtt: 'Sort by streaming',
+    recsFilterNoOtt: 'No streaming info',
     recsEmptyAll: 'No recommendations yet.',
     recsTitle: 'Movies Recommended to You',
     recsFilterAll: 'All',
@@ -317,21 +401,41 @@ const I18N = {
     modeTicket2Label: 'Quickly Find My<br>Kind of Movie',
     modeTicket3Label: 'Analyze Me Through<br>My Favorite Films',
     backToModesText: 'Try another way',
+    modeSnackRecsLabel: '🍿<br>Recommended to You',
+    modeSnackHistoryLabel: '🥤<br>Review History',
 
     mode2Eyebrow: 'Quickly Find My Kind of Movie',
     mode2QuizTitle: 'Just answer a few things',
     mode2QuizSub: "No rating or review needed — we'll find something for your mood right now.",
-    mode2MoodLabel: 'What are you in the mood for?',
+    mode2MoodLabel: 'What are you in the mood for? (pick multiple)',
     mode2RuntimeLabel: 'Runtime',
     mode2DecadeLabel: 'Release Era',
+    mode2OttLabel: 'Streaming Service (pick multiple)',
+    mode2FameLabel: 'How well-known?',
+    mode2CastLabel: 'What kind of cast?',
     mode2SubmitBtn: 'Get Recommendations',
     mode2ResultTitle: 'How about these?',
     mode2RestartBtn: 'Start Over',
     mode2Disclaimer: 'Found live, right now, based on what you picked.',
     mode2ReasonText: 'Matched to your mood and picks',
+    mode2ReasonMood: (mood) => `Fits the "${mood}" mood`,
+    mode2ReasonFameMain: "A well-known movie you probably haven't seen yet",
+    mode2ReasonFameHidden: 'A hidden gem almost no one has seen',
+    mode2ReasonCastFamous: 'Features well-known actors',
+    mode2ReasonCastNew: 'Features mostly up-and-coming actors',
     moodOptions: {
       action: 'Something exciting and thrilling', comedy: 'I want to laugh', thriller: 'Something tense and gripping',
       drama: 'A story that moves me', horror: 'A good scare works too', romance: 'A swoony romance',
+    },
+    fameOptions: {
+      any: 'Any',
+      mainstream: "Well-known, but I haven't seen it",
+      hidden: 'A hidden gem nobody knows',
+    },
+    castOptions: {
+      any: 'Any',
+      famous: 'Movies with famous actors',
+      newcomer: 'Movies with up-and-coming actors',
     },
 
     mode3Eyebrow: 'Analyze Me Through My Favorite Films',
@@ -345,78 +449,96 @@ const I18N = {
     mode3RecLabel: 'Your movie match',
     mode3ReasonTemplate: (trait) => `People who are ${trait} loved this movie`,
     mode3NeedMore: 'Pick at least 3 movies.',
-    mode3VerdictTitle: (archetypeTitle) => `You're the <b>"${archetypeTitle}"</b> type`,
+    mode3VerdictTitle: (charName) => `You're the <b>${charName}</b> type`,
+    mode3CommonIntro: (titlesStr, traitStr) => `What <b>${titlesStr}</b> have in common is that they're all <b>${traitStr}</b>.`,
+    mode3CommonIntroFallback: (titlesStr) => `<b>${titlesStr}</b> clearly have something in common.`,
+    mode3CharBlurbTemplate: (charName, charFilm, blurb) => `<b>${charName}</b> — from "${charFilm}." ${blurb}`,
     mode3LabelPersonality: "🎭 You're someone like this",
-    mode3LabelCompat: '💞 This kind of person suits you',
+    mode3LabelCompat: (charName) => `💞 The type that suits you is <b>${charName}</b>`,
     mode3LabelStrength: '💪 The strength you carry is',
     mode3LabelLifeGoal: '🧭 This is the life you dream of',
+    mode3ShareBtn: '📤 Share with a friend',
+    mode3ShareText: (charName) => `I analyzed my taste in movies on CineRec and got the "${charName}" type! What type are you?`,
+    shareCopiedMsg: 'Link copied! Paste it anywhere to share.',
+    shareFailMsg: 'Something went wrong while sharing. Please try again.',
     archetypes: {
       adventurer: {title:'The Adventurer',
         personality:"You can't sit still. New thrills and challenges make your eyes light up, and you act before you hesitate. Rather than spend time planning, you'd rather jump in and learn by doing.",
         compatibility:"You balance well with someone calm and deliberate. Best of all is someone who'll drop everything and go with you on a whim, and someone who trusts your wild-seeming decisions can become a lifelong partner.",
         strength:"Decisiveness and drive. While others are still weighing options, you're already a step ahead, and you make your next move faster than most even in a crisis.",
         lifeGoal:'You value experience over stability — a good story beats a safe regret. More than anything, you want to spend your life saying "I tried it" more often than not.',
-        fanTrait:'adventurous and quick to act without hesitation'},
+        fanTrait:'adventurous and quick to act without hesitation',
+        charName:'Indiana Jones', charFilm:'Raiders of the Lost Ark', charBlurb:'Someone who leaps into danger without a second thought. Fear takes a back seat to curiosity, and the bigger the risk, the more alive they feel.'},
       entertainer: {title:'The Entertainer',
         personality:"You can't stand a heavy mood. You find the funny angle in any room and naturally loosen things up. You rarely show it when you're struggling yourself — you check on everyone else's mood first.",
         compatibility:'You balance well with someone thoughtful and grounded. Someone who genuinely laughs at your jokes is a keeper, and it helps even more to have someone who occasionally asks how you\'re really doing.',
         strength:"You change the temperature of a room. Awkward silences don't survive long around you, and you have a knack for breaking the ice even among total strangers.",
         lifeGoal:"You'd rather live joyfully than seriously — every day should have some fun in it. Looking back, you want to remember a life full of laughter more than anything else.",
-        fanTrait:'funny and great at lifting the mood'},
+        fanTrait:'funny and great at lifting the mood',
+        charName:'Genie', charFilm:'Aladdin', charBlurb:'Someone who lights up any room they walk into. Even mid-crisis they crack a joke, and people can\'t help but laugh along.'},
       empath: {title:'The Empath',
         personality:"You look closely at people and feelings, noticing what's left unsaid, and you love a deep conversation. Even the smallest change in someone's tone doesn't escape you.",
         compatibility:'You do well with someone who expresses their feelings openly — mutual honesty feels safer than assumed understanding. A relationship deepens fast with someone who doesn\'t take your thoughtfulness for granted.',
         strength:"Empathy. Your sensitivity to what people really feel is why they gravitate toward you, and you're often the person people trust with their hardest stories.",
         lifeGoal:"You value a few deep connections over many shallow ones. You'd rather have a handful of people who truly get you than a big circle that barely does.",
-        fanTrait:'emotionally attuned and drawn to deep conversation'},
+        fanTrait:'emotionally attuned and drawn to deep conversation',
+        charName:'Amélie', charFilm:'Amélie', charBlurb:'Someone who notices the small emotional details everyone else misses. Quietly attentive, they show up for people in ways that matter.'},
       thrillSeeker: {title:'The Thrill-Seeker',
         personality:"You actually enjoy a good scare. Tension makes your heart race, and unpredictable turns pull you in. A story you can't predict the ending of grips you far more than a safe, familiar one.",
         compatibility:"You click with someone fearless enough to jump in with you — overly cautious types slow you down. The best match says \"I'm in\" the moment you suggest something spontaneous.",
         strength:"A calm that shows up right when things get intense — you're already moving while others freeze, and you treat the unexpected as a fun twist rather than a problem.",
         lifeGoal:"You'd rather live an exciting life than a safe one — an unpredictable day feels more alive. Even buckled in, you're always more curious about what's around the next corner than the view outside.",
-        fanTrait:'thrill-loving and fearless in the face of tension'},
+        fanTrait:'thrill-loving and fearless in the face of tension',
+        charName:'Ethan Hunt', charFilm:'Mission: Impossible', charBlurb:'Someone who moves toward danger instead of away from it. Retreating isn\'t really an option — they thrive right in the middle of the tension.'},
       romantic: {title:'The Romantic',
         personality:'You treasure butterflies and emotional arcs, finding meaning in small moments and sincerity in relationships. You remember anniversaries and tiny details most people forget.',
         compatibility:"You do well with someone who isn't stingy with affection — small gestures returned in kind keep things going. You'll stay far more comfortable with someone whose warmth shows, even over someone quietly deep.",
         strength:'You cherish people and moments — memories with you tend to stay especially vivid, and you have a gift for making people feel like they truly matter.',
         lifeGoal:"You'd rather live a life that leaves feeling behind than one optimized for efficiency. You believe what stays with you isn't the outcome, but how it felt at the time.",
-        fanTrait:'sentimental and openly affectionate'},
+        fanTrait:'sentimental and openly affectionate',
+        charName:'Jack Dawson', charFilm:'Titanic', charBlurb:'Someone who pours their whole heart into even the smallest moment. When it comes to love, they hold nothing back.'},
       strategist: {title:'The Strategist',
         personality:"You love the moment a puzzle clicks into place — piecing clues together to find your own answer. You'd much rather work out the reasoning yourself than just be told the conclusion.",
         compatibility:'You\'re complemented well by someone intuitive and free — they add unexpected fun to your plans. You get along even better with someone who respects your logic instead of being purely spontaneous.',
         strength:"Analytical depth — you notice the details everyone else missed, and you're just as good at breaking down something complicated so it actually makes sense.",
         lifeGoal:"You'd rather understand your way through life than just go by gut feeling. It has to make sense to really become yours — you can't stand leaving something half-understood.",
-        fanTrait:'logical and methodical about finding answers'},
+        fanTrait:'logical and methodical about finding answers',
+        charName:'Sherlock Holmes', charFilm:'Sherlock Holmes', charBlurb:'Someone who reads the room and calculates three moves ahead. Observation and logic guide every decision, not gut feeling.'},
       dreamer: {title:'The Dreamer',
         personality:"You love imagining worlds beyond this one. When others say something's impossible, you're already picturing how it could work. There are usually a few different worlds running in your head at once.",
         compatibility:'Grounded people help your ideas become real — you like someone who gets curious with you instead of laughing it off. You click especially well with someone who\'ll listen to your wildest idea with genuine interest.',
         strength:"Imagination — the ability to see possibilities no one else can yet, and a knack for finding a new story in things everyone else finds boring.",
         lifeGoal:"You'd rather chase an imagined path than follow a set one. You're drawn to the road no one's walked yet, and you trust the map you drew yourself more than the one everyone else follows.",
-        fanTrait:'imaginative and always picturing new possibilities'},
+        fanTrait:'imaginative and always picturing new possibilities',
+        charName:'Walter Mitty', charFilm:'The Secret Life of Walter Mitty', charBlurb:'Someone who follows the life they imagined rather than the one handed to them. Having less never stops them from wanting more.'},
       innocent: {title:'The Warm Heart',
         personality:'You find real happiness in warm, simple things. A gentle story moves you more than a complicated one, and even a small kindness stays with you a long time.',
         compatibility:'You feel at ease with someone unguarded and kind — sincerity without calculation opens you right up. You do far better with someone who treats you simply and warmly than with anything complicated.',
         strength:'A purity that sees people as they are — everyone drops their guard around you, and your unfiltered sincerity is exactly what puts people at ease.',
         lifeGoal:"You'd rather live warm and comfortable than complicated and grand. Small daily happiness means more to you than one big achievement — you know how to find joy in an ordinary day.",
-        fanTrait:'warm and sincere without pretense'},
+        fanTrait:'warm and sincere without pretense',
+        charName:'Forrest Gump', charFilm:'Forrest Gump', charBlurb:'Someone who meets the world with an unguarded, sincere heart. No hidden agendas — just full devotion to what they love.'},
       seeker: {title:'The Seeker',
         personality:"You're drawn to true stories — real facts interest you more than fiction, and once curious, you dig all the way down. Learning one thing usually sends you looking for the story behind it.",
         compatibility:"You do well with someone who respects your curiosity — a good match digs for answers with you instead of brushing you off. Trust builds faster with someone who admits what they don't know instead of faking it.",
         strength:"Persistence — you're never satisfied with a half-known answer, which is exactly how you find the real one, and you catch the one detail everyone else skipped past.",
         lifeGoal:"You'd rather verify things yourself than take them on faith. You trust a truth you found yourself more than any answer someone handed you — you need to see it to believe it.",
-        fanTrait:'curious and relentless about digging deeper'},
+        fanTrait:'curious and relentless about digging deeper',
+        charName:'Robert Langdon', charFilm:'The Da Vinci Code', charBlurb:'Someone who won\'t let a single clue go unexamined. They don\'t stop until they\'ve found the real answer.'},
       warrior: {title:'The Believer',
         personality:'You value history and cause, thinking about your place in the bigger picture and acting on what you believe is right. Principle tends to come before convenience for you.',
         compatibility:"You get along well with someone equally principled — a partner who understands your convictions becomes a steady ally. Trust actually deepens with someone who'll argue their case seriously instead of just agreeing.",
         strength:"An unshakeable resolve — once you believe something's right, you follow through, and you don't get swept up just because the majority thinks otherwise.",
         lifeGoal:"You'd rather live a meaningful life than just get by — you want to be able to explain why you live the way you do. You lean toward the right path over the easy one.",
-        fanTrait:'principled and resolute about what they believe'},
+        fanTrait:'principled and resolute about what they believe',
+        charName:'William Wallace', charFilm:'Braveheart', charBlurb:'Someone who won\'t back down from what they believe is right. Given the choice, they\'ll take principle over convenience every time.'},
       freeSpirit: {title:'The Free Spirit',
         personality:"You're not boxed into one genre — you enjoy a wide range of stories and pick whatever calls to you in the moment. You follow the mood of the moment more than any fixed taste.",
         compatibility:'You do well with someone equally open — a relationship works best when neither of you tries to define the other. Things stay natural longer with someone who doesn\'t over-structure the relationship with rules.',
         strength:'Flexibility — you adapt freely to whatever the moment calls for, and you settle into new environments without much stress at all.',
         lifeGoal:"You'd rather keep your options open than settle on one right answer. A life that can't be pinned down feels more natural to you — today's choice doesn't have to last forever, and that's exactly how you like it.",
-        fanTrait:'unconventional and free in how they choose'},
+        fanTrait:'unconventional and free in how they choose',
+        charName:'Christopher McCandless', charFilm:'Into the Wild', charBlurb:'Someone who refuses to be boxed into anyone else\'s mold. They set their own pace, guided by whatever calls to them in the moment.'},
     },
   },
 };
@@ -460,6 +582,30 @@ const IMG_W92 = 'https://image.tmdb.org/t/p/w92';
 const IMG_W200 = 'https://image.tmdb.org/t/p/w200';
 let serverAvailable = false;
 let genreMap = null;
+let providerIds = {};
+
+/* OTT 필터 — 넷플릭스 등 서비스 ID를 코드에 하드코딩하지 않고, TMDB의
+   /watch/providers/movie(watch_region=KR)를 실시간 조회해서 이름으로 매칭합니다.
+   (장르 ID를 genreMap으로 그때그때 받아오는 것과 동일한 패턴) */
+const OTT_CHIPS = [
+  {key:'netflix', labelKey:'ottOptionNetflix', matchNames:['Netflix']},
+  {key:'watcha', labelKey:'ottOptionWatcha', matchNames:['Watcha']},
+  {key:'tving', labelKey:'ottOptionTving', matchNames:['TVING']},
+  {key:'disney', labelKey:'ottOptionDisney', matchNames:['Disney Plus','Disney+']},
+  {key:'apple', labelKey:'ottOptionApple', matchNames:['Apple TV Plus','Apple TV+']},
+];
+
+async function loadProviderIds(){
+  try{
+    const data = await apiGet('/watch/providers/movie', {watch_region:'KR'});
+    const results = data.results || [];
+    providerIds = {};
+    OTT_CHIPS.forEach(chip=>{
+      const found = results.find(p=> chip.matchNames.some(name=> (p.provider_name||'').toLowerCase() === name.toLowerCase()));
+      if(found) providerIds[chip.key] = found.provider_id;
+    });
+  }catch(e){ providerIds = {}; }
+}
 
 async function apiGet(path, params){
   const url = new URL(API_BASE, window.location.origin);
@@ -480,6 +626,7 @@ async function checkServer(){
     genreMap = {};
     (data.genres||[]).forEach(g=> genreMap[g.id]=g.name);
     serverAvailable = true;
+    await loadProviderIds();
   }catch(e){
     serverAvailable = false;
   }
@@ -573,11 +720,12 @@ let state = {
   movie:null, rating:0, reviewText:'',
   aspects: Object.fromEntries(ASPECT_KEYS.map(k=>[k,3])),
   lang:'ko', lastPositive:true,
-  manualFilters: { genres:[], runtime:null, type:'all', decade:null },
+  manualFilters: { genres:[], runtime:null, type:'all', decade:null, ott:[] },
 };
 let history = [];
 let savedRecs = [];
 let recsGenreFilter = 'all';
+let recsOttFilter = 'all';
 let recsSortMode = 'date';
 let recsGalleryOpen = false;
 let historyOpen = false;
@@ -620,12 +768,15 @@ function applyStaticI18n(){
   $('#step1Title').textContent = t('step1Title');
   $('#step1sub').textContent = t('step1sub');
   $('#search').placeholder = t('searchPlaceholder');
+  $('#searchClear').setAttribute('aria-label', t('clearSearchAria'));
+  $('#mode3SearchClear').setAttribute('aria-label', t('clearSearchAria'));
   $('#searchStatus').textContent = t('searchStatusNote');
   $('#searchHint').textContent = t('searchHint');
   $('#toStep2').textContent = t('nextBtn');
 
   $('#step2sub').textContent = t('step2sub');
   $('#reviewText').placeholder = t('reviewPlaceholder');
+  $('#reviewNegativeHint').textContent = t('reviewNegativeHint');
   $('#privacyNote').textContent = t('privacyNote');
   $('#back1').textContent = t('backBtn');
   $('#toStep3').textContent = t('nextBtn');
@@ -640,6 +791,7 @@ function applyStaticI18n(){
   $('#runtimeLabel').textContent = t('runtimeLabel');
   $('#decadeLabel').textContent = t('decadeLabel');
   $('#typeLabel').textContent = t('typeLabel');
+  $('#ottLabel').textContent = t('ottLabel');
   $('#back3').textContent = t('backBtn');
   $('#skipRefine').textContent = t('skipBtn');
   $('#toStep5').textContent = t('recommendBtn');
@@ -650,6 +802,7 @@ function applyStaticI18n(){
   $('#recsGalleryBtn').textContent = t('recsGalleryBtn');
   $('#sortDateBtn').textContent = t('recsSortDate');
   $('#sortGenreBtn').textContent = t('recsSortGenre');
+  $('#sortOttBtn').textContent = t('recsSortOtt');
   $('#recsTitle').textContent = t('recsTitle');
   $('#historyBtn').textContent = t('historyBtn');
   $('#historyTitle').textContent = t('historyTitle');
@@ -672,6 +825,8 @@ function applyStaticI18n(){
   $('#modeTicket1Label').innerHTML = t('modeTicket1Label');
   $('#modeTicket2Label').innerHTML = t('modeTicket2Label');
   $('#modeTicket3Label').innerHTML = t('modeTicket3Label');
+  $('#modeSnackRecsLabel').innerHTML = t('modeSnackRecsLabel');
+  $('#modeSnackHistoryLabel').innerHTML = t('modeSnackHistoryLabel');
   ['1','2','3'].forEach(n=> $('#backToModes'+n+'Text').textContent = t('backToModesText'));
 
   $('#mode2Eyebrow').textContent = t('mode2Eyebrow');
@@ -680,6 +835,9 @@ function applyStaticI18n(){
   $('#mode2MoodLabel').textContent = t('mode2MoodLabel');
   $('#mode2RuntimeLabel').textContent = t('mode2RuntimeLabel');
   $('#mode2DecadeLabel').textContent = t('mode2DecadeLabel');
+  $('#mode2OttLabel').textContent = t('mode2OttLabel');
+  $('#mode2FameLabel').textContent = t('mode2FameLabel');
+  $('#mode2CastLabel').textContent = t('mode2CastLabel');
   $('#mode2Submit').textContent = t('mode2SubmitBtn');
   $('#mode2ResultTitle').textContent = t('mode2ResultTitle');
   $('#mode2Restart').textContent = t('mode2RestartBtn');
@@ -695,6 +853,7 @@ function applyStaticI18n(){
   $('#mode3Submit').textContent = t('mode3SubmitBtn');
   $('#mode3Restart').textContent = t('mode3RestartBtn');
   $('#mode3RecLabel').textContent = t('mode3RecLabel');
+  $('#mode3ShareBtn').textContent = t('mode3ShareBtn');
   if($('#mode3Root').classList.contains('show')) renderMode3PickedChips();
 }
 
@@ -790,7 +949,14 @@ function renderMovieGrid(filter=''){
 $('#search').addEventListener('input', e=>{
   clearTimeout(searchDebounce);
   const val = e.target.value;
+  $('#searchClear').style.display = val ? 'block' : 'none';
   searchDebounce = setTimeout(()=> renderMovieGrid(val), 400);
+});
+$('#searchClear').addEventListener('click', ()=>{
+  $('#search').value = '';
+  $('#searchClear').style.display = 'none';
+  renderMovieGrid('');
+  $('#search').focus();
 });
 
 function renderSelectedCard(){
@@ -864,6 +1030,7 @@ function renderAspectSliders(containerSel, keys){
       <label>${t('aspects')[key]} <span class="val" id="val-${key}">${state.aspects[key]}</span></label>
       <input type="range" min="1" max="5" step="1" value="${state.aspects[key]}" id="range-${key}">
       <div class="scale-labels"><span>${t('scaleLow')}</span><span>${t('scaleMid')}</span><span>${t('scaleHigh')}</span></div>
+      <div class="aspect-desc">${t('aspectDescs')[key] || ''}</div>
     `;
     c.appendChild(wrap);
     wrap.querySelector('input').addEventListener('input', e=>{
@@ -998,6 +1165,34 @@ function renderRefineStep(){
     };
     typeBox.appendChild(chip);
   });
+
+  const ottBox = $('#ottChips');
+  ottBox.innerHTML = '';
+  const ottAnyChip = document.createElement('button');
+  ottAnyChip.type = 'button';
+  ottAnyChip.className = 'chip' + (state.manualFilters.ott.length===0 ? ' selected' : '');
+  ottAnyChip.textContent = t('ottOptionAny');
+  ottAnyChip.onclick = ()=>{
+    state.manualFilters.ott = [];
+    ottBox.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+    ottAnyChip.classList.add('selected');
+  };
+  ottBox.appendChild(ottAnyChip);
+  OTT_CHIPS.forEach(o=>{
+    if(!providerIds[o.key]) return;
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'chip' + (state.manualFilters.ott.includes(o.key) ? ' selected' : '');
+    chip.textContent = t(o.labelKey);
+    chip.onclick = ()=>{
+      const i = state.manualFilters.ott.indexOf(o.key);
+      if(i===-1) state.manualFilters.ott.push(o.key);
+      else state.manualFilters.ott.splice(i,1);
+      chip.classList.toggle('selected');
+      ottAnyChip.classList.toggle('selected', state.manualFilters.ott.length===0);
+    };
+    ottBox.appendChild(chip);
+  });
 }
 
 $('#toStep4').onclick = ()=>{
@@ -1006,7 +1201,7 @@ $('#toStep4').onclick = ()=>{
 };
 $('#back3').onclick = ()=> showStep(3);
 $('#skipRefine').onclick = ()=>{
-  state.manualFilters = { genres:[], runtime:null, type:'all', decade:null };
+  state.manualFilters = { genres:[], runtime:null, type:'all', decade:null, ott:[] };
   runRecommend();
 };
 $('#toStep5').onclick = ()=> runRecommend();
@@ -1101,7 +1296,7 @@ async function computeTmdbRecommendations(){
   const base = state.movie;
   const positive = state.rating >= 3;
   const {liked, disliked} = getLikedDisliked();
-  const manual = state.manualFilters || { genres:[], runtime:null, type:'all' };
+  const manual = state.manualFilters || { genres:[], runtime:null, type:'all', ott:[] };
   const hasManualFilter = manual.genres.length>0 || manual.runtime || manual.type!=='all';
 
   const params = { sort_by:'popularity.desc', 'vote_count.gte':50, page:1 };
@@ -1156,6 +1351,14 @@ async function computeTmdbRecommendations(){
     params['primary_release_date.lte'] = (manual.decade + 9) + '-12-31';
   }
 
+  // OTT 선택 (직접 선택 안 했으면 건너뜀) — provider ID는 하드코딩 없이 loadProviderIds()로 실시간 조회한 값
+  const manualOttIds = (manual.ott||[]).map(k=> providerIds[k]).filter(Boolean);
+  if(manualOttIds.length){
+    params.with_watch_providers = manualOttIds.join('|');
+    params.watch_region = 'KR';
+    params.with_watch_monetization_types = 'flatrate';
+  }
+
   // 영화 유형 — 단편은 짧은 러닝타임으로, 독립영화는 TMDB 키워드로 근사해요
   if(manual.type==='short'){
     params['with_runtime.lte'] = Math.min(manual.runtime || 999, 40);
@@ -1200,6 +1403,11 @@ async function computeTmdbRecommendations(){
     }
     if(manual.type==='indie' || manual.type==='short' || selectedExtraGenres.length){
       if(params.with_keywords) loose.with_keywords = params.with_keywords;
+    }
+    if(params.with_watch_providers){
+      loose.with_watch_providers = params.with_watch_providers;
+      loose.watch_region = params.watch_region;
+      loose.with_watch_monetization_types = params.with_watch_monetization_types;
     }
     const more = (await tmdbDiscover(loose)).filter(m=> m.id !== base.tmdbId);
     const seen = new Set(results.map(r=>r.id));
@@ -1363,6 +1571,10 @@ function submitReviewToServer(){
       runtime: state.manualFilters.runtime,
       type: state.manualFilters.type,
       decade: state.manualFilters.decade,
+      ott: (state.manualFilters.ott||[]).map(k=>{
+        const chip = OTT_CHIPS.find(o=>o.key===k);
+        return chip ? t(chip.labelKey) : k;
+      }),
     },
   };
   fetch('/api/save-review', {
@@ -1456,7 +1668,7 @@ function saveRecToGallery(movie, reasons){
   savedRecs.unshift({
     id: movie.id, title: movie.title, year: movie.year,
     poster: movie.poster, imdbUrl: movie.imdbUrl,
-    genreIds: movie.genreIds || [], savedAt: Date.now(),
+    genreIds: movie.genreIds || [], ott: movie.ott || [], savedAt: Date.now(),
     reasons: (reasons||[]).slice(0,2),
   });
   if(savedRecs.length > 200) savedRecs = savedRecs.slice(0, 200);
@@ -1469,6 +1681,7 @@ function renderRecsGallery(){
 
   $('#sortDateBtn').classList.toggle('selected', recsSortMode==='date');
   $('#sortGenreBtn').classList.toggle('selected', recsSortMode==='genre');
+  $('#sortOttBtn').classList.toggle('selected', recsSortMode==='ott');
 
   const tabsBox = $('#recsGenreTabs');
   tabsBox.innerHTML = '';
@@ -1504,6 +1717,40 @@ function renderRecsGallery(){
     });
 
     list = recsGenreFilter==='all' ? savedRecs : savedRecs.filter(r=> (r.genreIds||[]).includes(recsGenreFilter));
+  } else if(recsSortMode==='ott'){
+    const ottPresent = new Set();
+    let hasNoOtt = false;
+    savedRecs.forEach(r=>{
+      if(r.ott && r.ott.length) r.ott.forEach(o=> ottPresent.add(o));
+      else hasNoOtt = true;
+    });
+
+    const allTab = document.createElement('button');
+    allTab.type = 'button';
+    allTab.className = 'genre-tab' + (recsOttFilter==='all' ? ' selected' : '');
+    allTab.textContent = t('recsFilterAll');
+    allTab.onclick = ()=>{ recsOttFilter = 'all'; renderRecsGallery(); };
+    tabsBox.appendChild(allTab);
+    [...ottPresent].sort().forEach(name=>{
+      const tab = document.createElement('button');
+      tab.type = 'button';
+      tab.className = 'genre-tab' + (recsOttFilter===name ? ' selected' : '');
+      tab.textContent = name;
+      tab.onclick = ()=>{ recsOttFilter = name; renderRecsGallery(); };
+      tabsBox.appendChild(tab);
+    });
+    if(hasNoOtt){
+      const tab = document.createElement('button');
+      tab.type = 'button';
+      tab.className = 'genre-tab' + (recsOttFilter==='none' ? ' selected' : '');
+      tab.textContent = t('recsFilterNoOtt');
+      tab.onclick = ()=>{ recsOttFilter = 'none'; renderRecsGallery(); };
+      tabsBox.appendChild(tab);
+    }
+
+    list = recsOttFilter==='all' ? savedRecs
+      : recsOttFilter==='none' ? savedRecs.filter(r=> !r.ott || r.ott.length===0)
+      : savedRecs.filter(r=> (r.ott||[]).includes(recsOttFilter));
   } else {
     list = [...savedRecs].sort((a,b)=> (b.savedAt||0) - (a.savedAt||0));
   }
@@ -1561,6 +1808,7 @@ $('#recsGalleryBtn').onclick = ()=>{
 };
 $('#sortDateBtn').onclick = ()=>{ recsSortMode = 'date'; renderRecsGallery(); };
 $('#sortGenreBtn').onclick = ()=>{ recsSortMode = 'genre'; renderRecsGallery(); };
+$('#sortOttBtn').onclick = ()=>{ recsSortMode = 'ott'; renderRecsGallery(); };
 
 $('#historyBtn').onclick = ()=>{
   historyOpen = !historyOpen;
@@ -1576,7 +1824,7 @@ $('#historyBtn').onclick = ()=>{
 $('#restart').onclick = ()=>{
   state.movie=null; state.rating=0; state.reviewText='';
   state.aspects = Object.fromEntries(ASPECT_KEYS.map(k=>[k,3]));
-  state.manualFilters = { genres:[], runtime:null, type:'all', decade:null };
+  state.manualFilters = { genres:[], runtime:null, type:'all', decade:null, ott:[] };
   $('#search').value='';
   $('#reviewText').value='';
   $('#toStep2').disabled = true;
@@ -1633,6 +1881,22 @@ function setupIntro(){
   $('#modeTicket2').addEventListener('click', ()=> enterMode('mode2Root', 2, setupMode2));
   $('#modeTicket3').addEventListener('click', ()=> enterMode('mode3Root', 3, setupMode3));
 
+  /* 메인 티켓 화면에서 바로 "추천 받았던 영화"/"내 리뷰 기록"으로 들어가는 팝콘·콜라 버튼 */
+  const snackRecs = $('#modeSnackRecs');
+  const snackHistory = $('#modeSnackHistory');
+  if(snackRecs) snackRecs.addEventListener('click', ()=>{
+    enterMode('appRoot', 1);
+    recsGalleryOpen = true; historyOpen = false;
+    renderRecsGallery(); renderHistory();
+    setTimeout(()=> $('#recsGallery').scrollIntoView({behavior:'smooth', block:'start'}), 100);
+  });
+  if(snackHistory) snackHistory.addEventListener('click', ()=>{
+    enterMode('appRoot', 1);
+    historyOpen = true; recsGalleryOpen = false;
+    renderHistory(); renderRecsGallery();
+    setTimeout(()=> $('#historyBox').scrollIntoView({behavior:'smooth', block:'start'}), 100);
+  });
+
   ['1','2','3'].forEach(n=>{
     const btn = $('#backToModes'+n);
     if(!btn) return;
@@ -1655,8 +1919,14 @@ const MOOD_OPTIONS = [
   {value:'horror', genres:[27]},
   {value:'romance', genres:[10749]},
 ];
-let mode2State = { mood:null, runtime:null, decade:null };
+const FAME_VALUES = ['any','mainstream','hidden'];
+const CAST_VALUES = ['any','famous','newcomer'];
+let mode2State = { mood:[], runtime:null, decade:null, ott:[], fame:'any', cast:'any' };
 let mode2Setup = false;
+
+function updateMode2SubmitState(){
+  $('#mode2Submit').disabled = mode2State.mood.length===0;
+}
 
 function mode2RenderChipGroup(container, options, getLabel, isSelected, onSelect){
   container.innerHTML='';
@@ -1669,17 +1939,66 @@ function mode2RenderChipGroup(container, options, getLabel, isSelected, onSelect
       onSelect(opt);
       container.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
       chip.classList.add('selected');
-      $('#mode2Submit').disabled = !mode2State.mood;
+      updateMode2SubmitState();
     };
     container.appendChild(chip);
   });
 }
 
+/* 무드처럼 복수 선택이 가능한 칩 그룹 — 선택해도 다른 칩이 안 풀리고 토글만 됨 */
+function mode2RenderMultiChipGroup(container, options, getLabel, getValue, selectedArr){
+  container.innerHTML='';
+  options.forEach(opt=>{
+    const val = getValue(opt);
+    const chip = document.createElement('button');
+    chip.type='button';
+    chip.className = 'chip' + (selectedArr.includes(val) ? ' selected' : '');
+    chip.textContent = getLabel(opt);
+    chip.onclick = ()=>{
+      const i = selectedArr.indexOf(val);
+      if(i===-1) selectedArr.push(val); else selectedArr.splice(i,1);
+      chip.classList.toggle('selected');
+      updateMode2SubmitState();
+    };
+    container.appendChild(chip);
+  });
+}
+
+/* OTT — 04단계와 동일하게, 하드코딩 없이 loadProviderIds()로 받아온 provider ID로 복수 선택 */
+function renderMode2OttChips(){
+  const box = $('#mode2OttChips');
+  box.innerHTML = '';
+  const anyChip = document.createElement('button');
+  anyChip.type = 'button';
+  anyChip.className = 'chip' + (mode2State.ott.length===0 ? ' selected' : '');
+  anyChip.textContent = t('ottOptionAny');
+  anyChip.onclick = ()=>{
+    mode2State.ott = [];
+    box.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+    anyChip.classList.add('selected');
+  };
+  box.appendChild(anyChip);
+  OTT_CHIPS.forEach(o=>{
+    if(!providerIds[o.key]) return;
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'chip' + (mode2State.ott.includes(o.key) ? ' selected' : '');
+    chip.textContent = t(o.labelKey);
+    chip.onclick = ()=>{
+      const i = mode2State.ott.indexOf(o.key);
+      if(i===-1) mode2State.ott.push(o.key); else mode2State.ott.splice(i,1);
+      chip.classList.toggle('selected');
+      anyChip.classList.toggle('selected', mode2State.ott.length===0);
+    };
+    box.appendChild(chip);
+  });
+}
+
 function renderMode2Quiz(){
-  mode2RenderChipGroup($('#mode2MoodChips'), MOOD_OPTIONS,
+  mode2RenderMultiChipGroup($('#mode2MoodChips'), MOOD_OPTIONS,
     (opt)=> t('moodOptions')[opt.value],
-    (opt)=> mode2State.mood===opt.value,
-    (opt)=>{ mode2State.mood = opt.value; });
+    (opt)=> opt.value,
+    mode2State.mood);
   mode2RenderChipGroup($('#mode2RuntimeChips'), RUNTIME_OPTIONS,
     (opt)=> t(opt.key),
     (opt)=> mode2State.runtime===opt.value,
@@ -1688,7 +2007,16 @@ function renderMode2Quiz(){
     (opt)=> t(opt.key),
     (opt)=> mode2State.decade===opt.value,
     (opt)=>{ mode2State.decade = opt.value; });
-  $('#mode2Submit').disabled = !mode2State.mood;
+  renderMode2OttChips();
+  mode2RenderChipGroup($('#mode2FameChips'), FAME_VALUES,
+    (v)=> t('fameOptions')[v],
+    (v)=> mode2State.fame===v,
+    (v)=>{ mode2State.fame = v; });
+  mode2RenderChipGroup($('#mode2CastChips'), CAST_VALUES,
+    (v)=> t('castOptions')[v],
+    (v)=> mode2State.cast===v,
+    (v)=>{ mode2State.cast = v; });
+  updateMode2SubmitState();
 }
 
 /* discover 후보(raw candidate)를 credits·제공처·외부ID·러닝타임까지 채운 카드 데이터로 확장.
@@ -1701,6 +2029,8 @@ async function detailMovieForCard(c){
     apiGet('/movie/'+c.id, {}).catch(()=>({})),
   ]);
   const cr = extractCredits(credits);
+  const topCast = (credits.cast||[]).slice(0,10);
+  const castAvgPopularity = topCast.length ? topCast.reduce((s,p)=> s+(p.popularity||0), 0)/topCast.length : 0;
   return {
     id: c.id, title:c.title, year:(c.release_date||'').slice(0,4)||'?',
     director: cr.director || t('unknownDirector'), actors:cr.actors||[],
@@ -1710,6 +2040,7 @@ async function detailMovieForCard(c){
     runtime: detail.runtime || null,
     imdbUrl: ext.imdb_id ? ('https://www.imdb.com/title/'+ext.imdb_id+'/') : imdbSearchUrl(c.title),
     ott: providers,
+    castAvgPopularity,
   };
 }
 
@@ -1760,6 +2091,9 @@ function submitMode2ToServer(resultTitles){
     mood: mode2State.mood,
     runtime: mode2State.runtime,
     decade: mode2State.decade,
+    ott: mode2State.ott,
+    fame: mode2State.fame,
+    cast: mode2State.cast,
     results: resultTitles,
     lang: state.lang,
   };
@@ -1770,42 +2104,93 @@ function submitMode2ToServer(resultTitles){
   }).catch(()=>{});
 }
 
+/* 카드마다 추천 이유가 다 똑같지 않도록, 실제로 그 영화에 겹치는 무드/장르와 고르신 조건을 바탕으로 이유를 구성해요 */
+function buildMode2Reasons(movie, moods){
+  const reasons = [];
+  moods.forEach(m=>{
+    if((movie.genreIds||[]).some(g=> m.genres.includes(g))){
+      reasons.push(t('mode2ReasonMood')(t('moodOptions')[m.value]));
+    }
+  });
+  if(mode2State.fame==='mainstream') reasons.push(t('mode2ReasonFameMain'));
+  if(mode2State.fame==='hidden') reasons.push(t('mode2ReasonFameHidden'));
+  if(mode2State.cast==='famous') reasons.push(t('mode2ReasonCastFamous'));
+  if(mode2State.cast==='newcomer') reasons.push(t('mode2ReasonCastNew'));
+  if(reasons.length===0) reasons.push(t('mode2ReasonText'));
+  return [...new Set(reasons)].slice(0,3).join(' · ');
+}
+
 async function runMode2Recommend(){
-  if(!mode2State.mood) return;
+  if(!mode2State.mood.length) return;
   const btn = $('#mode2Submit');
   btn.disabled = true;
   const originalText = btn.textContent;
   btn.textContent = t('loadingNote');
   try{
-    const mood = MOOD_OPTIONS.find(m=>m.value===mode2State.mood);
-    const params = { sort_by:'popularity.desc', 'vote_count.gte':50, page:1, with_genres: mood.genres.join('|') };
+    const moods = MOOD_OPTIONS.filter(m=> mode2State.mood.includes(m.value));
+    const genreIds = [...new Set(moods.flatMap(m=>m.genres))];
+    const params = { sort_by:'popularity.desc', 'vote_count.gte':50, page:1, with_genres: genreIds.join('|') };
     if(mode2State.runtime) params['with_runtime.lte'] = mode2State.runtime;
     if(mode2State.decade==='classic') params['primary_release_date.lte'] = '1979-12-31';
     else if(mode2State.decade){
       params['primary_release_date.gte'] = mode2State.decade + '-01-01';
       params['primary_release_date.lte'] = (mode2State.decade + 9) + '-12-31';
     }
+    const ottIds = mode2State.ott.map(k=>providerIds[k]).filter(Boolean);
+    if(ottIds.length){
+      params.with_watch_providers = ottIds.join('|');
+      params.watch_region = 'KR';
+      params.with_watch_monetization_types = 'flatrate';
+    }
+    // "나만 안 본 것 같은 영화"/"아무도 안 본 것 같은 영화" — 대중성 축(vote_count·평점 기준)을 다르게 조회
+    if(mode2State.fame==='mainstream'){
+      params['vote_count.gte'] = 1000;
+    }else if(mode2State.fame==='hidden'){
+      params['vote_count.gte'] = 50;
+      params['vote_count.lte'] = 500;
+      params['vote_average.gte'] = 7;
+      params.sort_by = 'vote_average.desc';
+      const indieKwId = await fetchKeywordId('independent film');
+      if(indieKwId) params.with_keywords = params.with_keywords ? params.with_keywords+'|'+indieKwId : String(indieKwId);
+    }
+
     let results = await tmdbDiscover(params);
     if(results.length < 4){
-      const loose = { sort_by:'popularity.desc', 'vote_count.gte':20, page:1, with_genres: mood.genres.join('|') };
+      const loose = { sort_by:'popularity.desc', 'vote_count.gte':20, page:1, with_genres: genreIds.join('|') };
+      if(params.with_watch_providers){
+        loose.with_watch_providers = params.with_watch_providers;
+        loose.watch_region = params.watch_region;
+        loose.with_watch_monetization_types = params.with_watch_monetization_types;
+      }
       const more = await tmdbDiscover(loose);
       const seen = new Set(results.map(r=>r.id));
       more.forEach(m=>{ if(!seen.has(m.id)){ results.push(m); seen.add(m.id); } });
     }
-    const top = results.slice(0,4);
-    const cards = await Promise.all(top.map(detailMovieForCard));
+
+    // "유명한 배우" / "신예 배우" 선호는 discover가 직접 지원하지 않아서, 후보를 넉넉히 뽑아
+    // 캐스팅 인지도(cast 평균 popularity)로 재정렬한 뒤 상위 4개만 남겨요
+    const poolSize = mode2State.cast==='any' ? 4 : 10;
+    const pool = results.slice(0, poolSize);
+    let cards = await Promise.all(pool.map(detailMovieForCard));
+    if(mode2State.cast!=='any'){
+      cards.sort((a,b)=> mode2State.cast==='famous'
+        ? (b.castAvgPopularity||0) - (a.castAvgPopularity||0)
+        : (a.castAvgPopularity||0) - (b.castAvgPopularity||0));
+    }
+    cards = cards.slice(0,4);
+
     const list = $('#mode2ResultList');
     list.innerHTML='';
     if(cards.length===0){
       list.innerHTML = `<div class="sub">${t('noResultsFound')}</div>`;
     }else{
-      cards.forEach(movie=> list.appendChild(renderSimpleTicketCard(movie, t('mode2ReasonText'))));
+      cards.forEach(movie=> list.appendChild(renderSimpleTicketCard(movie, buildMode2Reasons(movie, moods))));
     }
     submitMode2ToServer(cards.map(c=>c.title));
     $('#mode2QuizPanel').style.display='none';
     $('#mode2ResultPanel').style.display='block';
     window.scrollTo({top:0, behavior:'smooth'});
-    if(typeof gtag === 'function') gtag('event', 'mode2_result', {mood: mode2State.mood});
+    if(typeof gtag === 'function') gtag('event', 'mode2_result', {mood: mode2State.mood.join(',')});
   }catch(e){
     alert(t('alertRecommendFail'));
   }finally{
@@ -1820,7 +2205,7 @@ function setupMode2(){
   renderMode2Quiz();
   $('#mode2Submit').onclick = runMode2Recommend;
   $('#mode2Restart').onclick = ()=>{
-    mode2State = { mood:null, runtime:null, decade:null };
+    mode2State = { mood:[], runtime:null, decade:null, ott:[], fame:'any', cast:'any' };
     $('#mode2ResultPanel').style.display='none';
     $('#mode2QuizPanel').style.display='block';
     renderMode2Quiz();
@@ -1842,9 +2227,19 @@ const ARCHETYPE_BUCKETS = [
   {key:'seeker', genres:[99]},
   {key:'warrior', genres:[10752,36]},
 ];
+/* "당신과 잘 맞는 유형" — 서로 성향을 보완해주는 짝을 미리 정의 (신념가만 같은 유형끼리 잘 맞는다고 판단해 자기 자신으로 매칭) */
+const COMPAT_MAP = {
+  adventurer:'strategist', strategist:'adventurer',
+  entertainer:'empath', empath:'entertainer',
+  thrillSeeker:'freeSpirit', freeSpirit:'thrillSeeker',
+  romantic:'innocent', innocent:'romantic',
+  dreamer:'seeker', seeker:'dreamer',
+  warrior:'warrior',
+};
 let mode3Picked = [];
 let mode3Setup = false;
 let mode3SearchDebounce = null;
+let mode3LastResult = null;
 
 function updateMode3PickedLabel(){
   $('#mode3PickedLabel').innerHTML = `${t('mode3PickedLabel')} (<span id="mode3PickedCount">${mode3Picked.length}</span>/5)`;
@@ -1918,13 +2313,26 @@ function pickArchetype(picks){
   return best || 'freeSpirit';
 }
 
+/* 고르신 영화들의 공통점(장르) 설명용 — 결과를 결정한 장르 중, 실제로 픽에 많이 등장한 순으로 이름을 뽑아요 */
+function commonGenreNames(picks, bucketGenres){
+  if(!bucketGenres || !bucketGenres.length || !genreMap) return [];
+  const freq = {};
+  picks.forEach(m=> (m.genreIds||[]).forEach(g=>{ if(bucketGenres.includes(g)) freq[g] = (freq[g]||0)+1; }));
+  return Object.keys(freq)
+    .sort((a,b)=> freq[b]-freq[a])
+    .map(g=> genreMap[g])
+    .filter(Boolean)
+    .slice(0,2);
+}
+
 /* 관리자 페이지에서 볼 수 있도록 모드3(인생영화 분석) 결과도 서버에 저장 — 화면 동작에는 영향 없음 */
-function submitMode3ToServer(archetypeKey, archetypeTitle){
+function submitMode3ToServer(archetypeKey, archetypeTitle, charName){
   const payload = {
     mode: 'life',
     pickedMovies: mode3Picked.map(p=>p.title),
     archetype: archetypeKey,
     archetypeTitle: archetypeTitle,
+    charName: charName,
     lang: state.lang,
   };
   fetch('/api/save-review', {
@@ -1932,6 +2340,26 @@ function submitMode3ToServer(archetypeKey, archetypeTitle){
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(payload),
   }).catch(()=>{});
+}
+
+/* 친구에게 공유하기 — 카카오 개발자 앱 키가 없어도 되도록 OS 공유 시트(navigator.share)를 사용해요.
+   모바일(Android/iOS)에서는 이 시트에 카카오톡이 설치돼 있으면 공유 대상으로 자동으로 떠요.
+   지원하지 않는 브라우저(대부분의 데스크톱)에서는 클립보드 복사로 대신해요. */
+async function shareMode3Result(){
+  if(!mode3LastResult) return;
+  const shareText = t('mode3ShareText')(mode3LastResult.charName);
+  const shareUrl = 'https://cinereccc.vercel.app/';
+  if(navigator.share){
+    try{ await navigator.share({ title: t('pageTitle'), text: shareText, url: shareUrl }); }
+    catch(e){}
+    return;
+  }
+  try{
+    await navigator.clipboard.writeText(shareText + ' ' + shareUrl);
+    alert(t('shareCopiedMsg'));
+  }catch(e){
+    alert(t('shareFailMsg'));
+  }
 }
 
 async function runMode3Analyze(){
@@ -1943,19 +2371,30 @@ async function runMode3Analyze(){
   try{
     const archetypeKey = pickArchetype(mode3Picked);
     const archetype = t('archetypes')[archetypeKey];
+    const compatKey = COMPAT_MAP[archetypeKey] || archetypeKey;
+    const compatArchetype = t('archetypes')[compatKey];
+    const bucket = ARCHETYPE_BUCKETS.find(b=>b.key===archetypeKey);
+    const titlesStr = mode3Picked.map(p=>p.title).join(', ');
+    const genreNames = commonGenreNames(mode3Picked, bucket ? bucket.genres : []);
+
+    const common = $('#mode3Common');
+    common.innerHTML = `<div>${genreNames.length
+      ? t('mode3CommonIntro')(titlesStr, genreNames.join(state.lang==='ko' ? '·' : ', '))
+      : t('mode3CommonIntroFallback')(titlesStr)}</div>`;
+
     const verdict = $('#mode3Verdict');
     verdict.classList.remove('negative');
     verdict.innerHTML = `
       <div>
-        <div class="mode3-verdict-title">${t('mode3VerdictTitle')(archetype.title)}</div>
+        <div class="mode3-verdict-title">${t('mode3VerdictTitle')(archetype.charName)}</div>
+        <div class="mode3-char-blurb">${t('mode3CharBlurbTemplate')(archetype.charName, archetype.charFilm, archetype.charBlurb)}</div>
         <div class="mode3-trait"><b>${t('mode3LabelPersonality')}</b><br>${archetype.personality}</div>
-        <div class="mode3-trait"><b>${t('mode3LabelCompat')}</b><br>${archetype.compatibility}</div>
+        <div class="mode3-trait"><b>${t('mode3LabelCompat')(compatArchetype.charName)}</b><br>${archetype.compatibility}</div>
         <div class="mode3-trait"><b>${t('mode3LabelStrength')}</b><br>${archetype.strength}</div>
         <div class="mode3-trait"><b>${t('mode3LabelLifeGoal')}</b><br>${archetype.lifeGoal}</div>
       </div>
     `;
-
-    const bucket = ARCHETYPE_BUCKETS.find(b=>b.key===archetypeKey);
+    mode3LastResult = { archetypeKey, charName: archetype.charName };
     const list = $('#mode3RecList');
     list.innerHTML='';
     if(bucket){
@@ -1967,7 +2406,7 @@ async function runMode3Analyze(){
       const reasonText = t('mode3ReasonTemplate')(archetype.fanTrait);
       cards.forEach(movie=> list.appendChild(renderSimpleTicketCard(movie, reasonText)));
     }
-    submitMode3ToServer(archetypeKey, archetype.title);
+    submitMode3ToServer(archetypeKey, archetype.title, archetype.charName);
 
     $('#mode3PickPanel').style.display='none';
     $('#mode3ResultPanel').style.display='block';
@@ -1988,12 +2427,21 @@ function setupMode3(){
   $('#mode3Search').addEventListener('input', e=>{
     clearTimeout(mode3SearchDebounce);
     const val = e.target.value;
+    $('#mode3SearchClear').style.display = val ? 'block' : 'none';
     mode3SearchDebounce = setTimeout(()=> renderMode3Grid(val), 400);
   });
+  $('#mode3SearchClear').addEventListener('click', ()=>{
+    $('#mode3Search').value = '';
+    $('#mode3SearchClear').style.display = 'none';
+    renderMode3Grid('');
+    $('#mode3Search').focus();
+  });
   $('#mode3Submit').onclick = runMode3Analyze;
+  $('#mode3ShareBtn').onclick = shareMode3Result;
   $('#mode3Restart').onclick = ()=>{
     mode3Picked = [];
     $('#mode3Search').value='';
+    $('#mode3SearchClear').style.display = 'none';
     $('#mode3Grid').innerHTML='';
     renderMode3PickedChips();
     $('#mode3Submit').disabled = true;
