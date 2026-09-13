@@ -64,6 +64,12 @@ module.exports = async function handler(req, res) {
     };
   } else {
     // 모드 1: 방금 본 영화와 비슷한 영화 찾기 (기존 리뷰 저장 방식)
+    // 제목·별점이 없는 요청은 정상적인 사용자 흐름에서 나올 수 없는 값이라 저장하지 않음
+    // (테스트/오작동으로 빈 값이 들어와 관리자 페이지가 "☆☆☆☆☆ (0)" 빈 카드로 지저분해지는 걸 방지)
+    if (!body.title || !Number(body.rating)) {
+      res.status(400).json({ error: 'BAD_REQUEST', message: 'title과 rating이 필요합니다.' });
+      return;
+    }
     const filters = body.filters && typeof body.filters === 'object' ? body.filters : {};
     entry = {
       mode: 'similar',
@@ -78,6 +84,7 @@ module.exports = async function handler(req, res) {
         runtime: filters.runtime != null ? (Number(filters.runtime) || null) : null,
         type: typeof filters.type === 'string' ? filters.type.slice(0, 20) : 'all',
         decade: filters.decade === 'classic' ? 'classic' : (filters.decade != null ? (Number(filters.decade) || null) : null),
+        ott: Array.isArray(filters.ott) ? filters.ott.map((o) => String(o).slice(0, 40)).slice(0, 10) : [],
       },
       createdAt: new Date().toISOString(),
     };

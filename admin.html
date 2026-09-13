@@ -154,7 +154,9 @@ async function loadReviews(){
     if(res.status === 429){ showLogin('너무 많이 시도했어요. 잠시 후 다시 시도해 주세요.'); return false; }
     if(!res.ok){ showLogin('데이터를 불러오지 못했어요. (서버 환경변수 설정을 확인하세요)'); return false; }
     const data = await res.json();
-    allReviews = data.reviews || [];
+    // "비슷한 영화 찾기" 정상 흐름에서는 제목·별점이 항상 채워지므로, 둘 다 비어있는 항목은
+    // 예전 테스트/오작동으로 잘못 저장된 빈 값이에요 — 관리자 화면에서는 노이즈라 걸러냄
+    allReviews = (data.reviews || []).filter(r => !(modeOf(r) === 'similar' && !r.title && !r.rating));
     selectedDate = 'all';
     selectedMode = 'all';
     renderReviews();

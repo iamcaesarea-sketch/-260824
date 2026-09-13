@@ -42,13 +42,13 @@ const I18N = {
     aspectDescs: {
       direction: '높게 주시면 연출력이 뛰어난 영화가 추천돼요.',
       script: '높게 주시면 대사와 각본이 탄탄한 영화가 추천돼요.',
-      originality: '높게 주시면 독창적이고 신선한 소재의 영화가 추천돼요.',
+      originality: '높은 점수를 주시면 독창적이고 신선한 소재의 영화를 찾고, 낮은 점수를 주시면 그런 소재는 피해서 좀 더 익숙하고 대중적인 이야기의 영화를 찾아드려요.',
       theme: '높게 주시면 비슷한 주제·메시지를 다루는 영화가 추천돼요.',
       miseEnScene: '높게 주시면 영상미·색감·구도가 돋보이는 영화가 추천돼요.',
-      acting: '높게 주시면 같은 배우가 출연한 영화가 추천돼요.',
+      acting: '높은 점수를 주시면 같은 배우가 출연한 영화를 찾고, 낮은 점수를 주시면 그 배우 대신 다른 배우진이 나오는 영화를 찾아드려요.',
       genre: '높게 주시면 같은 장르의 영화가 추천돼요.',
-      editing: '높게 주시면 같은 편집자가 작업한, 호흡이 비슷한 영화가 추천돼요.',
-      music: '높게 주시면 같은 음악감독이 참여한 영화가 추천돼요.',
+      editing: '높은 점수를 주시면 같은 편집자가 참여한, 호흡이 비슷한 영화를 찾고, 낮은 점수를 주시면 그 편집자의 스타일은 피해서 추천해드려요.',
+      music: '높은 점수를 주시면 같은 음악감독이 참여한 영화를 찾고, 낮은 점수를 주시면 그 음악감독의 스타일은 피해서 추천해드려요.',
       immersion: '높게 주시면 몰입감이 강한 영화가 추천돼요.',
     },
     scaleLow: '별로', scaleMid: '보통', scaleHigh: '아주 좋음',
@@ -156,7 +156,9 @@ const I18N = {
     mode2ReasonCastNew: '신예 배우들 위주로 출연해요',
     moodOptions: {
       action: '신나고 짜릿한 게 좋아요', comedy: '웃고 싶어요', thriller: '몰입해서 긴장하고 싶어요',
-      drama: '마음 울리는 이야기가 좋아요', horror: '짜릿하게 무서운 것도 좋아요', romance: '설레는 로맨스가 좋아요',
+      mystery: '추리하듯 단서를 좇고 싶어요', drama: '마음 울리는 이야기가 좋아요', horror: '짜릿하게 무서운 것도 좋아요',
+      romance: '설레는 로맨스가 좋아요', scifi: '색다른 세계관에 빠지고 싶어요', fantasy: '판타지 속으로 떠나고 싶어요',
+      family: '편안하게 힐링하고 싶어요', history: '묵직한 이야기에 빠지고 싶어요',
     },
     fameOptions: {
       any: '상관없어요',
@@ -311,13 +313,13 @@ const I18N = {
     aspectDescs: {
       direction: 'Score it high and you\'ll get movies with strong direction.',
       script: 'Score it high and you\'ll get movies with a tight script and dialogue.',
-      originality: 'Score it high and you\'ll get movies with original, fresh ideas.',
+      originality: 'A high score finds movies with original, unconventional ideas; a low score steers away from that toward something more familiar and mainstream.',
       theme: 'Score it high and you\'ll get movies with a similar theme or message.',
       miseEnScene: 'Score it high and you\'ll get movies with striking visuals, color, and composition.',
-      acting: 'Score it high and you\'ll get movies featuring the same actors.',
+      acting: 'A high score finds movies featuring the same actors; a low score finds movies with a different cast instead.',
       genre: 'Score it high and you\'ll get movies in the same genre.',
-      editing: 'Score it high and you\'ll get movies from the same editor, with a similar pace.',
-      music: 'Score it high and you\'ll get movies with the same composer.',
+      editing: 'A high score finds movies from the same editor with a similar pace; a low score avoids that editor\'s style instead.',
+      music: 'A high score finds movies with the same composer; a low score avoids that composer\'s style instead.',
       immersion: 'Score it high and you\'ll get movies that are especially immersive.',
     },
     scaleLow: 'Poor', scaleMid: 'Average', scaleHigh: 'Excellent',
@@ -425,7 +427,9 @@ const I18N = {
     mode2ReasonCastNew: 'Features mostly up-and-coming actors',
     moodOptions: {
       action: 'Something exciting and thrilling', comedy: 'I want to laugh', thriller: 'Something tense and gripping',
-      drama: 'A story that moves me', horror: 'A good scare works too', romance: 'A swoony romance',
+      mystery: 'I want to chase clues like a detective', drama: 'A story that moves me', horror: 'A good scare works too',
+      romance: 'A swoony romance', scifi: 'I want a wild new world to dive into', fantasy: "I'm in the mood for fantasy",
+      family: 'Something comforting and easy', history: 'A weighty, substantial story',
     },
     fameOptions: {
       any: 'Any',
@@ -1447,7 +1451,9 @@ async function computeTmdbRecommendations(){
     if(sameDirector && (liked.includes('direction')||liked.includes('miseEnScene'))){ score+=3; reasons.push(t('reasonSameDirector')(d.director)); }
     if(sameWriter && liked.includes('script')){ score+=3; reasons.push(t('reasonSameWriter')(d.writer)); }
     if(sameEditor && liked.includes('editing')){ score+=2; reasons.push(t('reasonSameEditor')); }
+    if(sameEditor && disliked.includes('editing')) score -= 1;
     if(sameComposer && liked.includes('music')){ score+=2; reasons.push(t('reasonSameComposer')(d.composer)); }
+    if(sameComposer && disliked.includes('music')) score -= 1;
     if(sameActor && liked.includes('acting')){ score+=3; reasons.push(t('reasonSameActor')); }
     if(!sameActor && disliked.includes('acting')){ score+=1; reasons.push(t('reasonDiffActorOk')); }
     if(sameActor && disliked.includes('acting')) score -= 2;
@@ -1914,10 +1920,15 @@ function setupIntro(){
 const MOOD_OPTIONS = [
   {value:'action', genres:[28,12]},
   {value:'comedy', genres:[35]},
-  {value:'thriller', genres:[53,9648]},
+  {value:'thriller', genres:[53]},
+  {value:'mystery', genres:[9648,80]},
   {value:'drama', genres:[18]},
   {value:'horror', genres:[27]},
   {value:'romance', genres:[10749]},
+  {value:'scifi', genres:[878]},
+  {value:'fantasy', genres:[14]},
+  {value:'family', genres:[16,10751]},
+  {value:'history', genres:[10752,36]},
 ];
 const FAME_VALUES = ['any','mainstream','hidden'];
 const CAST_VALUES = ['any','famous','newcomer'];
