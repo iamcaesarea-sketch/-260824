@@ -13,6 +13,7 @@ const ALLOWED_PATH_PATTERNS = [
   /^\/movie\/\d+\/keywords$/,
   /^\/movie\/\d+\/recommendations$/,
   /^\/search\/keyword$/,
+  /^\/watch\/providers\/movie$/,
 ];
 
 module.exports = async function handler(req, res) {

@@ -36,22 +36,59 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const filters = body.filters && typeof body.filters === 'object' ? body.filters : {};
-  const entry = {
-    title: String(body.title || '').slice(0, 200),
-    tmdbId: Number(body.tmdbId) || null,
-    rating: Number(body.rating) || 0,
-    aspects: body.aspects && typeof body.aspects === 'object' ? body.aspects : {},
-    reviewText: String(body.reviewText || '').slice(0, 1000),
-    lang: body.lang === 'en' ? 'en' : 'ko',
-    filters: {
-      genres: Array.isArray(filters.genres) ? filters.genres.map((g) => String(g).slice(0, 40)).slice(0, 20) : [],
-      runtime: filters.runtime != null ? (Number(filters.runtime) || null) : null,
-      type: typeof filters.type === 'string' ? filters.type.slice(0, 20) : 'all',
-      decade: filters.decade === 'classic' ? 'classic' : (filters.decade != null ? (Number(filters.decade) || null) : null),
-    },
-    createdAt: new Date().toISOString(),
-  };
+  // 세 티켓(모드) 각각 다른 모양의 데이터를 남겨요 — 관리자 페이지에서 mode로 구분해서 보여줍니다.
+  const mode = body.mode === 'quiz' || body.mode === 'life' ? body.mode : 'similar';
+  const lang = body.lang === 'en' ? 'en' : 'ko';
+  let entry;
+
+  if (mode === 'quiz') {
+    // 모드 2: 나와 맞는 영화 찾기 (설문)
+    entry = {
+      mode: 'quiz',
+      mood: typeof body.mood === 'string' ? body.mood.slice(0, 40) : null,
+      runtime: body.runtime != null ? (Number(body.runtime) || null) : null,
+      decade: body.decade === 'classic' ? 'classic' : (body.decade != null ? (Number(body.decade) || null) : null),
+      results: Array.isArray(body.results) ? body.results.map((r) => String(r).slice(0, 200)).slice(0, 10) : [],
+      lang,
+      createdAt: new Date().toISOString(),
+    };
+  } else if (mode === 'life') {
+    // 모드 3: 인생 영화를 통해 나에 대해 분석하기
+    entry = {
+      mode: 'life',
+      pickedMovies: Array.isArray(body.pickedMovies) ? body.pickedMovies.map((m) => String(m).slice(0, 200)).slice(0, 10) : [],
+      archetype: typeof body.archetype === 'string' ? body.archetype.slice(0, 40) : null,
+      archetypeTitle: typeof body.archetypeTitle === 'string' ? body.archetypeTitle.slice(0, 40) : null,
+      lang,
+      createdAt: new Date().toISOString(),
+    };
+  } else {
+    // 모드 1: 방금 본 영화와 비슷한 영화 찾기 (기존 리뷰 저장 방식)
+    // 제목·별점이 없는 요청은 정상적인 사용자 흐름에서 나올 수 없는 값이라 저장하지 않음
+    // (테스트/오작동으로 빈 값이 들어와 관리자 페이지가 "☆☆☆☆☆ (0)" 빈 카드로 지저분해지는 걸 방지)
+    if (!body.title || !Number(body.rating)) {
+      res.status(400).json({ error: 'BAD_REQUEST', message: 'title과 rating이 필요합니다.' });
+      return;
+    }
+    const filters = body.filters && typeof body.filters === 'object' ? body.filters : {};
+    entry = {
+      mode: 'similar',
+      title: String(body.title || '').slice(0, 200),
+      tmdbId: Number(body.tmdbId) || null,
+      rating: Number(body.rating) || 0,
+      aspects: body.aspects && typeof body.aspects === 'object' ? body.aspects : {},
+      reviewText: String(body.reviewText || '').slice(0, 1000),
+      lang,
+      filters: {
+        genres: Array.isArray(filters.genres) ? filters.genres.map((g) => String(g).slice(0, 40)).slice(0, 20) : [],
+        runtime: filters.runtime != null ? (Number(filters.runtime) || null) : null,
+        type: typeof filters.type === 'string' ? filters.type.slice(0, 20) : 'all',
+        decade: filters.decade === 'classic' ? 'classic' : (filters.decade != null ? (Number(filters.decade) || null) : null),
+        ott: Array.isArray(filters.ott) ? filters.ott.map((o) => String(o).slice(0, 40)).slice(0, 10) : [],
+      },
+      createdAt: new Date().toISOString(),
+    };
+  }
 
   try {
     const upstreamRes = await fetch(REDIS_URL, {
