@@ -625,7 +625,7 @@ const OTT_CHIP_DEFS = {
   tencent: {key:'tencent', labelKey:'ottOptionTencent', matchNames:['Tencent Video','WeTV']},
 };
 const OTT_CHIPS_BY_COUNTRY = {
-  KR: ['netflix','watcha','tving','wavve','disney','apple'],
+  KR: ['netflix','watcha','tving','wavve','disney','apple','prime'],
   US: ['netflix','disney','apple','hulu','max','prime'],
   GB: ['netflix','disney','apple','prime'],
   JP: ['netflix','disney','apple','prime','unext'],
