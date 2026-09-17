@@ -82,6 +82,13 @@ const I18N = {
     ottOptionTving: '티빙',
     ottOptionDisney: '디즈니플러스',
     ottOptionApple: '애플TV',
+    ottOptionHulu: '훌루',
+    ottOptionMax: '맥스',
+    ottOptionPrime: '아마존 프라임 비디오',
+    ottOptionUnext: 'U-NEXT',
+    ottOptionIqiyi: '아이치이',
+    ottOptionYouku: '유쿠',
+    ottOptionTencent: '텐센트 비디오',
     runtimeHourUnit: '시간',
     runtimeMinutesUnit: '분',
     saveBtn: '저장하기',
@@ -110,7 +117,7 @@ const I18N = {
     reasonSimilarUsers: '사용자님과 비슷한 별점을 준 사람들이 좋아했어요.',
     streamingNone: '스트리밍 정보 없음',
     imdbLinkText: 'IMDB에서 보기 ↗',
-    disclaimerText: '※ 영화 목록·감독/각본/편집/음악/배우·OTT 제공처(한국)·IMDB 링크는 전부 서버를 통해 실시간으로 받아온 데이터예요. "주제"와 "독창성"은 전용 데이터가 없어서 키워드 유사도로 근사했어요.',
+    disclaimerText: (countryName) => `※ 영화 목록·감독/각본/편집/음악/배우·OTT 제공처(${countryName})·IMDB 링크는 전부 서버를 통해 실시간으로 받아온 데이터예요. "주제"와 "독창성"은 전용 데이터가 없어서 키워드 유사도로 근사했어요.`,
     restartBtn: '다른 영화 리뷰하기',
     recsGalleryBtn: '📝 추천 받았던 영화',
     recsSortDate: '날짜별로 보기',
@@ -353,6 +360,13 @@ const I18N = {
     ottOptionTving: 'TVING',
     ottOptionDisney: 'Disney+',
     ottOptionApple: 'Apple TV+',
+    ottOptionHulu: 'Hulu',
+    ottOptionMax: 'Max',
+    ottOptionPrime: 'Amazon Prime Video',
+    ottOptionUnext: 'U-NEXT',
+    ottOptionIqiyi: 'iQIYI',
+    ottOptionYouku: 'Youku',
+    ottOptionTencent: 'Tencent Video',
     runtimeHourUnit: 'h',
     runtimeMinutesUnit: 'm',
     saveBtn: 'Save',
@@ -381,7 +395,7 @@ const I18N = {
     reasonSimilarUsers: 'People who rated it similarly to you enjoyed this.',
     streamingNone: 'No streaming info',
     imdbLinkText: 'View on IMDB ↗',
-    disclaimerText: '※ Movie listings, director/writer/editor/composer/cast, OTT availability (Korea), and IMDB links are all fetched live from the server. "Theme" and "Originality" have no dedicated data, so they\'re approximated with keyword similarity.',
+    disclaimerText: (countryName) => `※ Movie listings, director/writer/editor/composer/cast, OTT availability (${countryName}), and IMDB links are all fetched live from the server. "Theme" and "Originality" have no dedicated data, so they're approximated with keyword similarity.`,
     restartBtn: 'Review Another Movie',
     recsGalleryBtn: '📝 Movies Recommended to You',
     recsSortDate: 'Sort by date',
@@ -589,22 +603,41 @@ let genreMap = null;
 let providerIds = {};
 
 /* OTT 필터 — 넷플릭스 등 서비스 ID를 코드에 하드코딩하지 않고, TMDB의
-   /watch/providers/movie(watch_region=KR)를 실시간 조회해서 이름으로 매칭합니다.
-   (장르 ID를 genreMap으로 그때그때 받아오는 것과 동일한 패턴) */
-const OTT_CHIPS = [
-  {key:'netflix', labelKey:'ottOptionNetflix', matchNames:['Netflix']},
-  {key:'watcha', labelKey:'ottOptionWatcha', matchNames:['Watcha']},
-  {key:'tving', labelKey:'ottOptionTving', matchNames:['TVING']},
-  {key:'disney', labelKey:'ottOptionDisney', matchNames:['Disney Plus','Disney+']},
-  {key:'apple', labelKey:'ottOptionApple', matchNames:['Apple TV Plus','Apple TV+']},
-];
+   /watch/providers/movie(watch_region=선택한 국가)를 실시간 조회해서 이름으로 매칭합니다.
+   (장르 ID를 genreMap으로 그때그때 받아오는 것과 동일한 패턴)
+   국가마다 실제로 서비스하는 OTT가 다르므로, 후보 정의는 하나로 모아두고(OTT_CHIP_DEFS)
+   국가별로 어떤 후보를 보여줄지만 OTT_CHIPS_BY_COUNTRY에서 나눠요. */
+const OTT_CHIP_DEFS = {
+  netflix: {key:'netflix', labelKey:'ottOptionNetflix', matchNames:['Netflix']},
+  watcha: {key:'watcha', labelKey:'ottOptionWatcha', matchNames:['Watcha']},
+  tving: {key:'tving', labelKey:'ottOptionTving', matchNames:['TVING']},
+  disney: {key:'disney', labelKey:'ottOptionDisney', matchNames:['Disney Plus','Disney+']},
+  apple: {key:'apple', labelKey:'ottOptionApple', matchNames:['Apple TV Plus','Apple TV+']},
+  hulu: {key:'hulu', labelKey:'ottOptionHulu', matchNames:['Hulu']},
+  max: {key:'max', labelKey:'ottOptionMax', matchNames:['Max','HBO Max']},
+  prime: {key:'prime', labelKey:'ottOptionPrime', matchNames:['Amazon Prime Video','Prime Video']},
+  unext: {key:'unext', labelKey:'ottOptionUnext', matchNames:['U-NEXT']},
+  iqiyi: {key:'iqiyi', labelKey:'ottOptionIqiyi', matchNames:['iQIYI','iQiyi']},
+  youku: {key:'youku', labelKey:'ottOptionYouku', matchNames:['Youku']},
+  tencent: {key:'tencent', labelKey:'ottOptionTencent', matchNames:['Tencent Video','WeTV']},
+};
+const OTT_CHIPS_BY_COUNTRY = {
+  KR: ['netflix','watcha','tving','disney','apple'],
+  US: ['netflix','disney','apple','hulu','max','prime'],
+  GB: ['netflix','disney','apple','prime'],
+  JP: ['netflix','disney','apple','prime','unext'],
+  CN: ['iqiyi','youku','tencent'],
+};
+function currentOttChips(){
+  return (OTT_CHIPS_BY_COUNTRY[state.country] || OTT_CHIPS_BY_COUNTRY.KR).map(k=> OTT_CHIP_DEFS[k]);
+}
 
 async function loadProviderIds(){
   try{
-    const data = await apiGet('/watch/providers/movie', {watch_region:'KR'});
+    const data = await apiGet('/watch/providers/movie', {watch_region: state.country});
     const results = data.results || [];
     providerIds = {};
-    OTT_CHIPS.forEach(chip=>{
+    Object.values(OTT_CHIP_DEFS).forEach(chip=>{
       const found = results.find(p=> chip.matchNames.some(name=> (p.provider_name||'').toLowerCase() === name.toLowerCase()));
       if(found) providerIds[chip.key] = found.provider_id;
     });
@@ -664,9 +697,9 @@ async function tmdbSearch(query){
 async function tmdbWatchProviders(tmdbId){
   try{
     const data = await apiGet('/movie/'+tmdbId+'/watch/providers', {});
-    const kr = data.results && data.results.KR;
-    if(!kr) return [];
-    return [...new Set((kr.flatrate||[]).map(p=>p.provider_name))];
+    const regionData = data.results && data.results[state.country];
+    if(!regionData) return [];
+    return [...new Set((regionData.flatrate||[]).map(p=>p.provider_name))];
   }catch(e){ return []; }
 }
 
@@ -720,10 +753,18 @@ const ASPECT_KEYS = ['direction','script','originality','theme','miseEnScene','a
 /* 03단계엔 핵심 6개만, 나머지(독창성/연기/편집/음악)는 04단계 "세부 평가 더 보기"로 이동 — 전부 선택 사항 */
 const STEP3_ASPECT_KEYS = ['genre','direction','script','theme','miseEnScene','immersion'];
 const EXTRA_ASPECT_KEYS = ['originality','acting','editing','music'];
+/* 국가 선택이 화면 언어도 함께 결정해요 — 사이트엔 한/영 번역만 있어서, 한국 외 국가는
+   전부 영어 UI로 보여줘요(중국·일본어 번역은 아직 없음). OTT 목록·검색 결과 지역은
+   국가별로 정확히 반영돼요(watch_region). */
+const COUNTRY_LANG = { KR:'ko', CN:'en', JP:'en', US:'en', GB:'en' };
+const COUNTRY_NAMES = {
+  ko: { KR:'한국', CN:'중국', JP:'일본', US:'미국', GB:'영국' },
+  en: { KR:'Korea', CN:'China', JP:'Japan', US:'United States', GB:'United Kingdom' },
+};
 let state = {
   movie:null, rating:0, reviewText:'',
   aspects: Object.fromEntries(ASPECT_KEYS.map(k=>[k,3])),
-  lang:'ko', lastPositive:true,
+  lang:'ko', country:'KR', lastPositive:true,
   manualFilters: { genres:[], runtime:null, type:'all', decade:null, ott:[] },
 };
 let history = [];
@@ -811,8 +852,7 @@ function applyStaticI18n(){
   $('#historyBtn').textContent = t('historyBtn');
   $('#historyTitle').textContent = t('historyTitle');
 
-  document.querySelectorAll('[data-lang="ko"]').forEach(b=> b.classList.toggle('active', state.lang==='ko'));
-  document.querySelectorAll('[data-lang="en"]').forEach(b=> b.classList.toggle('active', state.lang==='en'));
+  document.querySelectorAll('.country-select').forEach(sel=>{ sel.value = state.country; });
 
   renderStars();
   if(state.movie) renderSelectedCard();
@@ -861,29 +901,35 @@ function applyStaticI18n(){
   if($('#mode3Root').classList.contains('show')) renderMode3PickedChips();
 }
 
-async function setLang(lang){
-  if(state.lang===lang) return;
-  state.lang = lang;
+/* 국가를 바꾸면 언어(COUNTRY_LANG)와 OTT 지역(watch_region)이 함께 바뀌어요.
+   이전 국가에서 고른 OTT 선택은 새 국가에 없는 서비스일 수 있어서 초기화해요. */
+async function setCountry(code){
+  if(!COUNTRY_LANG[code] || state.country===code) return;
+  state.country = code;
+  state.lang = COUNTRY_LANG[code];
+  state.manualFilters.ott = [];
+  if(typeof mode2State !== 'undefined') mode2State.ott = [];
   applyStaticI18n();
-  if($('#panel-3').style.display!=='none'){
+  if($('#panel-3').style.display!=='none' && state.movie){
     $('#step3sub').textContent = state.lastPositive ? t('step3subPositive')(state.movie.title) : t('step3subNegative')();
   }
-  saveLang();
+  saveCountry();
   try{
     await checkServer();
   }catch(e){}
 }
-document.querySelectorAll('[data-lang="ko"]').forEach(b=> b.onclick = ()=> setLang('ko'));
-document.querySelectorAll('[data-lang="en"]').forEach(b=> b.onclick = ()=> setLang('en'));
+document.querySelectorAll('.country-select').forEach(sel=>{
+  sel.addEventListener('change', ()=> setCountry(sel.value));
+});
 
-/* 언어/기록 저장은 표준 localStorage를 사용합니다 (Vercel 등 실제 배포 환경에서도 동작). */
-function saveLang(){
-  try{ localStorage.setItem('cinerec:lang', state.lang); }catch(e){}
+/* 국가/기록 저장은 표준 localStorage를 사용합니다 (Vercel 등 실제 배포 환경에서도 동작). */
+function saveCountry(){
+  try{ localStorage.setItem('cinerec:country', state.country); }catch(e){}
 }
-function loadLang(){
+function loadCountry(){
   try{
-    const v = localStorage.getItem('cinerec:lang');
-    if(v==='ko' || v==='en') state.lang = v;
+    const v = localStorage.getItem('cinerec:country');
+    if(v && COUNTRY_LANG[v]){ state.country = v; state.lang = COUNTRY_LANG[v]; }
   }catch(e){}
 }
 
@@ -1182,7 +1228,7 @@ function renderRefineStep(){
     ottAnyChip.classList.add('selected');
   };
   ottBox.appendChild(ottAnyChip);
-  OTT_CHIPS.forEach(o=>{
+  currentOttChips().forEach(o=>{
     if(!providerIds[o.key]) return;
     const chip = document.createElement('button');
     chip.type = 'button';
@@ -1359,7 +1405,7 @@ async function computeTmdbRecommendations(){
   const manualOttIds = (manual.ott||[]).map(k=> providerIds[k]).filter(Boolean);
   if(manualOttIds.length){
     params.with_watch_providers = manualOttIds.join('|');
-    params.watch_region = 'KR';
+    params.watch_region = state.country;
     params.with_watch_monetization_types = 'flatrate';
   }
 
@@ -1547,7 +1593,7 @@ function renderResult(result, positive){
     list.appendChild(t2);
   });
 
-  $('#disclaimerText').textContent = t('disclaimerText');
+  $('#disclaimerText').textContent = t('disclaimerText')(COUNTRY_NAMES[state.lang][state.country] || state.country);
 
   history.unshift({id: Date.now(), title: state.movie.title, rating: state.rating, date: new Date().toLocaleDateString(t('dateLocale'))});
   renderHistory();
@@ -1578,7 +1624,7 @@ function submitReviewToServer(){
       type: state.manualFilters.type,
       decade: state.manualFilters.decade,
       ott: (state.manualFilters.ott||[]).map(k=>{
-        const chip = OTT_CHIPS.find(o=>o.key===k);
+        const chip = OTT_CHIP_DEFS[k];
         return chip ? t(chip.labelKey) : k;
       }),
     },
@@ -1824,6 +1870,12 @@ $('#historyBtn').onclick = ()=>{
   if(historyOpen) $('#historyBox').scrollIntoView({behavior:'smooth', block:'start'});
 };
 
+/* 결과 화면에서 처음부터 다시 시작하지 않고, 방금 고른 조건(04단계)만 다시 만지고 싶을 때 */
+$('#backToStep4').onclick = ()=>{
+  renderRefineStep();
+  showStep(4);
+};
+
 /* =========================================================
    다시 시작
    ========================================================= */
@@ -1876,6 +1928,7 @@ function setupIntro(){
   }, {once:true});
 
   function enterMode(rootId, modeNumber, onFirstEnter){
+    $('#appRoot').classList.remove('gallery-only');
     intro.classList.add('hide');
     setTimeout(()=>{ intro.style.display='none'; }, 450);
     showRoot(rootId);
@@ -1883,34 +1936,42 @@ function setupIntro(){
     if(typeof gtag === 'function') gtag('event', 'mode_select', {mode: modeNumber});
   }
 
+  function goToModeSelect(){
+    showRoot(null);
+    intro.style.display='flex';
+    requestAnimationFrame(()=> intro.classList.remove('hide'));
+  }
+
   $('#modeTicket1').addEventListener('click', ()=> enterMode('appRoot', 1));
   $('#modeTicket2').addEventListener('click', ()=> enterMode('mode2Root', 2, setupMode2));
   $('#modeTicket3').addEventListener('click', ()=> enterMode('mode3Root', 3, setupMode3));
 
-  /* 메인 티켓 화면에서 바로 "추천 받았던 영화"/"내 리뷰 기록"으로 들어가는 팝콘·콜라 버튼 */
+  /* 메인 티켓 화면에서 바로 "추천 받았던 영화"/"내 리뷰 기록"으로 들어가는 팝콘·콜라 버튼 —
+     01~05단계 전체 플로우는 숨기고(.gallery-only) 요청한 패널만 바로 보여줘요 */
   const snackRecs = $('#modeSnackRecs');
   const snackHistory = $('#modeSnackHistory');
   if(snackRecs) snackRecs.addEventListener('click', ()=>{
     enterMode('appRoot', 1);
+    $('#appRoot').classList.add('gallery-only');
     recsGalleryOpen = true; historyOpen = false;
     renderRecsGallery(); renderHistory();
-    setTimeout(()=> $('#recsGallery').scrollIntoView({behavior:'smooth', block:'start'}), 100);
   });
   if(snackHistory) snackHistory.addEventListener('click', ()=>{
     enterMode('appRoot', 1);
+    $('#appRoot').classList.add('gallery-only');
     historyOpen = true; recsGalleryOpen = false;
     renderHistory(); renderRecsGallery();
-    setTimeout(()=> $('#historyBox').scrollIntoView({behavior:'smooth', block:'start'}), 100);
   });
 
   ['1','2','3'].forEach(n=>{
     const btn = $('#backToModes'+n);
     if(!btn) return;
-    btn.addEventListener('click', ()=>{
-      showRoot(null);
-      intro.style.display='flex';
-      requestAnimationFrame(()=> intro.classList.remove('hide'));
-    });
+    btn.addEventListener('click', goToModeSelect);
+  });
+
+  /* 로고를 누르면 어디서든 티켓 선택 화면(첫 페이지)으로 돌아가요 */
+  document.querySelectorAll('.logo-btn').forEach(btn=>{
+    btn.addEventListener('click', goToModeSelect);
   });
 }
 
@@ -1989,7 +2050,7 @@ function renderMode2OttChips(){
     anyChip.classList.add('selected');
   };
   box.appendChild(anyChip);
-  OTT_CHIPS.forEach(o=>{
+  currentOttChips().forEach(o=>{
     if(!providerIds[o.key]) return;
     const chip = document.createElement('button');
     chip.type = 'button';
@@ -2150,7 +2211,7 @@ async function runMode2Recommend(){
     const ottIds = mode2State.ott.map(k=>providerIds[k]).filter(Boolean);
     if(ottIds.length){
       params.with_watch_providers = ottIds.join('|');
-      params.watch_region = 'KR';
+      params.watch_region = state.country;
       params.with_watch_monetization_types = 'flatrate';
     }
     // "나만 안 본 것 같은 영화"/"아무도 안 본 것 같은 영화" — 대중성 축(vote_count·평점 기준)을 다르게 조회
@@ -2215,6 +2276,12 @@ function setupMode2(){
   mode2Setup = true;
   renderMode2Quiz();
   $('#mode2Submit').onclick = runMode2Recommend;
+  $('#mode2Back').onclick = ()=>{
+    $('#mode2ResultPanel').style.display='none';
+    $('#mode2QuizPanel').style.display='block';
+    renderMode2Quiz();
+    window.scrollTo({top:0, behavior:'smooth'});
+  };
   $('#mode2Restart').onclick = ()=>{
     mode2State = { mood:[], runtime:null, decade:null, ott:[], fame:'any', cast:'any' };
     $('#mode2ResultPanel').style.display='none';
@@ -2452,6 +2519,11 @@ function setupMode3(){
     $('#mode3Search').focus();
   });
   $('#mode3Submit').onclick = runMode3Analyze;
+  $('#mode3Back').onclick = ()=>{
+    $('#mode3ResultPanel').style.display='none';
+    $('#mode3PickPanel').style.display='block';
+    window.scrollTo({top:0, behavior:'smooth'});
+  };
   $('#mode3ShareBtn').onclick = shareMode3Result;
   $('#mode3Restart').onclick = ()=>{
     mode3Picked = [];
@@ -2466,7 +2538,7 @@ function setupMode3(){
 }
 
 (function init(){
-  loadLang();
+  loadCountry();
   applyStaticI18n();
   setupIntro();
   checkServer();

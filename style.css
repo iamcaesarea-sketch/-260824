@@ -19,22 +19,25 @@ header{
   background:radial-gradient(ellipse at top, rgba(128,0,0,0.22), transparent 60%), var(--bg);
 }
 header .eyebrow{letter-spacing:0.35em; font-size:11px; color:var(--text-dim); text-transform:uppercase; margin-bottom:14px; font-weight:700;}
+.logo-btn{all:unset; cursor:pointer; display:block; margin:0 auto; border-radius:var(--radius-md);}
+.logo-btn:focus-visible{outline:2px solid var(--accent); outline-offset:4px;}
 header .logo-img{width:min(40vw, 480px); height:auto; display:block; margin:0 auto 8px; filter:invert(1);}
 header .slogan{color:var(--text-dim); font-size:11.5px; letter-spacing:0.2em; margin:0 0 14px;}
 header p{color:var(--text-dim); font-size:13px; max-width:520px; margin:0 auto; word-break:keep-all;}
 
-.lang-switch{
-  position:absolute; top:16px; right:16px; display:flex; gap:2px; background:var(--bg-alt);
+.country-switch{
+  position:absolute; top:16px; right:16px; background:var(--bg-alt);
   border:2px solid var(--line); border-radius:var(--radius-pill); padding:3px;
 }
-.lang-switch button{
-  border:none; background:transparent; color:var(--text-dim); font-family:inherit;
-  font-size:11.5px; font-weight:700; padding:6px 12px; border-radius:var(--radius-pill); cursor:pointer; transition:all .15s;
+.country-select{
+  border:none; background:transparent; color:var(--text); font-family:inherit;
+  font-size:11.5px; font-weight:700; padding:6px 10px; border-radius:var(--radius-pill); cursor:pointer;
+  appearance:none; -webkit-appearance:none;
 }
-.lang-switch button.active{background:var(--accent); color:var(--text);}
-.lang-switch button:not(.active):hover{color:var(--text);}
+.country-select:focus{outline:none;}
+.country-select option{background:var(--bg-alt); color:var(--text);}
 @media (max-width:520px){
-  .lang-switch{position:static; display:inline-flex; margin-bottom:16px;}
+  .country-switch{position:static; display:inline-flex; margin-bottom:16px;}
   header p{font-size:12px;}
   header .logo-img{width:min(85vw, 320px);}
 }
@@ -251,6 +254,13 @@ button:disabled{opacity:0.35; cursor:not-allowed; box-shadow:none; transform:non
 .disclaimer{margin-top:28px; font-size:11.5px; color:var(--text-dim); border-top:1px solid var(--line); padding-top:14px;}
 
 .bottom-toggle-row{display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:56px;}
+
+/* 메인 티켓 화면의 🍿/🥤 버튼으로 들어왔을 때 — 01~05단계 전체 플로우는 숨기고
+   추천받은 영화/리뷰 기록만 바로 보여줘요 */
+#appRoot.gallery-only .steps,
+#appRoot.gallery-only .status-line,
+#appRoot.gallery-only .panel{ display:none !important; }
+#appRoot.gallery-only .bottom-toggle-row{ margin-top:8px; }
 .recs-toggle-btn{font-size:13px;}
 
 .recs-gallery{margin-top:20px;}

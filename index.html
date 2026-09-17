@@ -23,7 +23,7 @@
   gtag('config', 'G-QWPLQLJECT');
 </script>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-<link rel="stylesheet" href="style.css?v=38">
+<link rel="stylesheet" href="style.css?v=40">
 </head>
 <body>
 
@@ -37,9 +37,14 @@
   </button>
 
   <div class="mode-select" id="modeSelect" style="display:none;">
-    <div class="lang-switch">
-      <button type="button" data-lang="ko">한국어</button>
-      <button type="button" data-lang="en">English</button>
+    <div class="country-switch">
+      <select class="country-select" aria-label="Country">
+        <option value="KR">🇰🇷 South Korea</option>
+        <option value="CN">🇨🇳 China</option>
+        <option value="JP">🇯🇵 Japan</option>
+        <option value="US">🇺🇸 United States</option>
+        <option value="GB">🇬🇧 United Kingdom</option>
+      </select>
     </div>
     <div class="intro-caption">
       <div class="en">Pick your ticket</div>
@@ -70,12 +75,17 @@
 <div id="appRoot" class="app-root">
 <header>
   <button type="button" class="back-to-modes" id="backToModes1">🎫 <span id="backToModes1Text">다른 방식으로 찾기</span></button>
-  <div class="lang-switch" id="langSwitch">
-    <button type="button" data-lang="ko" id="langKo">한국어</button>
-    <button type="button" data-lang="en" id="langEn">English</button>
+  <div class="country-switch">
+    <select class="country-select" aria-label="Country">
+      <option value="KR">🇰🇷 South Korea</option>
+      <option value="CN">🇨🇳 China</option>
+      <option value="JP">🇯🇵 Japan</option>
+      <option value="US">🇺🇸 United States</option>
+      <option value="GB">🇬🇧 United Kingdom</option>
+    </select>
   </div>
   <div class="eyebrow" id="eyebrowText">장편·독립·단편 영화 DB 수록</div>
-  <img src="cinerec_logo_thin.png" alt="CINEREC" class="logo-img">
+  <button type="button" class="logo-btn"><img src="cinerec_logo_thin.png" alt="CINEREC" class="logo-img"></button>
   <div class="slogan">Stop endless scrolling</div>
   <p id="taglineText">시청한 영화의 별점과 리뷰를 남기면, 10가지 항목으로 분석한 후<br>전세계 영화 데이터베이스에서 취향에 맞는 다음 영화를 찾아드려요.</p>
 </header>
@@ -185,8 +195,8 @@
     <div class="verdict" id="verdictBox"></div>
     <div id="resultList"></div>
     <div class="btn-row">
+      <button class="ghost" id="backToStep4">이전</button>
       <button class="ghost" id="restart">다른 영화 리뷰하기</button>
-      <span></span>
     </div>
     <div class="disclaimer" id="disclaimerText"></div>
   </section>
@@ -225,12 +235,17 @@
 <div id="mode2Root" class="app-root mode-root">
 <header>
   <button type="button" class="back-to-modes" id="backToModes2">🎫 <span id="backToModes2Text">다른 방식으로 찾기</span></button>
-  <div class="lang-switch">
-    <button type="button" data-lang="ko">한국어</button>
-    <button type="button" data-lang="en">English</button>
+  <div class="country-switch">
+    <select class="country-select" aria-label="Country">
+      <option value="KR">🇰🇷 South Korea</option>
+      <option value="CN">🇨🇳 China</option>
+      <option value="JP">🇯🇵 Japan</option>
+      <option value="US">🇺🇸 United States</option>
+      <option value="GB">🇬🇧 United Kingdom</option>
+    </select>
   </div>
   <div class="eyebrow" id="mode2Eyebrow">내 취향 영화 빠르게 찾기</div>
-  <img src="cinerec_logo_thin.png" alt="CINEREC" class="logo-img">
+  <button type="button" class="logo-btn"><img src="cinerec_logo_thin.png" alt="CINEREC" class="logo-img"></button>
 </header>
 <main>
   <section class="panel" id="mode2QuizPanel">
@@ -272,8 +287,8 @@
     <h2 id="mode2ResultTitle">이런 영화 어때요?</h2>
     <div id="mode2ResultList"></div>
     <div class="btn-row">
+      <button class="ghost" id="mode2Back">이전</button>
       <button class="ghost" id="mode2Restart">다시 고르기</button>
-      <span></span>
     </div>
     <div class="disclaimer" id="mode2DisclaimerText"></div>
   </section>
@@ -284,12 +299,17 @@
 <div id="mode3Root" class="app-root mode-root">
 <header>
   <button type="button" class="back-to-modes" id="backToModes3">🎫 <span id="backToModes3Text">다른 방식으로 찾기</span></button>
-  <div class="lang-switch">
-    <button type="button" data-lang="ko">한국어</button>
-    <button type="button" data-lang="en">English</button>
+  <div class="country-switch">
+    <select class="country-select" aria-label="Country">
+      <option value="KR">🇰🇷 South Korea</option>
+      <option value="CN">🇨🇳 China</option>
+      <option value="JP">🇯🇵 Japan</option>
+      <option value="US">🇺🇸 United States</option>
+      <option value="GB">🇬🇧 United Kingdom</option>
+    </select>
   </div>
   <div class="eyebrow" id="mode3Eyebrow">인생 영화를 통해 나에 대해 분석하기</div>
-  <img src="cinerec_logo_thin.png" alt="CINEREC" class="logo-img">
+  <button type="button" class="logo-btn"><img src="cinerec_logo_thin.png" alt="CINEREC" class="logo-img"></button>
 </header>
 <main>
   <section class="panel" id="mode3PickPanel">
@@ -325,13 +345,13 @@
     <div class="refine-label" id="mode3RecLabel">이런 영화도 잘 맞을 거예요</div>
     <div id="mode3RecList"></div>
     <div class="btn-row">
+      <button class="ghost" id="mode3Back">이전</button>
       <button class="ghost" id="mode3Restart">다시 고르기</button>
-      <span></span>
     </div>
   </section>
 </main>
 </div>
 
-<script src="script.js?v=28"></script>
+<script src="script.js?v=30"></script>
 </body>
 </html>
