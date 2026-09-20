@@ -202,6 +202,9 @@ const I18N = {
     mode3SaveImageBtn: '🖼️ 이미지로 저장',
     mode3ShareText: (charName) => `저는 CineRec에서 인생 영화로 분석해봤더니 "${charName}" 유형이 나왔어요! 당신은 어떤 유형일까요?`,
     mode3ShareCardEyebrow: '인생 영화로 나에 대해 분석하기',
+    friendResultTitle: (charName) => `친구의 유형은 <span class="mode3-hl">${charName}</span> 예요!`,
+    friendResultFilm: (film) => `영화 <${film}>의 인물`,
+    friendResultCta: '🎬 나도 테스트 해보기',
     shareCopiedMsg: '링크가 복사됐어요! 카카오톡이나 메시지에 붙여넣어서 공유해보세요.',
     shareFailMsg: '공유하는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.',
     imageSaveFailMsg: '이미지를 만드는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.',
@@ -517,6 +520,9 @@ const I18N = {
     mode3SaveImageBtn: '🖼️ Save as image',
     mode3ShareText: (charName) => `I analyzed my taste in movies on CineRec and got the "${charName}" type! What type are you?`,
     mode3ShareCardEyebrow: 'What My Favorite Movies Say About Me',
+    friendResultTitle: (charName) => `Your friend got the <span class="mode3-hl">${charName}</span> type!`,
+    friendResultFilm: (film) => `from "${film}"`,
+    friendResultCta: '🎬 Take the test myself',
     shareCopiedMsg: 'Link copied! Paste it anywhere to share.',
     shareFailMsg: 'Something went wrong while sharing. Please try again.',
     imageSaveFailMsg: 'Something went wrong while creating the image. Please try again.',
@@ -2583,11 +2589,16 @@ function pickArchetype(picks){
 }
 
 /* 유형(archetype)마다 캐릭터가 하나로 고정되지 않도록, chars 배열(한국 영화 + 해외 영화 캐릭터) 중
-   seedNum으로 하나를 결정적으로 골라요. 같은 영화를 고르면 항상 같은 결과가 나오게 돼요. */
+   seedNum으로 하나를 결정적으로 골라요. 같은 영화를 고르면 항상 같은 결과가 나오게 돼요.
+   인덱스를 따로 구하는 이유: 친구에게 공유하는 링크에 골라진 캐릭터를 그대로 실어야 해서
+   (archetypeKey+인덱스만 있으면 되고, 긴 분석 텍스트를 URL에 실을 필요가 없어요). */
+function archetypeCharIndex(chars, seedNum){
+  if(!chars || !chars.length) return 0;
+  return ((seedNum % chars.length) + chars.length) % chars.length;
+}
 function pickArchetypeChar(chars, seedNum){
   if(!chars || !chars.length) return {name:'', film:'', blurb:''};
-  const idx = ((seedNum % chars.length) + chars.length) % chars.length;
-  return chars[idx];
+  return chars[archetypeCharIndex(chars, seedNum)];
 }
 
 /* 고르신 영화들의 공통점(장르) 설명용 — 결과를 결정한 장르 중, 실제로 픽에 많이 등장한 순으로 이름을 뽑아요 */
@@ -2663,23 +2674,24 @@ async function generateMode3ShareImage(){
   }
 }
 
-/* 친구에게 공유하기 — 카카오 개발자 앱 키가 없어도 되도록 OS 공유 시트(navigator.share)를 사용해요.
-   결과 요약 이미지를 먼저 만들어서, 공유 시트가 파일 공유를 지원하면(대부분의 모바일) 그 이미지와
-   함께 공유해요. 지원 안 하면 기존처럼 텍스트+링크로, 그마저도 안 되면 클립보드 복사로 대신해요. */
+/* 친구에게 공유하기 — 이미지를 같이 보내던 방식은 카카오톡 등에서 링크 미리보기까지 겹쳐서
+   같은 이미지가 2장 가는 문제가 이미지 없이 url만 보내도 재현돼서(카카오 쪽에서 같은 콘텐츠를
+   "미리보기"와 "전송"으로 중복 처리하는 것으로 추정), 이미지 공유 자체를 접고 링크 공유로
+   바꿈. 링크를 받은 친구는 "당신 친구의 유형은 OOO예요" 결과 화면으로 바로 들어가고,
+   그 화면의 "나도 테스트 해보기" 버튼으로 자기도 바로 테스트를 시작할 수 있어요 —
+   카카오 개발자 앱 키 없이도 되는 OS 공유 시트(navigator.share)는 그대로 사용. */
+function buildFriendShareUrl(result){
+  const params = new URLSearchParams({
+    friendType: result.archetypeKey,
+    friendChar: String(result.charIdx),
+    friendLang: result.lang,
+  });
+  return 'https://cinereccc.vercel.app/?' + params.toString();
+}
 async function shareMode3Result(){
   if(!mode3LastResult) return;
   const shareText = t('mode3ShareText')(mode3LastResult.charName);
-  const shareUrl = 'https://cinereccc.vercel.app/';
-  let file = null;
-  try{
-    const blob = await generateMode3ShareImage();
-    if(blob) file = new File([blob], 'cinerec-result.png', {type:'image/png'});
-  }catch(e){}
-
-  if(file && navigator.canShare && navigator.canShare({files:[file]})){
-    try{ await navigator.share({ title: t('pageTitle'), text: shareText, url: shareUrl, files:[file] }); return; }
-    catch(e){ if(e && e.name==='AbortError') return; }
-  }
+  const shareUrl = buildFriendShareUrl(mode3LastResult);
   if(navigator.share){
     try{ await navigator.share({ title: t('pageTitle'), text: shareText, url: shareUrl }); return; }
     catch(e){ if(e && e.name==='AbortError') return; }
@@ -2690,6 +2702,40 @@ async function shareMode3Result(){
   }catch(e){
     alert(t('shareFailMsg'));
   }
+}
+
+/* 공유 링크(?friendType=...&friendChar=...&friendLang=...)로 들어왔는지 확인해서, 맞으면 친구의
+   분석 결과를 먼저 보여주는 화면으로 진입해요. archetypeKey+캐릭터 인덱스만 URL에 실어두면
+   되니까(분석 전문을 URL에 실을 필요 없음), 그 값으로 I18N에서 그대로 같은 캐릭터를 다시 찾아요. */
+function showFriendResultScreen(char){
+  $('#friendResultTitle').innerHTML = t('friendResultTitle')(char.name);
+  $('#friendResultFilm').textContent = t('friendResultFilm')(char.film);
+  $('#friendResultCta').textContent = t('friendResultCta');
+  $('#introScreen').style.display = 'none';
+  $('#friendResultScreen').style.display = 'flex';
+  $('#friendResultCta').onclick = ()=>{
+    $('#friendResultScreen').style.display = 'none';
+    showRoot('mode3Root');
+    setupMode3();
+    // URL의 friendType 등 쿼리를 지우는 건 주소창 정리용 부가 기능이라, 못 지워도(구형 브라우저 등)
+    // 테스트 진입 자체는 막지 않도록 따로 try/catch로 감싸요.
+    try{ history.replaceState(null, '', location.pathname); }catch(e){}
+  };
+}
+function checkFriendShareLink(){
+  const params = new URLSearchParams(location.search);
+  const archetypeKey = params.get('friendType');
+  const lang = params.get('friendLang');
+  const charIdx = parseInt(params.get('friendChar'), 10);
+  if(!archetypeKey || (lang!=='ko' && lang!=='en')) return;
+  const archetype = I18N[lang].archetypes[archetypeKey];
+  if(!archetype || !archetype.chars || !archetype.chars.length) return;
+  const char = archetype.chars[charIdx] || archetype.chars[0];
+
+  state.lang = lang;
+  state.country = lang==='ko' ? 'KR' : 'US';
+  applyStaticI18n();
+  showFriendResultScreen(char);
 }
 
 /* 이미지로 저장 — 공유 시트를 거치지 않고 바로 다운로드해요(데스크톱에서 특히 유용) */
@@ -2737,7 +2783,8 @@ async function runMode3Analyze(){
     // chars 배열(한국 영화 + 해외 영화 캐릭터) 중 하나를 골라 다양성을 줘요. 같은 영화를 다시
     // 고르면 같은 결과가 나오도록 결정적으로 계산해요.
     const seedNum = mode3Picked.reduce((s,p)=> s + p.id, 0);
-    const char = pickArchetypeChar(archetype.chars, seedNum);
+    const charIdx = archetypeCharIndex(archetype.chars, seedNum);
+    const char = archetype.chars[charIdx];
     const compatChar = pickArchetypeChar(compatArchetype.chars, seedNum + 1);
 
     const common = $('#mode3Common');
@@ -2770,7 +2817,7 @@ async function runMode3Analyze(){
         </div>
       </div>
     `;
-    mode3LastResult = { archetypeKey, charName: char.name };
+    mode3LastResult = { archetypeKey, charName: char.name, charIdx, lang: state.lang };
     const list = $('#mode3RecList');
     list.innerHTML='';
     if(bucket){
@@ -2840,4 +2887,5 @@ function setupMode3(){
   loadRecs();
   loadHistory();
   showStep(1);
+  checkFriendShareLink();
 })();

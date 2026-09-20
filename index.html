@@ -23,7 +23,7 @@
   gtag('config', 'G-QWPLQLJECT');
 </script>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-<link rel="stylesheet" href="style.css?v=43">
+<link rel="stylesheet" href="style.css?v=45">
 </head>
 <body>
 
@@ -69,6 +69,17 @@
         <span class="mode-snack-label" id="modeSnackHistoryLabel">🥤<br>내 리뷰 기록</span>
       </button>
     </div>
+  </div>
+</div>
+
+<!-- 친구가 공유 링크로 들어왔을 때 보는 화면 — 친구의 분석 결과를 먼저 보여주고, "나도 테스트
+     해보기"를 누르면 모드3(인생영화 분석) 플로우로 들어가요. 공유 링크가 아니면 항상 숨겨짐 -->
+<div id="friendResultScreen" class="friend-result" style="display:none;">
+  <div class="friend-result-card">
+    <div class="friend-result-brand">CINEREC</div>
+    <div class="friend-result-title" id="friendResultTitle"></div>
+    <div class="friend-result-film" id="friendResultFilm"></div>
+    <button type="button" class="primary" id="friendResultCta"></button>
   </div>
 </div>
 
@@ -363,6 +374,6 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="script.js?v=39"></script>
+<script src="script.js?v=43"></script>
 </body>
 </html>
