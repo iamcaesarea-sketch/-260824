@@ -202,12 +202,19 @@ button:disabled{opacity:0.35; cursor:not-allowed; box-shadow:none; transform:non
   border-left:3px solid var(--accent-dim); letter-spacing:0.01em;
 }
 .result-other-section{margin-top:28px; padding-top:24px; border-top:2px solid var(--line);}
-.mode3-verdict-title{font-size:20px; font-weight:800; color:var(--text); line-height:1.4;}
-.mode3-char-blurb{margin-top:8px; line-height:1.6; color:var(--text-dim); font-size:13px;}
-.mode3-trait{margin-top:14px; line-height:1.6;}
-.mode3-trait b{display:block; margin-bottom:4px;}
+#mode3Verdict{display:block; padding:26px 22px;}
+.mode3-verdict-title{font-size:21px; font-weight:800; color:var(--text); line-height:1.5; margin-bottom:14px;}
+.mode3-hl{color:var(--accent); font-weight:800;}
+.mode3-char-blurb{
+  margin:10px 0 2px; padding:16px 18px; border-radius:var(--radius-md);
+  background:var(--bg); border:1px solid var(--line); line-height:1.8; color:var(--text-dim); font-size:13px;
+}
+.mode3-trait{margin-top:28px; padding-top:24px; border-top:1px solid var(--line); line-height:1.8;}
+.mode3-trait:first-of-type{margin-top:24px;}
+.mode3-trait-label{display:block; font-weight:800; color:var(--text); margin-bottom:10px; font-size:14.5px;}
+.mode3-trait p{margin:0; color:var(--text-dim);}
 .mode3-common{
-  margin-bottom:18px; padding:14px 18px; border-radius:var(--radius-md);
+  margin-bottom:20px; padding:14px 18px; border-radius:var(--radius-md);
   background:var(--bg-alt); border:2px solid var(--line); font-size:13px; color:var(--text-dim); line-height:1.6;
 }
 .mode3-common b{color:var(--text);}

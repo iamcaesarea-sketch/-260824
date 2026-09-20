@@ -189,15 +189,15 @@ const I18N = {
     mode3PickedLabel: '고른 영화',
     mode3SubmitBtn: '분석하기',
     mode3RestartBtn: '다시 고르기',
-    mode3RecLabel: '나랑 잘 맞을 영화',
+    mode3RecLabel: '당신에게 추천하는 영화',
     mode3ReasonTemplate: (trait) => `${trait} 사람들이 이 영화를 좋아했어요`,
     mode3NeedMore: '영화를 3편 이상 골라주세요.',
-    mode3VerdictTitle: (charName) => `당신은 <b>${charName}</b> 유형이에요`,
+    mode3VerdictTitle: (charName) => `당신은 <span class="mode3-hl">${charName}</span> 유형이에요`,
     mode3CommonIntro: (titlesStr, traitStr) => `고르신 <b>${titlesStr}</b>의 공통점은 <b>${traitStr}</b> 장르를 좋아하신다는 점이에요.`,
     mode3CommonIntroFallback: (titlesStr) => `고르신 <b>${titlesStr}</b>에는 뚜렷한 공통점이 있었어요.`,
-    mode3CharBlurbTemplate: (charName, charFilm, blurb) => `<b>${charName}</b> — 영화 &lt;${charFilm}&gt;의 인물로, ${blurb}`,
+    mode3CharBlurbTemplate: (charName, charFilm, blurb) => `<span class="mode3-hl">${charName}</span> — 영화 &lt;${charFilm}&gt;의 인물로, ${blurb}`,
     mode3LabelPersonality: '🎭 당신은 이런 사람이에요',
-    mode3LabelCompat: (charName) => `💞 당신과 잘 맞는 유형은 <b>${charName}</b> 유형이에요`,
+    mode3LabelCompat: (charName) => `💞 당신과 잘 맞는 유형은 <span class="mode3-hl">${charName}</span> 유형이에요`,
     mode3LabelStrength: '💪 당신이 갖고 있는 큰 힘은',
     mode3LabelLifeGoal: '🧭 당신은 이런 삶을 꿈꾸고 있어요',
     mode3ShareBtn: '📤 친구에게 공유해보기',
@@ -211,77 +211,110 @@ const I18N = {
         strength:'결단력과 추진력이에요. 남들이 재고 따지는 동안 이미 한 발짝 나가 있는 실행력이 최대 무기고, 위기 상황에서도 남들보다 빠르게 다음 선택을 내리는 순발력도 돋보이죠.',
         lifeGoal:'안정보다 경험이 남는 삶을 지향해요. 나중에 후회하는 것보다, 일단 해보고 얻은 이야기가 더 값지다고 믿는 사람이에요. 인생을 통틀어 "해봤다"는 말을 더 많이 하고 싶은 쪽이죠.',
         fanTrait:'모험심이 많고 망설임 없이 행동하는',
-        charName:'고니', charFilm:'타짜', charBlurb:'고니는 목숨보다 패를 더 소중히 여기는 것처럼 보이지만, 사실은 판 위에서만 온전히 살아있다고 느끼는 사람이에요. 평범한 삶의 속도가 그에게는 답답하게 느껴지고, 위험이 클수록 오히려 정신이 또렷해지는 타입이죠. 손을 떨면서도 베팅을 늘리는 순간, 두려움과 흥분을 동시에 즐기는 게 보여요. 계획을 세우기보다는 일단 판에 앉아보고, 상대의 표정과 흐름을 읽으며 그 자리에서 답을 찾아나가는 즉흥적인 승부사예요. 실패해도 후회보다는 다음 판을 기대하는 회복력이 강하고, 남들이 다 접을 때 오히려 자리를 지키는 배짱이 있죠. 겉으로는 가볍고 능글맞아 보이지만, 속으로는 누구보다 치열하게 계산하고 있는 사람이기도 해요. 안정적인 삶보다 짜릿한 이야기를 남기는 삶을 택하는, 전형적인 모험가형 인물이에요.'},
+        chars:[
+          {name:'고니', film:'타짜', blurb:'고니는 목숨보다 패를 더 소중히 여기는 것처럼 보이지만, 사실은 판 위에서만 온전히 살아있다고 느끼는 사람이에요. 평범한 삶의 속도가 그에게는 답답하게 느껴지고, 위험이 클수록 오히려 정신이 또렷해지는 타입이죠. 손을 떨면서도 베팅을 늘리는 순간, 두려움과 흥분을 동시에 즐기는 게 보여요. 계획을 세우기보다는 일단 판에 앉아보고, 상대의 표정과 흐름을 읽으며 그 자리에서 답을 찾아나가는 즉흥적인 승부사예요. 실패해도 후회보다는 다음 판을 기대하는 회복력이 강하고, 남들이 다 접을 때 오히려 자리를 지키는 배짱이 있죠. 겉으로는 가볍고 능글맞아 보이지만, 속으로는 누구보다 치열하게 계산하고 있는 사람이기도 해요. 뛰어난 손기술이나 타고난 재능보다는, 판을 떠나지 못하는 근성과 될 때까지 버텨보는 오기로 살아남는 쪽에 가깝죠. 큰돈을 잃어도 금방 털고 일어나 다음 기회를 노리는 회복탄력성은 웬만한 사람은 따라가기 힘든 수준이에요. 사실 그가 진짜 두려워하는 건 돈을 잃는 것보다, 판에서 완전히 밀려나 아무것도 아닌 사람이 되는 쪽이죠. 안정적인 삶보다 짜릿한 이야기를 남기는 삶을 택하는, 전형적인 모험가형 인물이에요.'},
+          {name:'인디아나 존스', film:'레이더스: 잃어버린 성궤', blurb:'인디아나 존스는 평소엔 얌전한 고고학과 교수지만, 잃어버린 유물과 진짜 위험이 얽히는 순간 완전히 다른 사람이 돼요. 모든 경우의 수를 미리 대비하기보다, 현장에서 즉흥적으로 계획을 짜고 자신의 감과 경험을 믿고 밀어붙이는 쪽을 택하죠. 뱀이 가득한 유적이든 함정투성이 신전이든, 장애물이 클수록 오히려 더 집요해지는 성격이에요. 무모해 보이지만 실제로는 위험을 빠르게 계산하고 망설임 없이 몸을 던지는 타입이라, 같은 걸 노리는 경쟁자들보다 늘 한 발 앞서 있어요. 채찍과 페도라 뒤에 숨어 있는 건, 보상 자체보다 그 추격의 과정을 진심으로 즐기는 사람이죠. 크게 실패해도 금방 털고 일어나 다음 단서를 쫓는 회복력이 있고, 그 실패조차 이야기의 일부로 받아들이는 여유가 있어요. 혼자 해결하려 들기보다 필요할 땐 동료의 도움을 기꺼이 받아들이는 유연함도 있지만, 결정적인 순간엔 결국 자기 몸으로 부딪혀 답을 찾아내는 사람이에요. 안전한 서재보다 위험한 현장에서 더 살아있음을 느끼는, 쉼 없는 호기심과 실전 앞의 담대함을 함께 갖춘 전형적인 모험가형 인물이에요.'},
+        ]},
       entertainer: {title:'분위기 메이커',
         personality:'무거운 공기를 못 참는 타입이에요. 어디서든 웃음 포인트를 찾아내고, 사람들 사이의 분위기를 자연스럽게 풀어주는 사람이죠. 정작 본인은 힘들어도 그 티를 잘 안 내고, 주변 사람들 기분부터 살피는 편이에요.',
         compatibility:'진지하고 속 깊은 사람과 있으면 서로 좋은 균형을 이뤄요. 당신의 유머에 진심으로 웃어주는 사람이면 오래갈 인연이고, 가끔은 당신의 진짜 속마음까지 물어봐주는 사람이 곁에 있으면 더 편안해질 거예요.',
         strength:'공간의 온도를 바꾸는 힘이에요. 당신이 있으면 어색함이 오래 못 버티고, 처음 만난 사람들 사이에서도 자연스럽게 대화의 물꼬를 트는 능력이 있죠.',
         lifeGoal:'심각하게 사는 것보다 즐겁게 사는 삶을 지향해요. 매일이 재밌어야 진짜 잘 살고 있는 거라 믿는 사람이에요. 훗날 돌아봤을 때 "그래도 많이 웃었다"는 기억을 남기고 싶어 하죠.',
         fanTrait:'유머 감각이 좋고 분위기를 잘 살리는',
-        charName:'김반장', charFilm:'극한직업', charBlurb:'김반장은 위장 치킨집이 잘 되는 상황마저 웃음거리로 만들어버리는, 타고난 분위기 메이커예요. 팀이 위기에 처하거나 다들 예민해져 있을 때, 누구보다 먼저 농담을 던져서 분위기를 풀어주는 역할을 자처하죠. 정작 본인이 제일 힘든 상황에서도 그 티를 잘 내지 않고, 오히려 그 순간에 더 유쾌해지는 사람이에요. 즉흥적인 순발력이 뛰어나서 예상치 못한 상황에서도 재치있는 대사나 행동으로 상황을 넘기는 데 능숙해요. 진지함보다는 능청스러움으로 사람 마음의 긴장을 풀어주는 재주가 있고, 그 덕분에 어떤 팀에 있어도 자연스럽게 중심 역할을 하게 돼요. 실없어 보이는 행동 뒤에는 의외로 동료를 살뜰히 챙기는 다정함이 숨어 있죠. 심각한 상황일수록 유머로 풀어내는 이 능력이야말로 그가 가진 진짜 무기예요.'},
+        chars:[
+          {name:'김반장', film:'극한직업', blurb:'김반장은 위장 치킨집이 잘 되는 상황마저 웃음거리로 만들어버리는, 타고난 분위기 메이커예요. 팀이 위기에 처하거나 다들 예민해져 있을 때, 누구보다 먼저 농담을 던져서 분위기를 풀어주는 역할을 자처하죠. 정작 본인이 제일 힘든 상황에서도 그 티를 잘 내지 않고, 오히려 그 순간에 더 유쾌해지는 사람이에요. 즉흥적인 순발력이 뛰어나서 예상치 못한 상황에서도 재치있는 대사나 행동으로 상황을 넘기는 데 능숙해요. 진지함보다는 능청스러움으로 사람 마음의 긴장을 풀어주는 재주가 있고, 그 덕분에 어떤 팀에 있어도 자연스럽게 중심 역할을 하게 돼요. 실없어 보이는 행동 뒤에는 의외로 동료를 살뜰히 챙기는 다정함이 숨어 있죠. 위기가 커질수록 오히려 텐션을 낮추기보다 더 과장된 유머로 정면 돌파하는 역설적인 재주도 있어요. 그래서 정작 진지하게 사과하거나 속마음을 털어놓아야 할 때는 서툴러서, 농담 뒤에 진심을 숨기는 습관이 생기기도 하죠. 심각한 상황일수록 유머로 풀어내는 이 능력이야말로 그가 가진 진짜 무기예요.'},
+          {name:'지니', film:'알라딘', blurb:'지니는 몇백 년을 램프 안에 갇혀 지냈으면서도, 그 시간을 씁쓸함 대신 농담거리로 만들어버리는 사람이에요. 방 안의 공기가 무거워지는 순간을 못 견뎌서, 노래든 성대모사든 뭐든 동원해서 분위기를 먼저 풀어놓고 보는 타입이죠. 알라딘이 감당하기 힘든 상황에 놓일 때조차, 자기감정을 앞세우기보다 상대의 기분을 먼저 살피고 밝은 에너지를 유지하려 애써요. 이 유머는 아무 말이나 던지는 게 아니라, 상대를 세심하게 관찰한 끝에 지금 이 순간 필요한 게 뭔지 정확히 짚어내는 데서 나오죠. 실없어 보이는 농담들 뒤에는 친구를 위해서라면 망설임 없이 나서는 진짜 의리가 자리하고 있어요. 상황에 따라 무엇으로든 자유자재로 변신하는 유연함 덕분에, 어떤 자리에 있어도 자연스럽게 사람들의 시선을 끌고 분위기를 이끄는 존재가 돼요. 정작 자신의 소원이나 진짜 바람은 뒤로 미룬 채, 남을 웃기고 기분 좋게 만드는 일에 훨씬 더 진심인 사람이기도 하죠. 분위기를 가볍게 만드는 게 단순한 재주가 아니라, 곁에 있는 사람을 편하게 해주고 싶은 마음에서 비롯된다는 점이 이 유형을 특별하게 만들어요.'},
+        ]},
       empath: {title:'감성 관찰자',
         personality:'사람과 감정의 결을 세심하게 들여다보는 타입이에요. 겉으로 드러나지 않는 마음까지 알아차리고, 깊이 있는 대화를 좋아하죠. 누군가 말투가 평소와 조금만 달라도 금방 눈치채는 편이에요.',
         compatibility:'솔직하게 감정을 표현하는 사람과 잘 맞아요. 말하지 않아도 알아주길 바라기보다, 서로 표현해주는 관계에서 더 편안함을 느껴요. 당신의 세심함을 당연하게 여기지 않고 고마워하는 사람이면 관계가 훨씬 깊어질 거예요.',
         strength:'공감 능력이에요. 사람의 진짜 마음을 읽어내는 섬세함이 당신 곁에 사람이 모이는 이유고, 힘든 이야기를 털어놓기에 가장 편한 사람으로 꼽히는 경우가 많아요.',
         lifeGoal:'얕고 넓은 관계보다 깊고 진한 관계를 지향해요. 몇 명이어도 진심으로 통하는 사람이 있으면 충분하다고 생각하는 편이에요. 관계의 숫자보다 밀도를 더 중요하게 여기죠.',
         fanTrait:'감정을 세심하게 살피고 깊은 대화를 좋아하는',
-        charName:'미자', charFilm:'시', charBlurb:'미자는 시를 쓰기 위해 세상을 다시 천천히 들여다보기 시작한 사람이에요. 화려하거나 극적인 사건보다, 나뭇잎이 떨어지는 소리나 누군가의 표정에 스치는 그늘 같은 사소한 것들에 오래 마음이 머무르는 타입이죠. 겉으로 드러내지 않는 감정까지 알아차리는 섬세함이 있어서, 주변 사람들이 말하지 않아도 그의 상태를 먼저 눈치채곤 해요. 정작 자신이 감당하기 힘든 일 앞에서는 담담해 보이려 애쓰지만, 그 안에는 누구보다 여린 마음이 자리하고 있어요. 사람을 판단하기보다 이해하려는 태도로 다가가기 때문에, 어렵고 불편한 이야기도 편하게 털어놓게 만드는 힘이 있죠. 느리더라도 자신만의 방식으로 세상을 관찰하고, 그걸 언어로 옮기려는 조용한 집요함도 갖고 있어요. 큰 목소리를 내진 않지만, 그 존재만으로 곁에 있는 사람의 마음을 편안하게 만들어주는 사람이에요.'},
+        chars:[
+          {name:'미자', film:'시', blurb:'미자는 시를 쓰기 위해 세상을 다시 천천히 들여다보기 시작한 사람이에요. 화려하거나 극적인 사건보다, 나뭇잎이 떨어지는 소리나 누군가의 표정에 스치는 그늘 같은 사소한 것들에 오래 마음이 머무르는 타입이죠. 겉으로 드러내지 않는 감정까지 알아차리는 섬세함이 있어서, 주변 사람들이 말하지 않아도 그의 상태를 먼저 눈치채곤 해요. 정작 자신이 감당하기 힘든 일 앞에서는 담담해 보이려 애쓰지만, 그 안에는 누구보다 여린 마음이 자리하고 있어요. 사람을 판단하기보다 이해하려는 태도로 다가가기 때문에, 어렵고 불편한 이야기도 편하게 털어놓게 만드는 힘이 있죠. 느리더라도 자신만의 방식으로 세상을 관찰하고, 그걸 언어로 옮기려는 조용한 집요함도 갖고 있어요. 정작 자신이 가장 힘든 순간엔 누구에게도 기대지 못하고 혼자 삭이는 쪽을 택하는 사람이기도 해요. 다른 사람의 아픔은 그렇게 세심하게 알아차리면서도, 자기 안의 감정은 뒤늦게야 시로, 언어로 겨우 풀어내죠. 큰 목소리를 내진 않지만, 그 존재만으로 곁에 있는 사람의 마음을 편안하게 만들어주는 사람이에요.'},
+          {name:'아멜리에', film:'아멜리에', blurb:'아멜리에는 다른 사람들이 그냥 지나치는 것들을 유독 오래 눈여겨보는 사람이에요. 실망한 사람의 축 처진 어깨나, 누군가 무심코 반복하는 사소한 습관에서 그 사람이 진짜 원하는 게 뭔지 읽어내는 눈치가 있죠. 세상에 요란하게 끼어들기보다, 조용히 관찰하는 데 훨씬 더 많은 에너지를 쓰는 타입이라 사람들의 속마음을 거의 직관적으로 알아차려요. 문제를 마주하면 정면으로 부딪히기보다, 티 나지 않게 작은 친절을 설계해서 그 사람의 삶을 슬쩍 좋은 쪽으로 밀어주는 방식을 택하죠. 이런 간접적이고 조심스러운 배려 방식에는, 돕고는 싶지만 자신이 드러나거나 상처받는 건 피하고 싶은 마음이 함께 들어있어요. 아이러니하게도 남의 숨은 감정은 그렇게 잘 읽으면서, 정작 자기 마음을 알아차리고 표현하는 데는 유난히 서툴러요. 사소한 디테일에 마음을 오래 두는 건 우연이 아니라, 작은 것에도 진짜 감정의 무게가 실려 있다는 믿음에서 나오는 태도죠. 남을 향한 세심하고 조용한 다정함이야말로, 이 유형을 가장 잘 설명하는 특징이에요.'},
+        ]},
       thrillSeeker: {title:'스릴 추구자',
         personality:'적당히 무서운 걸 오히려 즐기는 타입이에요. 긴장감 있는 상황에서 심장이 뛰는 걸 좋아하고, 예측 불가능한 전개에 끌리죠. 뻔한 결말보다는 끝까지 어떻게 될지 모르는 이야기에 훨씬 몰입해요.',
         compatibility:'겁 없이 같이 달려줄 사람과 죽이 잘 맞아요. 너무 신중한 사람보다는, 그냥 같이 저지르는 사람이 편해요. 당신의 즉흥적인 제안에 "콜"이라고 바로 답해주는 사람이 최고의 짝이죠.',
         strength:'위기 앞에서 오히려 침착해지는 담대함이에요. 다른 사람이 얼어있을 때 당신은 이미 움직이고 있고, 예상 밖의 상황을 오히려 재미있는 변수로 받아들이는 여유도 있어요.',
         lifeGoal:'무난한 삶보다 짜릿한 삶을 지향해요. 예측 가능한 하루보다는, 무슨 일이 생길지 모르는 하루가 더 살아있다고 느껴요. 안전벨트를 매고도 늘 창밖 풍경보다 다음 모퉁이가 더 궁금한 사람이에요.',
         fanTrait:'긴장감을 즐기고 두려움 없이 부딪히는',
-        charName:'서도철', charFilm:'베테랑', charBlurb:'서도철은 몸을 사리는 법을 잘 모르는 형사예요. 위험한 상황일수록 한 발 물러서기보다 먼저 뛰어들어 몸으로 부딪히는 쪽을 택하고, 그 순간의 긴장감을 오히려 즐기는 듯한 여유까지 보이죠. 정석대로 움직이기보다 상황에 따라 즉흥적으로 판단하고 행동하는 스타일이라, 예측 불가능한 전개일수록 더 신이 나는 사람이에요. 겁이 없다기보다는, 두려움보다 정의감이나 승부욕이 항상 앞서는 타입에 가까워요. 상대가 강하고 위협적일수록 오히려 눈빛이 살아나고, 물러서라는 신호를 무시한 채 끝까지 밀어붙이는 뚝심이 있죠. 유쾌하고 능청스러운 평소 모습과 달리, 결정적인 순간에는 누구보다 진지하고 집요해지는 반전 매력도 있어요. 안전한 길보다 스릴 있는 정면 승부를 택하는, 전형적인 액션형 인물이에요.'},
+        chars:[
+          {name:'서도철', film:'베테랑', blurb:'서도철은 몸을 사리는 법을 잘 모르는 형사예요. 위험한 상황일수록 한 발 물러서기보다 먼저 뛰어들어 몸으로 부딪히는 쪽을 택하고, 그 순간의 긴장감을 오히려 즐기는 듯한 여유까지 보이죠. 정석대로 움직이기보다 상황에 따라 즉흥적으로 판단하고 행동하는 스타일이라, 예측 불가능한 전개일수록 더 신이 나는 사람이에요. 겁이 없다기보다는, 두려움보다 정의감이나 승부욕이 항상 앞서는 타입에 가까워요. 상대가 강하고 위협적일수록 오히려 눈빛이 살아나고, 물러서라는 신호를 무시한 채 끝까지 밀어붙이는 뚝심이 있죠. 유쾌하고 능청스러운 평소 모습과 달리, 결정적인 순간에는 누구보다 진지하고 집요해지는 반전 매력도 있어요. 몸을 사리지 않는 만큼 다치는 일도 잦지만, 그마저 무용담처럼 넘겨버리고 오히려 몸을 사리는 쪽이 더 불편하게 느껴지는 사람이에요. 규정이나 절차보다 지금 눈앞의 상황을 해결하는 게 우선이라, 가끔은 원칙과 부딪혀도 결국 자기 방식을 밀어붙이죠. 안전한 길보다 스릴 있는 정면 승부를 택하는, 전형적인 액션형 인물이에요.'},
+          {name:'이단 헌트', film:'미션 임파서블', blurb:'이단 헌트는 남들이 다 불가능하다고 말하는 임무를, 그냥 원래 그런 거라는 듯 담담하게 시작점으로 삼는 사람이에요. 더 안전한 대안이 나타나길 기다리지 않고, 작전이 중간에 어긋나면 그 자리에서 곧바로 새 계획을 즉흥적으로 짜내죠. 대부분의 사람이 실패 후 멈춰서 다시 판단하려 할 때, 그는 오히려 그 혼란을 틈타 더 빠르게 움직이는 쪽을 택해요. 망설이는 순간이야말로 가장 위험한 선택이라는 걸 경험으로 알고 있기 때문이죠. 팀을 전적으로 신뢰하면서도, 가장 위험한 순간엔 자기 자신을 서슴없이 내던지는 사람이에요. 높은 곳이든 촉박한 시간이든 무장한 상대든, 그에게는 두려운 대상이라기보다 풀어야 할 퍼즐에 가깝게 느껴지죠. 그렇다고 진짜 무모한 건 아니라서, 겉으로는 순간의 판단처럼 보여도 그 뒤에는 철저한 훈련과 계산이 깔려 있어요. 극한의 압박 속에서도 두려움 없이 움직이면서 동료에 대한 신의는 절대 저버리지 않는 그 조합이, 그를 전형적인 스릴 추구자로 만들어요.'},
+        ]},
       romantic: {title:'로맨티스트',
         personality:'설렘과 감정선을 소중히 여기는 타입이에요. 작은 순간에도 의미를 부여하고, 관계 속에서 진심을 나누는 걸 중요하게 생각하죠. 기념일이나 사소한 디테일을 잘 챙기고, 잘 기억하는 편이에요.',
         compatibility:'표현에 인색하지 않은 사람과 잘 맞아요. 사소한 다정함을 알아채고 되돌려주는 사람이면 관계가 오래갈 거예요. 무뚝뚝해도 마음이 깊은 사람보다는, 표현이 자연스러운 사람과 더 오래 편안하게 지낼 수 있어요.',
         strength:'사람과 순간을 소중히 여기는 마음이에요. 당신과 함께한 기억은 유난히 더 특별하게 남고, 상대방이 자신이 소중한 사람이라고 느끼게 만드는 재주가 있죠.',
         lifeGoal:'효율적인 삶보다 마음이 남는 삶을 지향해요. 결과보다 그 과정에서 느낀 감정을 더 오래 기억하는 사람이에요. 남는 건 성과가 아니라 그때 느꼈던 감정이라고 믿는 편이죠.',
         fanTrait:'감성적이고 솔직하게 마음을 표현하는',
-        charName:'상우', charFilm:'봄날은 간다', charBlurb:'상우는 사랑 앞에서 계산이라는 걸 할 줄 모르는 사람이에요. 사운드 엔지니어답게 소리와 순간의 미묘한 결을 세심하게 담아내듯, 사랑하는 사람과의 사소한 순간들도 마음 깊이 새겨두는 타입이죠. 대나무 숲의 바람 소리를 녹음하듯, 감정 하나하나를 흘려보내지 않고 오래 간직하는 섬세함이 있어요. 관계가 변해가는 걸 눈치채면서도 쉽게 놓지 못하고, 그 안에서 계속 진심을 표현하려 애쓰는 우직함도 갖고 있죠. "어떻게 사랑이 변하니"라는 말처럼, 감정에 솔직하고 그 감정을 끝까지 지키려는 태도가 그의 가장 큰 특징이에요. 이별 앞에서도 원망보다는 그 시간을 소중히 여기는 마음이 더 크고, 아픔조차 의미 있는 기억으로 받아들이는 성숙함이 있어요. 화려한 로맨스보다 진심이 담긴 작은 순간들을 소중히 여기는, 전형적인 로맨티스트예요.'},
+        chars:[
+          {name:'상우', film:'봄날은 간다', blurb:'상우는 사랑 앞에서 계산이라는 걸 할 줄 모르는 사람이에요. 사운드 엔지니어답게 소리와 순간의 미묘한 결을 세심하게 담아내듯, 사랑하는 사람과의 사소한 순간들도 마음 깊이 새겨두는 타입이죠. 대나무 숲의 바람 소리를 녹음하듯, 감정 하나하나를 흘려보내지 않고 오래 간직하는 섬세함이 있어요. 관계가 변해가는 걸 눈치채면서도 쉽게 놓지 못하고, 그 안에서 계속 진심을 표현하려 애쓰는 우직함도 갖고 있죠. "어떻게 사랑이 변하니"라는 말처럼, 감정에 솔직하고 그 감정을 끝까지 지키려는 태도가 그의 가장 큰 특징이에요. 사랑이 식어가는 걸 머리로는 알아차리면서도, 마음은 쉽게 그 속도를 따라가지 못해 자꾸 뒤를 돌아보는 사람이에요. 화려한 이벤트보다 함께 있던 공기, 표정, 침묵 같은 순간의 결을 더 오래 기억하는 편이라, 이별 후에도 한참을 그 잔상 속에 머무르곤 하죠. 이별 앞에서도 원망보다는 그 시간을 소중히 여기는 마음이 더 크고, 아픔조차 의미 있는 기억으로 받아들이는 성숙함이 있어요. 화려한 로맨스보다 진심이 담긴 작은 순간들을 소중히 여기는, 전형적인 로맨티스트예요.'},
+          {name:'잭 도슨', film:'타이타닉', blurb:'잭 도슨은 가진 것은 거의 없지만, 눈앞에 있는 사람과 순간에는 자신이 가진 전부를 내어주는 사람이에요. 로즈를 만나자마자 마음을 빼앗기지만, 그를 로맨티스트로 만드는 건 그 속도가 아니라 매 순간을 진심으로 대하는 태도예요. 이 관계가 현실적으로 득이 될지 손해가 될지 따지지 않고, 그저 느끼는 대로 솔직하게 표현하는 사람이라, 늘 재고 따지는 데 익숙한 사람에게는 오히려 낯설고 신선하게 다가오죠. 가장 위태로운 순간에도 자신을 지키기보다 따뜻함과 솔직함을 먼저 선택하는 사람이에요. 낯선 사람의 초상화를 그려주고, 3등석에서 춤을 추고, 계획에 없던 작은 순간들을 소중히 여기는 삶의 방식은, 그가 소유보다 경험에서 의미를 찾는 사람이라는 걸 보여줘요. 오래 지속되는 관계만이 의미 있다고 믿지 않기 때문에, 단 하룻밤도 누군가에게는 평생만큼 소중할 수 있다고 믿는 사람이죠. 계산 없이, 망설임 없이 사랑을 다해버리는 이 태도야말로 그를 전형적인 로맨티스트로 만드는 이유예요.'},
+        ]},
       strategist: {title:'전략가',
         personality:'퍼즐이 맞춰지는 순간을 좋아하는 타입이에요. 단서를 하나씩 모아 스스로 답을 찾아내는 과정에서 짜릿함을 느끼죠. 결론만 듣는 것보다 그 과정을 직접 추리해보는 걸 훨씬 좋아해요.',
         compatibility:'직관적이고 자유로운 사람과 만나면 서로를 잘 보완해요. 당신의 계획에 예상 밖의 재미를 더해주는 사람이 좋은 짝이에요. 너무 즉흥적이기만 한 사람보다는, 가끔은 당신의 논리를 존중해주는 사람과 더 잘 맞아요.',
         strength:'논리적으로 파고드는 분석력이에요. 남들이 놓친 디테일을 당신은 이미 눈치채고 있고, 복잡한 상황을 차근차근 정리해서 설명하는 능력도 뛰어나죠.',
         lifeGoal:'감으로 사는 삶보다 이해하고 넘어가는 삶을 지향해요. 왜 그런지 납득이 돼야 진짜 내 것이 된다고 믿는 편이에요. 대충 아는 채로 넘어가는 걸 유난히 못 견디는 편이죠.',
         fanTrait:'논리적이고 차근차근 답을 찾아가는',
-        charName:'평경장', charFilm:'타짜', charBlurb:'평경장은 판이 시작되기도 전에 이미 승부의 흐름을 읽어내는 사람이에요. 감이나 운에 기대기보다, 상대의 습관과 표정, 판돈이 오가는 패턴을 관찰해서 다음 수를 미리 계산해두는 치밀함이 있죠. 화려한 기술보다 정확한 타이밍과 판단력으로 승부를 보는 타입이라, 겉으로는 느긋해 보여도 머릿속은 누구보다 바쁘게 돌아가고 있어요. 젊은 혈기로 무모하게 뛰어드는 사람들과 달리, 이길 수 있는 판인지 아닌지를 먼저 냉정하게 따져보는 신중함을 갖고 있죠. 오랜 경험에서 나오는 통찰력으로 상황을 꿰뚫어 보고, 필요할 땐 한 발 물러서서 손해를 최소화할 줄도 알아요. 말수는 적지만 한마디 한마디에 무게가 있고, 그 침착함이 오히려 상대를 긴장하게 만들어요. 감정보다 논리, 순간보다 흐름을 보는 전형적인 전략가형 인물이에요.'},
+        chars:[
+          {name:'평경장', film:'타짜', blurb:'평경장은 판이 시작되기도 전에 이미 승부의 흐름을 읽어내는 사람이에요. 감이나 운에 기대기보다, 상대의 습관과 표정, 판돈이 오가는 패턴을 관찰해서 다음 수를 미리 계산해두는 치밀함이 있죠. 화려한 기술보다 정확한 타이밍과 판단력으로 승부를 보는 타입이라, 겉으로는 느긋해 보여도 머릿속은 누구보다 바쁘게 돌아가고 있어요. 젊은 혈기로 무모하게 뛰어드는 사람들과 달리, 이길 수 있는 판인지 아닌지를 먼저 냉정하게 따져보는 신중함을 갖고 있죠. 오랜 경험에서 나오는 통찰력으로 상황을 꿰뚫어 보고, 필요할 땐 한 발 물러서서 손해를 최소화할 줄도 알아요. 자신이 가진 노하우를 아끼기보다, 가능성이 보이는 사람에게는 아낌없이 나눠주는 스승 같은 면모도 있어요. 말수는 적지만 한마디 한마디에 무게가 있고, 그 침착함이 오히려 상대를 긴장하게 만들어요. 감정보다 논리, 순간보다 흐름을 보는 전형적인 전략가형 인물이에요.'},
+          {name:'셜록 홈즈', film:'셜록 홈즈', blurb:'셜록 홈즈는 남들이 문장 하나를 읽는 사이에 방 전체를 읽어내는 사람이에요. 어림짐작에 기대는 법이 없고, 그가 내리는 모든 결론은 누구도 놓치지 않도록 스스로 훈련해온 작은 관찰들이 차곡차곡 쌓여 만들어진 것이죠. 범죄 현장 앞에서 남들이 감정적으로 동요할 때도, 그는 오히려 한 발 떨어져 상황을 정확히 보는 데 집중해요. 사건이 풀릴 기미가 안 보일수록 오히려 눈빛이 살아나는데, 그런 순간이야말로 자신의 집요하고 체계적인 추리 방식이 진가를 발휘할 기회이기 때문이죠. 그의 자신감은 거만하게 보일 때도 있지만, 확인할 수 없는 걸 함부로 추측하지 않는다는 원칙에서 나오는, 근거 있는 확신에 가까워요. 추리 과정을 굳이 소리 내어 설명하는 것도 과시가 아니라, 논리를 한 단계씩 눈앞에 펼쳐놓아야 스스로도 완전히 납득이 되기 때문이에요. 감정에 흔들리기보다 사실과 증거를 우선하는 이 태도가, 위기 상황에서도 그를 가장 믿을 만한 사람으로 만들어주죠. 근거 없이는 결코 답을 내리지 않는 이 집요함이야말로, 그를 전형적인 전략가로 만드는 이유예요.'},
+        ]},
       dreamer: {title:'몽상가',
         personality:'현실 너머의 세계를 상상하는 걸 즐기는 타입이에요. 남들이 안 된다고 할 때, 오히려 "그럼 어떻게 되면 좋을까"를 먼저 그려보죠. 머릿속에 늘 몇 가지 다른 세계가 동시에 펼쳐져 있는 편이에요.',
         compatibility:'현실감각이 있는 사람과 함께면 상상이 진짜가 될 수 있어요. 당신의 아이디어를 비웃지 않고 함께 궁금해해 주는 사람이 좋아요. 엉뚱한 이야기에도 눈을 반짝이며 끝까지 들어주는 사람과 유난히 잘 맞아요.',
         strength:'남들이 못 보는 가능성을 보는 상상력이에요. 아직 없는 걸 그려내는 힘이 당신의 무기고, 남들이 지루해하는 것에서도 새로운 이야기를 뽑아내는 재능이 있죠.',
         lifeGoal:'정해진 틀보다 상상한 걸 실현하는 삶을 지향해요. 남들이 다 가는 길보다, 아직 아무도 안 가본 길에 더 끌리는 사람이에요. 남들이 정해놓은 답보다 스스로 그린 지도를 더 믿는 편이죠.',
         fanTrait:'상상력이 풍부하고 새로운 가능성을 그리는',
-        charName:'미소', charFilm:'소공녀', charBlurb:'미소는 집을 포기하더라도 좋아하는 위스키와 담배는 포기하지 않는 사람이에요. 남들이 당연하게 여기는 안정적인 삶의 기준을 그대로 따르기보다, 자신에게 진짜 중요한 게 무엇인지를 끝까지 지키려는 사람이죠. 가진 게 적어질수록 오히려 자신이 원하는 삶의 모습이 선명해지고, 그 방향으로 망설임 없이 나아가는 뚝심이 있어요. 남들 눈에는 무모하거나 이상하게 보일 수 있는 선택도, 본인에게는 가장 합리적인 결정이라는 확신이 있죠. 옛 친구들의 집을 전전하면서도 자존심을 굽히지 않고, 자신의 방식대로 삶을 꾸려나가는 담담한 태도가 인상적이에요. 현실에 순응하기보다, 조금 불편하더라도 자기만의 세계관을 지켜내는 걸 더 중요하게 여기는 타입이에요. 정해진 답을 따르기보다, 스스로 그린 삶의 지도를 믿는 전형적인 몽상가형 인물이에요.'},
+        chars:[
+          {name:'미소', film:'소공녀', blurb:'미소는 집을 포기하더라도 좋아하는 위스키와 담배는 포기하지 않는 사람이에요. 남들이 당연하게 여기는 안정적인 삶의 기준을 그대로 따르기보다, 자신에게 진짜 중요한 게 무엇인지를 끝까지 지키려는 사람이죠. 가진 게 적어질수록 오히려 자신이 원하는 삶의 모습이 선명해지고, 그 방향으로 망설임 없이 나아가는 뚝심이 있어요. 남들 눈에는 무모하거나 이상하게 보일 수 있는 선택도, 본인에게는 가장 합리적인 결정이라는 확신이 있죠. 옛 친구들의 집을 전전하면서도 자존심을 굽히지 않고, 자신의 방식대로 삶을 꾸려나가는 담담한 태도가 인상적이에요. 남들처럼 살지 못한다는 불안보다, 남들처럼 살아야 한다는 압박에 더 크게 답답함을 느끼는 사람이에요. 현실적인 손해를 눈앞에 두고도 자신이 그린 삶의 그림을 지우지 않는, 조용하지만 단단한 고집이 있죠. 현실에 순응하기보다, 조금 불편하더라도 자기만의 세계관을 지켜내는 걸 더 중요하게 여기는 타입이에요. 정해진 답을 따르기보다, 스스로 그린 삶의 지도를 믿는 전형적인 몽상가형 인물이에요.'},
+          {name:'월터 미티', film:'월터의 상상은 현실이 된다', blurb:'월터 미티는 하루 대부분을 정교한 상상 속에서 보내는 사람이에요. 눈앞의 조용한 일상 대신, 훨씬 더 용감하고 모험 가득한 자신의 모습을 머릿속으로 그려보는 데 익숙하죠. 오랫동안 그 상상은 그가 위험을 감수해볼 수 있는 유일한 공간이었는데, 어느 날 맡게 된 실제 임무가 그를 마침내 머릿속에서만 그리던 삶 쪽으로 떠밀어요. 흥미로운 건, 막상 움직이기 시작하자 공상을 만들어내던 바로 그 상상력이 현실의 불확실함을 헤쳐나가는 데 그대로 쓰인다는 점이에요. 특별한 배경이나 재능이 없어도, 그동안 원해왔던 걸 이제라도 행동으로 옮기겠다는 마음 하나면 충분했던 거죠. 실제로 위험한 상황에 놓여서도, 그는 위협보다 그 순간의 아름다움과 가능성을 먼저 알아차리는 사람이에요. 겉보기엔 평범하고 눈에 띄지 않아서 자주 과소평가되지만, 그 조용한 내면에는 누구도 짐작 못 한 야심이 자리하고 있었죠. 머릿속으로만 그리던 삶을 마침내 직접 살아보기로 한 그 결심이, 그를 전형적인 몽상가로 만들어요.'},
+        ]},
       innocent: {title:'동심 지킴이',
         personality:'따뜻하고 단순한 것에서 진짜 행복을 찾는 타입이에요. 복잡한 것보다 소박하고 다정한 이야기에 마음이 더 크게 움직이죠. 작은 친절이나 사소한 배려에도 오래 마음이 머무는 편이에요.',
         compatibility:'꾸밈없고 다정한 사람과 편안함을 느껴요. 계산 없이 진심으로 대해주는 사람이면 마음을 활짝 열게 돼요. 복잡한 관계보다는, 있는 그대로 편하게 대해줄 수 있는 사람과 훨씬 잘 맞아요.',
         strength:'사람을 있는 그대로 봐주는 순수함이에요. 당신 앞에서는 다들 방어를 내려놓게 되고, 꾸미지 않은 진심이 오히려 사람들의 마음을 여는 열쇠가 되죠.',
         lifeGoal:'복잡하고 화려한 삶보다 따뜻하고 편안한 삶을 지향해요. 큰 성취보다 소소한 행복이 쌓인 하루하루를 더 값지게 여겨요. 특별한 날이 아니어도 평범한 하루에서 행복을 찾을 줄 아는 사람이에요.',
         fanTrait:'따뜻하고 꾸밈없이 진심을 나누는',
-        charName:'초원', charFilm:'말아톤', charBlurb:'초원이는 세상을 복잡하게 해석하지 않고, 있는 그대로 순수하게 받아들이는 사람이에요. 자폐를 가진 초원이에게 세상은 계산이나 눈치의 영역이 아니라, 좋아하는 것에 온전히 몰입할 수 있는 공간이죠. 달리기를 시작하면 다른 생각 없이 그 순간에만 완전히 집중하는 힘이 있고, 그 순박한 몰입이 오히려 주변 사람들의 마음을 움직여요. 얼룩말 무늬를 좋아한다고 솔직하게 말하는 것처럼, 꾸미거나 숨기지 않고 자신의 감정을 그대로 드러내는 사람이에요. 복잡한 인간관계의 규칙을 잘 모르지만, 그 대신 누구보다 진심으로 사람을 대하는 따뜻함이 있죠. 결과보다 지금 하고 있는 일 자체에서 기쁨을 느끼고, 그 순수한 태도가 주변 사람들에게 오히려 큰 위로가 돼요. 세상의 복잡한 기준 대신 자신만의 속도와 방식으로 나아가는, 전형적인 순수한 마음의 소유자예요.'},
+        chars:[
+          {name:'초원', film:'말아톤', blurb:'초원이는 세상을 복잡하게 해석하지 않고, 있는 그대로 순수하게 받아들이는 사람이에요. 자폐를 가진 초원이에게 세상은 계산이나 눈치의 영역이 아니라, 좋아하는 것에 온전히 몰입할 수 있는 공간이죠. 달리기를 시작하면 다른 생각 없이 그 순간에만 완전히 집중하는 힘이 있고, 그 순박한 몰입이 오히려 주변 사람들의 마음을 움직여요. 얼룩말 무늬를 좋아한다고 솔직하게 말하는 것처럼, 꾸미거나 숨기지 않고 자신의 감정을 그대로 드러내는 사람이에요. 복잡한 인간관계의 규칙을 잘 모르지만, 그 대신 누구보다 진심으로 사람을 대하는 따뜻함이 있죠. 힘든 훈련을 반복해도 불평보다는 그 반복 자체에서 작은 기쁨을 찾아내는 우직함이 있고, 그 꾸준함이 결국 자신도 몰랐던 가능성을 열어줘요. 남들이 정한 속도나 기준에 맞추려 애쓰지 않고, 자기만의 리듬으로 나아가는 데서 오히려 더 큰 안정감을 느끼는 사람이에요. 결과보다 지금 하고 있는 일 자체에서 기쁨을 느끼고, 그 순수한 태도가 주변 사람들에게 오히려 큰 위로가 돼요. 세상의 복잡한 기준 대신 자신만의 속도와 방식으로 나아가는, 전형적인 순수한 마음의 소유자예요.'},
+          {name:'포레스트 검프', film:'포레스트 검프', blurb:'포레스트 검프는 역사적인 굵직한 사건들을 지나면서도, 처음 가졌던 순박한 태도를 한 번도 잃지 않는 사람이에요. 상대의 숨은 의도를 읽으려 하기보다, 자신이 보는 진실을 그대로 말하고 상대가 대하는 만큼만 되돌려주는, 계산 없는 태도로 살아가죠. 그런 태도 덕분에 자신을 향한 세상의 악의를 잘 눈치채지 못하고, 오히려 그럴 자격이 없어 보이는 사람들에게도 변함없이 다정함과 의리를 베풀어요. 특히 제니와 길에서 만난 친구들을 향한 마음은 조건 없이, 끝까지 이어지는 헌신에 가깝죠. 달리기든, 벤치에 앉아 기다리는 일이든, 약속을 지키는 일이든, 단순하고 반복되는 행동 속에서 진짜 기쁨을 찾아내고 그 꾸준함 자체를 하나의 성취로 여기는 사람이에요. 세상이 그에게 가르치려 드는 냉소적인 교훈들에도 좀처럼 물들지 않고, 어릴 때 품었던 다정한 세계관을 어른이 되어서도 그대로 지켜내죠. 세상이 어떻게 반응하든 상관없이 거리낌 없이 내어주는 이 꾸밈없는 진심이, 그를 전형적인 순수한 마음의 소유자로 만들어요.'},
+        ]},
       seeker: {title:'탐구자',
         personality:'"진짜" 이야기에 끌리는 타입이에요. 꾸며진 것보다 사실 그 자체에 흥미를 느끼고, 궁금한 건 끝까지 파고드는 성격이죠. 하나를 알게 되면 그 뒤에 숨은 배경까지 찾아보는 편이에요.',
         compatibility:'호기심을 존중해주는 사람과 잘 맞아요. 당신의 질문을 귀찮아하지 않고 같이 답을 찾아주는 사람이 좋은 인연이에요. 대충 아는 척하는 사람보다는, 모르면 모른다고 솔직히 말하는 사람과 더 신뢰가 쌓여요.',
         strength:'끝까지 파고드는 집요함이에요. 대충 아는 걸로 만족 못 하는 성격이 결국 진짜 답을 찾아내고, 남들이 지나친 사실 하나까지 놓치지 않는 꼼꼼함도 있죠.',
         lifeGoal:'믿고 넘어가는 삶보다 직접 확인하는 삶을 지향해요. 남이 알려준 답보다, 스스로 찾아낸 진실을 더 신뢰하는 사람이에요. 누가 뭐라 해도 결국 제 눈으로 확인해야 직성이 풀리는 편이죠.',
         fanTrait:'호기심이 많고 끝까지 파고드는',
-        charName:'서태윤', charFilm:'살인의 추억', charBlurb:'서태윤은 감이나 직관보다 증거와 사실을 믿는 형사예요. 지방 관행에 익숙한 동료들과 달리, 서류와 자료를 하나하나 다시 확인하고 논리적으로 사건을 재구성하려는 원칙주의자 타입이죠. 하나의 단서가 나오면 그걸로 끝내지 않고, 그 뒤에 숨은 맥락까지 파고드는 집요함이 있어요. 확실하지 않은 걸 확실한 척 넘어가는 걸 극도로 싫어하고, 스스로 납득할 때까지 계속 질문을 던지는 사람이에요. 사건이 미궁에 빠질수록 오히려 더 침착하게 처음부터 다시 짚어보는 끈기를 보여주죠. 감정적으로 흔들리는 순간에도 이성적인 판단을 놓지 않으려 애쓰고, 그 균형감이 그를 신뢰하게 만드는 이유이기도 해요. 답이 쉽게 나오지 않는 문제일수록 오히려 눈빛이 진지해지는, 전형적인 탐구자형 인물이에요.'},
+        chars:[
+          {name:'서태윤', film:'살인의 추억', blurb:'서태윤은 감이나 직관보다 증거와 사실을 믿는 형사예요. 지방 관행에 익숙한 동료들과 달리, 서류와 자료를 하나하나 다시 확인하고 논리적으로 사건을 재구성하려는 원칙주의자 타입이죠. 하나의 단서가 나오면 그걸로 끝내지 않고, 그 뒤에 숨은 맥락까지 파고드는 집요함이 있어요. 확실하지 않은 걸 확실한 척 넘어가는 걸 극도로 싫어하고, 스스로 납득할 때까지 계속 질문을 던지는 사람이에요. 사건이 미궁에 빠질수록 오히려 더 침착하게 처음부터 다시 짚어보는 끈기를 보여주죠. 동료들이 감으로 결론을 내리고 넘어가려 할 때조차, 혼자서라도 자료를 다시 뒤져보는 고집스러움이 있어요. 감정적으로 흔들리는 순간에도 이성적인 판단을 놓지 않으려 애쓰고, 그 균형감이 그를 신뢰하게 만드는 이유이기도 해요. 결국 답을 찾지 못한 채 끝나더라도, 대충 마무리 짓기보다는 끝까지 사실을 붙들고 있으려는 태도 자체가 그를 설명해주죠. 답이 쉽게 나오지 않는 문제일수록 오히려 눈빛이 진지해지는, 전형적인 탐구자형 인물이에요.'},
+          {name:'로버트 랭던', film:'다빈치 코드', blurb:'로버트 랭던은 설명되지 않은 상징이나 앞뒤가 안 맞는 역사적 사실을 그냥 넘어가지 못하는 사람이에요. 그 호기심 때문에 실제로 위험에 처하는 순간에도, 일단 눈앞에 놓인 질문은 끝까지 파헤쳐야 직성이 풀리죠. 답을 찾다 중간에 멈추는 건 그에게 선택지가 아니에요. 그럴듯한 추측이 아니라, 실제로 확인된 답을 원하는 사람이거든요. 학자로서 몸에 밴 습관대로 모든 걸 교차 검증하고, 근거가 충분히 뒷받침될 때까지는 편한 설명을 받아들이지 않아요. 강의실에서 그를 뛰어난 학자로 만들어주는 바로 그 집요함이, 쫓기는 상황에서도 침착하게 퍼즐을 풀어나가는 진짜 무기가 되죠. 소문이나 짐작보다 기록된 역사와 상징을 신뢰하는 태도 때문에, 그만 파고들라고 말리는 사람들과 부딪히는 일도 잦아요. 그를 움직이는 건 명성이나 보상이 아니라, 풀리지 않은 미스터리를 그대로 두지 못하는 불편함이에요. 스스로 확인하지 못한 답은 받아들이지 않는 이 태도야말로, 그를 전형적인 탐구자로 만드는 이유죠.'},
+        ]},
       warrior: {title:'신념가',
         personality:'역사와 대의를 소중히 여기는 타입이에요. 큰 흐름 속에서 자신의 자리를 고민하고, 옳다고 믿는 걸 위해 움직이는 사람이죠. 눈앞의 이익보다 원칙을 먼저 따지는 편이에요.',
         compatibility:'신념이 뚜렷한 사람과 서로 존중하며 잘 지내요. 당신의 원칙을 이해해주는 사람이면 든든한 동료가 될 거예요. 의견이 달라도 진지하게 논쟁해줄 수 있는 사람과 오히려 더 깊은 신뢰가 쌓이죠.',
         strength:'쉽게 흔들리지 않는 뚝심이에요. 한번 옳다고 믿으면 끝까지 밀고 나가는 힘이 있고, 다수의 의견에도 쉽게 휩쓸리지 않는 소신도 갖고 있죠.',
         lifeGoal:'그냥저냥 사는 삶보다 의미 있는 삶을 지향해요. 내가 왜 이렇게 사는지 스스로 설명할 수 있어야 한다고 믿는 사람이에요. 편한 길보다 옳다고 믿는 길을 택하는 쪽에 더 가깝죠.',
         fanTrait:'신념이 뚜렷하고 옳다고 믿는 걸 밀고 나가는',
-        charName:'송우석', charFilm:'변호인', charBlurb:'송우석은 원래 시류에 맞춰 사는 게 더 편했던 사람이에요. 하지만 부당한 일을 눈앞에서 목격한 뒤로는, 손해를 감수하더라도 옳다고 믿는 쪽에 서기로 마음을 바꾼 사람이죠. 한번 신념이 생기면 주변의 반대나 위협에도 쉽게 흔들리지 않고, 오히려 더 단단해지는 뚝심이 있어요. "계란으로 바위 치기"라는 걸 알면서도, 계란이 있어야 할 자리에 서는 걸 주저하지 않는 사람이에요. 법정에서 홀로 맞서는 순간에도 두려움보다 원칙을 지켜야 한다는 확신이 앞서고, 그 확신이 다른 사람들을 움직이는 힘이 되죠. 편한 길과 옳은 길 사이에서 늘 후자를 택하려 하고, 그 대가를 치르는 것도 감수하는 사람이에요. 개인의 이익보다 더 큰 가치를 위해 움직이는, 전형적인 신념가형 인물이에요.'},
+        chars:[
+          {name:'송우석', film:'변호인', blurb:'송우석은 원래 시류에 맞춰 사는 게 더 편했던 사람이에요. 하지만 부당한 일을 눈앞에서 목격한 뒤로는, 손해를 감수하더라도 옳다고 믿는 쪽에 서기로 마음을 바꾼 사람이죠. 한번 신념이 생기면 주변의 반대나 위협에도 쉽게 흔들리지 않고, 오히려 더 단단해지는 뚝심이 있어요. "계란으로 바위 치기"라는 걸 알면서도, 계란이 있어야 할 자리에 서는 걸 주저하지 않는 사람이에요. 법정에서 홀로 맞서는 순간에도 두려움보다 원칙을 지켜야 한다는 확신이 앞서고, 그 확신이 다른 사람들을 움직이는 힘이 되죠. 예전의 그였다면 절대 택하지 않았을 길이라는 걸 스스로도 잘 알기에, 그 변화가 더 값지게 느껴지는 사람이에요. 편한 길과 옳은 길 사이에서 늘 후자를 택하려 하고, 그 대가를 치르는 것도 감수하는 사람이에요. 자신이 잃을 걸 계산하기보다, 이 일을 하지 않았을 때 스스로를 어떻게 볼지를 더 신경 쓰는 쪽이죠. 개인의 이익보다 더 큰 가치를 위해 움직이는, 전형적인 신념가형 인물이에요.'},
+          {name:'윌리엄 월레스', film:'브레이브하트', blurb:'윌리엄 월레스는 처음엔 그저 평범하고 조용한 삶을 원했던 사람이에요. 하지만 사랑하는 사람에게 가해진 불의를 목격한 뒤로, 그 마음은 되돌릴 수 없이 바뀌어버리죠. 한번 대의를 품은 뒤로는 그걸 협상의 대상으로 두지 않고, 훨씬 더 크고 강한 군대 앞에서도 물러서기보다 맞서는 쪽을 택해요. 그의 신념은 요란한 구호로 드러나기보다, 대가가 뼈아프게 분명해지는 순간에도 흔들리지 않는 묵직한 태도로 나타나죠. 사람들을 움직이는 것도 화려한 연설이 아니라, 자신이 요구하는 걸 스스로 먼저 실천해 보이는 모습이에요. 그래서 그의 리더십은 억지로 만들어진 게 아니라, 스스로 증명해낸 것에 가깝죠. 안전이나 자기 보전은 그의 판단 기준에서 늘 원칙보다 아래에 있고, 모든 현실적인 이득이 반대 방향을 가리켜도 그 순서는 바뀌지 않아요. 결국 그는 승리보다, 옳다고 믿는 걸 끝까지 타협하지 않았다는 사실로 더 오래 기억되는 사람이죠. 승산과 상관없이 자신의 선을 지켜내는 이 태도야말로, 그를 전형적인 신념가로 만드는 이유예요.'},
+        ]},
       freeSpirit: {title:'자유로운 영혼',
         personality:'한 가지 장르에 갇히지 않는 타입이에요. 다양한 이야기를 골고루 즐기면서, 그때그때 끌리는 대로 선택하는 걸 좋아하죠. 정해진 취향보다 그 순간의 기분을 더 따르는 편이에요.',
         compatibility:'당신처럼 열린 사람과 잘 맞아요. 틀에 가두지 않고 있는 그대로 봐주는 사람이면 편안한 관계가 될 거예요. 관계에 규칙을 너무 많이 정하지 않는 사람과 오히려 더 자연스럽게 오래갈 수 있어요.',
         strength:'어디에도 얽매이지 않는 유연함이에요. 상황에 맞게 자유자재로 바뀌는 적응력이 당신의 무기고, 새로운 환경에도 크게 스트레스받지 않고 잘 녹아드는 편이죠.',
         lifeGoal:'한 가지 정답보다 다양한 가능성이 열린 삶을 지향해요. 하나로 규정되지 않는 삶이 당신에게는 더 자연스러워요. 지금의 선택이 평생 갈 필요는 없다고 믿는, 유연한 인생관을 가진 사람이에요.',
         fanTrait:'틀에 얽매이지 않고 자유롭게 선택하는',
-        charName:'혜원', charFilm:'리틀 포레스트', charBlurb:'혜원은 도시에서의 삶이 뜻대로 풀리지 않자, 미련 없이 고향으로 돌아온 사람이에요. 남들이 정해놓은 성공의 기준이나 속도에 맞추기보다, 자신의 리듬대로 계절을 나고 살아가는 방식을 택했죠. 사계절 내내 텃밭을 가꾸고 직접 요리를 하면서, 정해진 답 없이 그때그때 필요한 걸 스스로 찾아가는 유연함이 있어요. 도시와 시골, 성공과 실패 같은 이분법적인 틀에 자신을 가두지 않고, 그 사이를 자유롭게 오가는 걸 자연스럽게 받아들이는 사람이에요. 지금의 선택이 평생을 결정짓는다고 생각하지 않기 때문에, 언제든 다시 방향을 바꿀 수 있다는 여유를 갖고 있죠. 남들의 시선보다 자신이 지금 무엇을 느끼고 원하는지에 더 귀를 기울이는 타입이에요. 정해진 틀 없이 자기만의 속도로 살아가는, 전형적인 자유로운 영혼이에요.'},
+        chars:[
+          {name:'혜원', film:'리틀 포레스트', blurb:'혜원은 도시에서의 삶이 뜻대로 풀리지 않자, 미련 없이 고향으로 돌아온 사람이에요. 남들이 정해놓은 성공의 기준이나 속도에 맞추기보다, 자신의 리듬대로 계절을 나고 살아가는 방식을 택했죠. 사계절 내내 텃밭을 가꾸고 직접 요리를 하면서, 정해진 답 없이 그때그때 필요한 걸 스스로 찾아가는 유연함이 있어요. 도시와 시골, 성공과 실패 같은 이분법적인 틀에 자신을 가두지 않고, 그 사이를 자유롭게 오가는 걸 자연스럽게 받아들이는 사람이에요. 지금의 선택이 평생을 결정짓는다고 생각하지 않기 때문에, 언제든 다시 방향을 바꿀 수 있다는 여유를 갖고 있죠. 도시로 돌아갈지, 여기 머물지를 두고도 조급하게 결론 내리지 않고, 스스로 납득될 때까지 충분히 시간을 두고 지켜보는 사람이에요. 남들의 시선보다 자신이 지금 무엇을 느끼고 원하는지에 더 귀를 기울이는 타입이에요. 정해진 틀 없이 자기만의 속도로 살아가는, 전형적인 자유로운 영혼이에요.'},
+          {name:'크리스토퍼 매캔들리스', film:'인투 더 와일드', blurb:'크리스토퍼 매캔들리스는 안정적인 미래와 넉넉한 형편이 보장된 삶을 스스로 걸어 나온 사람이에요. 단순한 반항심 때문이 아니라, 남이 정해놓은 성공의 기준으로 사는 삶은 진짜 자신의 삶이 아니라는 확신이 있었기 때문이죠. 가진 돈을 다 기부하고 이름까지 바꾼 뒤 광야로 떠나는 건 일시적인 충동이 아니라, 온전히 자기 방식대로 살아보겠다는 단호한 결심이었어요. 정해진 계획보다 그때그때의 호기심과 직감을 따라 움직이고, 대부분의 사람이 불편해하는 불확실함을 오히려 편안하게 받아들이는 사람이에요. 여정의 모든 순간은 애초에 오래 머무를 생각 없이 스쳐 지나가도록 설계돼 있고, 그렇다고 그 시간이 덜 의미 있다고 여기지도 않아요. 이런 개방성에는 분명한 위험이 따르고, 실제로 그는 자신이 마주한 것들을 다소 과소평가하기도 했어요. 그럼에도 각본 없는 길을 택한 걸 후회하지 않는 사람이었죠. 누구의 기준도 아닌 자신만의 삶의 방식을 지켜내려는 이 태도야말로, 그를 전형적인 자유로운 영혼으로 만드는 이유예요.'},
+        ]},
     },
   },
   en: {
@@ -470,15 +503,15 @@ const I18N = {
     mode3PickedLabel: 'Your picks',
     mode3SubmitBtn: 'Analyze',
     mode3RestartBtn: 'Start Over',
-    mode3RecLabel: 'Your movie match',
+    mode3RecLabel: 'Recommended for You',
     mode3ReasonTemplate: (trait) => `People who are ${trait} loved this movie`,
     mode3NeedMore: 'Pick at least 3 movies.',
-    mode3VerdictTitle: (charName) => `You're the <b>${charName}</b> type`,
+    mode3VerdictTitle: (charName) => `You're the <span class="mode3-hl">${charName}</span> type`,
     mode3CommonIntro: (titlesStr, traitStr) => `What <b>${titlesStr}</b> have in common is that they're all <b>${traitStr}</b>.`,
     mode3CommonIntroFallback: (titlesStr) => `<b>${titlesStr}</b> clearly have something in common.`,
-    mode3CharBlurbTemplate: (charName, charFilm, blurb) => `<b>${charName}</b> — from "${charFilm}." ${blurb}`,
+    mode3CharBlurbTemplate: (charName, charFilm, blurb) => `<span class="mode3-hl">${charName}</span> — from "${charFilm}." ${blurb}`,
     mode3LabelPersonality: "🎭 You're someone like this",
-    mode3LabelCompat: (charName) => `💞 The type that suits you is <b>${charName}</b>`,
+    mode3LabelCompat: (charName) => `💞 The type that suits you is <span class="mode3-hl">${charName}</span>`,
     mode3LabelStrength: '💪 The strength you carry is',
     mode3LabelLifeGoal: '🧭 This is the life you dream of',
     mode3ShareBtn: '📤 Share with a friend',
@@ -492,77 +525,77 @@ const I18N = {
         strength:"Decisiveness and drive. While others are still weighing options, you're already a step ahead, and you make your next move faster than most even in a crisis.",
         lifeGoal:'You value experience over stability — a good story beats a safe regret. More than anything, you want to spend your life saying "I tried it" more often than not.',
         fanTrait:'adventurous and quick to act without hesitation',
-        charName:'Indiana Jones', charFilm:'Raiders of the Lost Ark', charBlurb:'Indiana Jones is a mild-mannered archaeology professor by day, but the moment there\'s a lost relic and real danger involved, a completely different person takes over. He\'d rather improvise a plan on the spot than sit around preparing for every contingency, trusting his instincts and experience to get him through. Snakes, booby traps, and armed rivals don\'t stop him — if anything, the bigger the obstacle, the more determined he becomes. He\'s not reckless for its own sake; he calculates risk quickly and moves before hesitation can set in, which is exactly why he\'s usually a step ahead of everyone chasing the same prize. Underneath the whip and the fedora is someone who genuinely loves the chase more than the reward itself. He picks himself up fast after every setback, treating failure as simply part of the story rather than a reason to stop. That restless curiosity, paired with real courage under pressure, is what makes him the definitive adventurer archetype.'},
+        chars:[{name:'Indiana Jones', film:'Raiders of the Lost Ark', blurb:'Indiana Jones is a mild-mannered archaeology professor by day, but the moment there\'s a lost relic and real danger involved, a completely different person takes over. He\'d rather improvise a plan on the spot than sit around preparing for every contingency, trusting his instincts and experience to get him through. Snakes, booby traps, and armed rivals don\'t stop him — if anything, the bigger the obstacle, the more determined he becomes. He\'s not reckless for its own sake; he calculates risk quickly and moves before hesitation can set in, which is exactly why he\'s usually a step ahead of everyone chasing the same prize. Underneath the whip and the fedora is someone who genuinely loves the chase more than the reward itself. He picks himself up fast after every setback, treating failure as simply part of the story rather than a reason to stop. That restless curiosity, paired with real courage under pressure, is what makes him the definitive adventurer archetype.'}]},
       entertainer: {title:'The Entertainer',
         personality:"You can't stand a heavy mood. You find the funny angle in any room and naturally loosen things up. You rarely show it when you're struggling yourself — you check on everyone else's mood first.",
         compatibility:'You balance well with someone thoughtful and grounded. Someone who genuinely laughs at your jokes is a keeper, and it helps even more to have someone who occasionally asks how you\'re really doing.',
         strength:"You change the temperature of a room. Awkward silences don't survive long around you, and you have a knack for breaking the ice even among total strangers.",
         lifeGoal:"You'd rather live joyfully than seriously — every day should have some fun in it. Looking back, you want to remember a life full of laughter more than anything else.",
         fanTrait:'funny and great at lifting the mood',
-        charName:'Genie', charFilm:'Aladdin', charBlurb:'Genie has spent centuries trapped in a lamp, yet somehow that\'s made him funnier, not bitter — he turns even his own confinement into a bit. The moment tension rises in a room, he\'s already there with a joke, a song, or a ridiculous impression to cut through it, because he genuinely can\'t stand watching people stay uncomfortable. Even while helping Aladdin navigate an impossible situation, he rarely lets his own feelings about it show, choosing instead to keep the energy light for everyone else. His comic timing isn\'t just noise, either — it comes from paying close attention to people and reading exactly what a moment needs. Underneath the constant jokes is real loyalty; when it matters, he shows up for his friends without hesitation. He\'s endlessly adaptable, shape-shifting into whatever the situation calls for, which makes him magnetic company in almost any group. That instinct to lighten a room and lift the people in it is exactly what makes him the entertainer archetype.'},
+        chars:[{name:'Genie', film:'Aladdin', blurb:'Genie has spent centuries trapped in a lamp, yet somehow that\'s made him funnier, not bitter — he turns even his own confinement into a bit. The moment tension rises in a room, he\'s already there with a joke, a song, or a ridiculous impression to cut through it, because he genuinely can\'t stand watching people stay uncomfortable. Even while helping Aladdin navigate an impossible situation, he rarely lets his own feelings about it show, choosing instead to keep the energy light for everyone else. His comic timing isn\'t just noise, either — it comes from paying close attention to people and reading exactly what a moment needs. Underneath the constant jokes is real loyalty; when it matters, he shows up for his friends without hesitation. He\'s endlessly adaptable, shape-shifting into whatever the situation calls for, which makes him magnetic company in almost any group. That instinct to lighten a room and lift the people in it is exactly what makes him the entertainer archetype.'}]},
       empath: {title:'The Empath',
         personality:"You look closely at people and feelings, noticing what's left unsaid, and you love a deep conversation. Even the smallest change in someone's tone doesn't escape you.",
         compatibility:'You do well with someone who expresses their feelings openly — mutual honesty feels safer than assumed understanding. A relationship deepens fast with someone who doesn\'t take your thoughtfulness for granted.',
         strength:"Empathy. Your sensitivity to what people really feel is why they gravitate toward you, and you're often the person people trust with their hardest stories.",
         lifeGoal:"You value a few deep connections over many shallow ones. You'd rather have a handful of people who truly get you than a big circle that barely does.",
         fanTrait:'emotionally attuned and drawn to deep conversation',
-        charName:'Amélie', charFilm:'Amélie', charBlurb:'Amélie notices what everyone else walks past — the way someone\'s shoulders drop when they\'re disappointed, or the small habit that reveals what a stranger secretly longs for. She spends far more energy quietly observing the world than participating loudly in it, which gives her an almost uncanny read on other people\'s inner lives. Rather than confronting problems directly, she prefers to engineer small, anonymous acts of kindness that nudge someone\'s life gently back toward happiness. That indirect, careful way of caring says a lot about her — she wants to help, but she\'s cautious about being seen or vulnerable herself. Ironically, the person who understands everyone else\'s hidden feelings so well struggles to name and act on her own. Her attention to tiny details isn\'t random; it comes from a deep belief that small things carry real emotional weight. That quiet, detail-oriented tenderness toward others is what makes her the definitive empath archetype.'},
+        chars:[{name:'Amélie', film:'Amélie', blurb:'Amélie notices what everyone else walks past — the way someone\'s shoulders drop when they\'re disappointed, or the small habit that reveals what a stranger secretly longs for. She spends far more energy quietly observing the world than participating loudly in it, which gives her an almost uncanny read on other people\'s inner lives. Rather than confronting problems directly, she prefers to engineer small, anonymous acts of kindness that nudge someone\'s life gently back toward happiness. That indirect, careful way of caring says a lot about her — she wants to help, but she\'s cautious about being seen or vulnerable herself. Ironically, the person who understands everyone else\'s hidden feelings so well struggles to name and act on her own. Her attention to tiny details isn\'t random; it comes from a deep belief that small things carry real emotional weight. That quiet, detail-oriented tenderness toward others is what makes her the definitive empath archetype.'}]},
       thrillSeeker: {title:'The Thrill-Seeker',
         personality:"You actually enjoy a good scare. Tension makes your heart race, and unpredictable turns pull you in. A story you can't predict the ending of grips you far more than a safe, familiar one.",
         compatibility:"You click with someone fearless enough to jump in with you — overly cautious types slow you down. The best match says \"I'm in\" the moment you suggest something spontaneous.",
         strength:"A calm that shows up right when things get intense — you're already moving while others freeze, and you treat the unexpected as a fun twist rather than a problem.",
         lifeGoal:"You'd rather live an exciting life than a safe one — an unpredictable day feels more alive. Even buckled in, you're always more curious about what's around the next corner than the view outside.",
         fanTrait:'thrill-loving and fearless in the face of tension',
-        charName:'Ethan Hunt', charFilm:'Mission: Impossible', charBlurb:'Ethan Hunt treats an assignment everyone else calls impossible as simply the correct starting point. He doesn\'t wait for a safer option to appear — when a plan falls apart mid-mission, he improvises a new one in real time, often turning himself into the backup plan. Where most people would pause to reassess after a setback, he uses that same moment of chaos to move faster, because hesitation is what actually gets people killed in his line of work. He trusts his team completely, but he\'s also willing to take on the most dangerous part of any operation himself. Physical danger doesn\'t rattle him the way it should — heights, deadlines, and armed opposition register more as puzzles to solve than threats to fear. That said, he\'s not reckless: every stunt is backed by planning and skill, even if it looks like pure instinct from the outside. That combination of fearlessness and loyalty under extreme pressure is exactly what defines the thrill-seeker archetype.'},
+        chars:[{name:'Ethan Hunt', film:'Mission: Impossible', blurb:'Ethan Hunt treats an assignment everyone else calls impossible as simply the correct starting point. He doesn\'t wait for a safer option to appear — when a plan falls apart mid-mission, he improvises a new one in real time, often turning himself into the backup plan. Where most people would pause to reassess after a setback, he uses that same moment of chaos to move faster, because hesitation is what actually gets people killed in his line of work. He trusts his team completely, but he\'s also willing to take on the most dangerous part of any operation himself. Physical danger doesn\'t rattle him the way it should — heights, deadlines, and armed opposition register more as puzzles to solve than threats to fear. That said, he\'s not reckless: every stunt is backed by planning and skill, even if it looks like pure instinct from the outside. That combination of fearlessness and loyalty under extreme pressure is exactly what defines the thrill-seeker archetype.'}]},
       romantic: {title:'The Romantic',
         personality:'You treasure butterflies and emotional arcs, finding meaning in small moments and sincerity in relationships. You remember anniversaries and tiny details most people forget.',
         compatibility:"You do well with someone who isn't stingy with affection — small gestures returned in kind keep things going. You'll stay far more comfortable with someone whose warmth shows, even over someone quietly deep.",
         strength:'You cherish people and moments — memories with you tend to stay especially vivid, and you have a gift for making people feel like they truly matter.',
         lifeGoal:"You'd rather live a life that leaves feeling behind than one optimized for efficiency. You believe what stays with you isn't the outcome, but how it felt at the time.",
         fanTrait:'sentimental and openly affectionate',
-        charName:'Jack Dawson', charFilm:'Titanic', charBlurb:'Jack Dawson has almost nothing material to offer, yet he gives everything he has to the people and moments in front of him. He falls for Rose almost immediately, but what makes him a romantic isn\'t the speed of it — it\'s the total sincerity, the way he treats every hour together as something worth fully showing up for. He doesn\'t calculate whether a relationship is practical; he simply follows what he feels and says so directly, which is rare enough to be startling to someone used to a more guarded world. Even in the most dire circumstances, he keeps choosing warmth and honesty over self-preservation. His way of living — sketching strangers, dancing in steerage, treasuring small unplanned moments — reveals someone who finds meaning in experience rather than possessions. He doesn\'t need permanence to consider something meaningful; a single night can matter as much to him as a lifetime would to someone else. That capacity to love fully and without hedging is what makes him the archetypal romantic.'},
+        chars:[{name:'Jack Dawson', film:'Titanic', blurb:'Jack Dawson has almost nothing material to offer, yet he gives everything he has to the people and moments in front of him. He falls for Rose almost immediately, but what makes him a romantic isn\'t the speed of it — it\'s the total sincerity, the way he treats every hour together as something worth fully showing up for. He doesn\'t calculate whether a relationship is practical; he simply follows what he feels and says so directly, which is rare enough to be startling to someone used to a more guarded world. Even in the most dire circumstances, he keeps choosing warmth and honesty over self-preservation. His way of living — sketching strangers, dancing in steerage, treasuring small unplanned moments — reveals someone who finds meaning in experience rather than possessions. He doesn\'t need permanence to consider something meaningful; a single night can matter as much to him as a lifetime would to someone else. That capacity to love fully and without hedging is what makes him the archetypal romantic.'}]},
       strategist: {title:'The Strategist',
         personality:"You love the moment a puzzle clicks into place — piecing clues together to find your own answer. You'd much rather work out the reasoning yourself than just be told the conclusion.",
         compatibility:'You\'re complemented well by someone intuitive and free — they add unexpected fun to your plans. You get along even better with someone who respects your logic instead of being purely spontaneous.',
         strength:"Analytical depth — you notice the details everyone else missed, and you're just as good at breaking down something complicated so it actually makes sense.",
         lifeGoal:"You'd rather understand your way through life than just go by gut feeling. It has to make sense to really become yours — you can't stand leaving something half-understood.",
         fanTrait:'logical and methodical about finding answers',
-        charName:'Sherlock Holmes', charFilm:'Sherlock Holmes', charBlurb:'Sherlock Holmes reads a room the way most people read a sentence — instantly, and with far more information extracted than anyone expects. He doesn\'t rely on hunches; every conclusion he reaches is built from a chain of small observed details he\'s trained himself to never overlook. While others react emotionally to a crime scene, he stays detached enough to actually see it clearly, treating the puzzle itself as the priority. He\'s most alive when a case seems unsolvable, because that\'s exactly when his method of relentless, structured reasoning has room to prove itself. His confidence can come across as arrogance, but it\'s earned — he\'s rarely wrong precisely because he refuses to guess when he can verify. He explains his reasoning aloud not to show off, but because logic only feels complete to him once it\'s been laid out step by step. That relentless, evidence-first way of thinking is exactly what makes him the definitive strategist.'},
+        chars:[{name:'Sherlock Holmes', film:'Sherlock Holmes', blurb:'Sherlock Holmes reads a room the way most people read a sentence — instantly, and with far more information extracted than anyone expects. He doesn\'t rely on hunches; every conclusion he reaches is built from a chain of small observed details he\'s trained himself to never overlook. While others react emotionally to a crime scene, he stays detached enough to actually see it clearly, treating the puzzle itself as the priority. He\'s most alive when a case seems unsolvable, because that\'s exactly when his method of relentless, structured reasoning has room to prove itself. His confidence can come across as arrogance, but it\'s earned — he\'s rarely wrong precisely because he refuses to guess when he can verify. He explains his reasoning aloud not to show off, but because logic only feels complete to him once it\'s been laid out step by step. That relentless, evidence-first way of thinking is exactly what makes him the definitive strategist.'}]},
       dreamer: {title:'The Dreamer',
         personality:"You love imagining worlds beyond this one. When others say something's impossible, you're already picturing how it could work. There are usually a few different worlds running in your head at once.",
         compatibility:'Grounded people help your ideas become real — you like someone who gets curious with you instead of laughing it off. You click especially well with someone who\'ll listen to your wildest idea with genuine interest.',
         strength:"Imagination — the ability to see possibilities no one else can yet, and a knack for finding a new story in things everyone else finds boring.",
         lifeGoal:"You'd rather chase an imagined path than follow a set one. You're drawn to the road no one's walked yet, and you trust the map you drew yourself more than the one everyone else follows.",
         fanTrait:'imaginative and always picturing new possibilities',
-        charName:'Walter Mitty', charFilm:'The Secret Life of Walter Mitty', charBlurb:'Walter Mitty spends most of his days drifting into elaborate daydreams, imagining a braver, more adventurous version of his own life instead of living the quiet one in front of him. For a long time, that imagination was the only place he let himself take risks — until a real assignment finally pushes him to chase the extraordinary life he\'d only ever pictured in his head. What\'s notable is that once he actually starts moving, the same imaginative instinct that built his daydreams turns out to be exactly what helps him navigate real uncertainty. He doesn\'t need a dramatic backstory or special skill to begin — just a willingness to finally act on what he\'s always wanted. Even amid real danger, his instinct is still to notice beauty and possibility in the moment rather than only the risk in it. He\'s often underestimated because he seems unremarkable on the surface, but that quiet interior life turns out to hold more ambition than anyone assumed. That willingness to finally live out what he once only dreamed is what makes him the archetypal dreamer.'},
+        chars:[{name:'Walter Mitty', film:'The Secret Life of Walter Mitty', blurb:'Walter Mitty spends most of his days drifting into elaborate daydreams, imagining a braver, more adventurous version of his own life instead of living the quiet one in front of him. For a long time, that imagination was the only place he let himself take risks — until a real assignment finally pushes him to chase the extraordinary life he\'d only ever pictured in his head. What\'s notable is that once he actually starts moving, the same imaginative instinct that built his daydreams turns out to be exactly what helps him navigate real uncertainty. He doesn\'t need a dramatic backstory or special skill to begin — just a willingness to finally act on what he\'s always wanted. Even amid real danger, his instinct is still to notice beauty and possibility in the moment rather than only the risk in it. He\'s often underestimated because he seems unremarkable on the surface, but that quiet interior life turns out to hold more ambition than anyone assumed. That willingness to finally live out what he once only dreamed is what makes him the archetypal dreamer.'}]},
       innocent: {title:'The Warm Heart',
         personality:'You find real happiness in warm, simple things. A gentle story moves you more than a complicated one, and even a small kindness stays with you a long time.',
         compatibility:'You feel at ease with someone unguarded and kind — sincerity without calculation opens you right up. You do far better with someone who treats you simply and warmly than with anything complicated.',
         strength:'A purity that sees people as they are — everyone drops their guard around you, and your unfiltered sincerity is exactly what puts people at ease.',
         lifeGoal:"You'd rather live warm and comfortable than complicated and grand. Small daily happiness means more to you than one big achievement — you know how to find joy in an ordinary day.",
         fanTrait:'warm and sincere without pretense',
-        charName:'Forrest Gump', charFilm:'Forrest Gump', charBlurb:'Forrest Gump moves through extraordinary historical moments without ever losing the plain sincerity he started with. He doesn\'t strategize or read hidden motives into people — he simply tells the truth as he sees it and treats others exactly as they treat him, without calculation. That lack of cynicism means he rarely notices the cruelty aimed at him, and instead keeps offering warmth and loyalty even to people who don\'t deserve it. His devotion, especially to Jenny and to the friends he makes along the way, is total and largely unconditional. He finds genuine joy in simple, repeated acts — running, sitting on a bench, keeping a promise — treating consistency itself as a kind of quiet accomplishment. He\'s remarkably resistant to being changed by the world\'s harsher lessons, holding onto the same gentle worldview from childhood all the way through adulthood. That unfiltered, unguarded sincerity — offered freely regardless of how the world responds — is exactly what defines the innocent archetype.'},
+        chars:[{name:'Forrest Gump', film:'Forrest Gump', blurb:'Forrest Gump moves through extraordinary historical moments without ever losing the plain sincerity he started with. He doesn\'t strategize or read hidden motives into people — he simply tells the truth as he sees it and treats others exactly as they treat him, without calculation. That lack of cynicism means he rarely notices the cruelty aimed at him, and instead keeps offering warmth and loyalty even to people who don\'t deserve it. His devotion, especially to Jenny and to the friends he makes along the way, is total and largely unconditional. He finds genuine joy in simple, repeated acts — running, sitting on a bench, keeping a promise — treating consistency itself as a kind of quiet accomplishment. He\'s remarkably resistant to being changed by the world\'s harsher lessons, holding onto the same gentle worldview from childhood all the way through adulthood. That unfiltered, unguarded sincerity — offered freely regardless of how the world responds — is exactly what defines the innocent archetype.'}]},
       seeker: {title:'The Seeker',
         personality:"You're drawn to true stories — real facts interest you more than fiction, and once curious, you dig all the way down. Learning one thing usually sends you looking for the story behind it.",
         compatibility:"You do well with someone who respects your curiosity — a good match digs for answers with you instead of brushing you off. Trust builds faster with someone who admits what they don't know instead of faking it.",
         strength:"Persistence — you're never satisfied with a half-known answer, which is exactly how you find the real one, and you catch the one detail everyone else skipped past.",
         lifeGoal:"You'd rather verify things yourself than take them on faith. You trust a truth you found yourself more than any answer someone handed you — you need to see it to believe it.",
         fanTrait:'curious and relentless about digging deeper',
-        charName:'Robert Langdon', charFilm:'The Da Vinci Code', charBlurb:'Robert Langdon can\'t leave a symbol unexplained or a historical inconsistency unexamined, even when doing so puts him in real danger. Once a question is in front of him, stopping partway through simply isn\'t an option — he needs the actual answer, not a plausible guess. His academic training means he cross-references everything, refusing to accept a convenient explanation until the evidence genuinely supports it. That same instinct that makes him excellent in a lecture hall becomes a real asset under pressure, since he keeps working the puzzle methodically even while being chased. He trusts documented history and symbolism over rumor or assumption, which sometimes puts him at odds with people who\'d rather he stop digging. What drives him isn\'t fame or reward — it\'s a genuine discomfort with unresolved mysteries. That refusal to accept an answer he hasn\'t personally verified is exactly what makes him the definitive seeker.'},
+        chars:[{name:'Robert Langdon', film:'The Da Vinci Code', blurb:'Robert Langdon can\'t leave a symbol unexplained or a historical inconsistency unexamined, even when doing so puts him in real danger. Once a question is in front of him, stopping partway through simply isn\'t an option — he needs the actual answer, not a plausible guess. His academic training means he cross-references everything, refusing to accept a convenient explanation until the evidence genuinely supports it. That same instinct that makes him excellent in a lecture hall becomes a real asset under pressure, since he keeps working the puzzle methodically even while being chased. He trusts documented history and symbolism over rumor or assumption, which sometimes puts him at odds with people who\'d rather he stop digging. What drives him isn\'t fame or reward — it\'s a genuine discomfort with unresolved mysteries. That refusal to accept an answer he hasn\'t personally verified is exactly what makes him the definitive seeker.'}]},
       warrior: {title:'The Believer',
         personality:'You value history and cause, thinking about your place in the bigger picture and acting on what you believe is right. Principle tends to come before convenience for you.',
         compatibility:"You get along well with someone equally principled — a partner who understands your convictions becomes a steady ally. Trust actually deepens with someone who'll argue their case seriously instead of just agreeing.",
         strength:"An unshakeable resolve — once you believe something's right, you follow through, and you don't get swept up just because the majority thinks otherwise.",
         lifeGoal:"You'd rather live a meaningful life than just get by — you want to be able to explain why you live the way you do. You lean toward the right path over the easy one.",
         fanTrait:'principled and resolute about what they believe',
-        charName:'William Wallace', charFilm:'Braveheart', charBlurb:'William Wallace starts out wanting nothing more than a quiet, ordinary life, but injustice done to the people he loves changes that permanently. Once he commits to a cause, he doesn\'t treat it as negotiable — even facing an army with far greater numbers and resources, he chooses to stand rather than fold. His conviction isn\'t loud posturing; it\'s the kind of resolve that holds up even when the personal cost becomes brutally clear. He inspires the people around him less through speeches than through visibly living out what he asks of others, which is what makes his leadership feel earned. Comfort and self-preservation consistently rank below principle in his decision-making, even when every practical incentive points the other way. He\'s remembered less for winning than for refusing to compromise what he believed was right, even at ultimate cost. That willingness to hold a line regardless of the odds is exactly what makes him the archetypal warrior.'},
+        chars:[{name:'William Wallace', film:'Braveheart', blurb:'William Wallace starts out wanting nothing more than a quiet, ordinary life, but injustice done to the people he loves changes that permanently. Once he commits to a cause, he doesn\'t treat it as negotiable — even facing an army with far greater numbers and resources, he chooses to stand rather than fold. His conviction isn\'t loud posturing; it\'s the kind of resolve that holds up even when the personal cost becomes brutally clear. He inspires the people around him less through speeches than through visibly living out what he asks of others, which is what makes his leadership feel earned. Comfort and self-preservation consistently rank below principle in his decision-making, even when every practical incentive points the other way. He\'s remembered less for winning than for refusing to compromise what he believed was right, even at ultimate cost. That willingness to hold a line regardless of the odds is exactly what makes him the archetypal warrior.'}]},
       freeSpirit: {title:'The Free Spirit',
         personality:"You're not boxed into one genre — you enjoy a wide range of stories and pick whatever calls to you in the moment. You follow the mood of the moment more than any fixed taste.",
         compatibility:'You do well with someone equally open — a relationship works best when neither of you tries to define the other. Things stay natural longer with someone who doesn\'t over-structure the relationship with rules.',
         strength:'Flexibility — you adapt freely to whatever the moment calls for, and you settle into new environments without much stress at all.',
         lifeGoal:"You'd rather keep your options open than settle on one right answer. A life that can't be pinned down feels more natural to you — today's choice doesn't have to last forever, and that's exactly how you like it.",
         fanTrait:'unconventional and free in how they choose',
-        charName:'Christopher McCandless', charFilm:'Into the Wild', charBlurb:'Christopher McCandless walks away from a comfortable, conventional future — family wealth, an expected career path — because none of it matches what he actually wants from his life. He doesn\'t reject structure out of rebellion alone; he genuinely believes that a life measured by other people\'s definitions of success isn\'t worth living. Giving away his savings and renaming himself before heading into the wilderness isn\'t a phase for him — it\'s a deliberate attempt to live entirely on his own terms. He moves through the country following curiosity and instinct rather than a fixed plan, comfortable with uncertainty in a way most people aren\'t. Every stop along his journey is temporary by design; he doesn\'t need permanence to feel like a chapter mattered. That openness comes with real risk, and he underestimates some of what he\'s up against — but even so, he never regrets choosing the unscripted path. That refusal to be defined by anyone else\'s blueprint for how to live is exactly what makes him the archetypal free spirit.'},
+        chars:[{name:'Christopher McCandless', film:'Into the Wild', blurb:'Christopher McCandless walks away from a comfortable, conventional future — family wealth, an expected career path — because none of it matches what he actually wants from his life. He doesn\'t reject structure out of rebellion alone; he genuinely believes that a life measured by other people\'s definitions of success isn\'t worth living. Giving away his savings and renaming himself before heading into the wilderness isn\'t a phase for him — it\'s a deliberate attempt to live entirely on his own terms. He moves through the country following curiosity and instinct rather than a fixed plan, comfortable with uncertainty in a way most people aren\'t. Every stop along his journey is temporary by design; he doesn\'t need permanence to feel like a chapter mattered. That openness comes with real risk, and he underestimates some of what he\'s up against — but even so, he never regrets choosing the unscripted path. That refusal to be defined by anyone else\'s blueprint for how to live is exactly what makes him the archetypal free spirit.'}]},
     },
   },
 };
@@ -2502,6 +2535,14 @@ function pickArchetype(picks){
   return best || 'freeSpirit';
 }
 
+/* 유형(archetype)마다 캐릭터가 하나로 고정되지 않도록, chars 배열(한국 영화 + 해외 영화 캐릭터) 중
+   seedNum으로 하나를 결정적으로 골라요. 같은 영화를 고르면 항상 같은 결과가 나오게 돼요. */
+function pickArchetypeChar(chars, seedNum){
+  if(!chars || !chars.length) return {name:'', film:'', blurb:''};
+  const idx = ((seedNum % chars.length) + chars.length) % chars.length;
+  return chars[idx];
+}
+
 /* 고르신 영화들의 공통점(장르) 설명용 — 결과를 결정한 장르 중, 실제로 픽에 많이 등장한 순으로 이름을 뽑아요 */
 function commonGenreNames(picks, bucketGenres){
   if(!bucketGenres || !bucketGenres.length || !genreMap) return [];
@@ -2566,6 +2607,13 @@ async function runMode3Analyze(){
     const titlesStr = mode3Picked.map(p=>p.title).join(', ');
     const genreNames = commonGenreNames(mode3Picked, bucket ? bucket.genres : []);
 
+    // 고르신 영화 id 합을 시드로 써서, 같은 유형이라도 한국 영화 캐릭터 하나로 고정되지 않고
+    // chars 배열(한국 영화 + 해외 영화 캐릭터) 중 하나를 골라 다양성을 줘요. 같은 영화를 다시
+    // 고르면 같은 결과가 나오도록 결정적으로 계산해요.
+    const seedNum = mode3Picked.reduce((s,p)=> s + p.id, 0);
+    const char = pickArchetypeChar(archetype.chars, seedNum);
+    const compatChar = pickArchetypeChar(compatArchetype.chars, seedNum + 1);
+
     const common = $('#mode3Common');
     common.innerHTML = `<div>${genreNames.length
       ? t('mode3CommonIntro')(titlesStr, genreNames.join(state.lang==='ko' ? '·' : ', '))
@@ -2575,19 +2623,28 @@ async function runMode3Analyze(){
     verdict.classList.remove('negative');
     verdict.innerHTML = `
       <div>
-        <div class="mode3-verdict-title">${t('mode3VerdictTitle')(archetype.charName)}</div>
-        <div class="mode3-char-blurb">${t('mode3CharBlurbTemplate')(archetype.charName, archetype.charFilm, archetype.charBlurb)}</div>
-        <div class="mode3-trait"><b>${t('mode3LabelPersonality')}</b><br>${archetype.personality}</div>
+        <div class="mode3-verdict-title">${t('mode3VerdictTitle')(char.name)}</div>
+        <div class="mode3-char-blurb">${t('mode3CharBlurbTemplate')(char.name, char.film, char.blurb)}</div>
         <div class="mode3-trait">
-          <b>${t('mode3LabelCompat')(compatArchetype.charName)}</b>
-          <div class="mode3-char-blurb">${t('mode3CharBlurbTemplate')(compatArchetype.charName, compatArchetype.charFilm, compatArchetype.charBlurb)}</div>
-          <br>${archetype.compatibility}
+          <span class="mode3-trait-label">${t('mode3LabelPersonality')}</span>
+          <p>${archetype.personality}</p>
         </div>
-        <div class="mode3-trait"><b>${t('mode3LabelStrength')}</b><br>${archetype.strength}</div>
-        <div class="mode3-trait"><b>${t('mode3LabelLifeGoal')}</b><br>${archetype.lifeGoal}</div>
+        <div class="mode3-trait">
+          <span class="mode3-trait-label">${t('mode3LabelCompat')(compatChar.name)}</span>
+          <div class="mode3-char-blurb">${t('mode3CharBlurbTemplate')(compatChar.name, compatChar.film, compatChar.blurb)}</div>
+          <p>${archetype.compatibility}</p>
+        </div>
+        <div class="mode3-trait">
+          <span class="mode3-trait-label">${t('mode3LabelStrength')}</span>
+          <p>${archetype.strength}</p>
+        </div>
+        <div class="mode3-trait">
+          <span class="mode3-trait-label">${t('mode3LabelLifeGoal')}</span>
+          <p>${archetype.lifeGoal}</p>
+        </div>
       </div>
     `;
-    mode3LastResult = { archetypeKey, charName: archetype.charName };
+    mode3LastResult = { archetypeKey, charName: char.name };
     const list = $('#mode3RecList');
     list.innerHTML='';
     if(bucket){
@@ -2599,7 +2656,7 @@ async function runMode3Analyze(){
       const reasonText = t('mode3ReasonTemplate')(archetype.fanTrait);
       cards.forEach(movie=> list.appendChild(renderSimpleTicketCard(movie, reasonText)));
     }
-    submitMode3ToServer(archetypeKey, archetype.title, archetype.charName);
+    submitMode3ToServer(archetypeKey, archetype.title, char.name);
 
     $('#mode3PickPanel').style.display='none';
     $('#mode3ResultPanel').style.display='block';
