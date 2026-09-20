@@ -1419,14 +1419,6 @@ async function computeTmdbRecommendations(){
     params['primary_release_date.lte'] = (manual.decade + 9) + '-12-31';
   }
 
-  // OTT 선택 (직접 선택 안 했으면 건너뜀) — provider ID는 하드코딩 없이 loadProviderIds()로 실시간 조회한 값.
-  // 결과 화면을 "구독 중인 OTT" / "그 외"로 나눠 보여주기 위해, discover 자체는 OTT로 제한하지 않고
-  // 아래에서 OTT로 제한한 별도 조회 결과를 후보 풀에 합쳐서(부족하지 않게) 최종 분류만 여기서 해요.
-  const manualOttIds = (manual.ott||[]).map(k=> providerIds[k]).filter(Boolean);
-  const ottParams = manualOttIds.length
-    ? {...params, with_watch_providers: manualOttIds.join('|'), watch_region: state.country, with_watch_monetization_types: 'flatrate'}
-    : null;
-
   // 영화 유형 — 단편은 짧은 러닝타임으로, 독립영화는 TMDB 키워드로 근사해요
   if(manual.type==='short'){
     params['with_runtime.lte'] = Math.min(manual.runtime || 999, 40);
@@ -1436,6 +1428,17 @@ async function computeTmdbRecommendations(){
     const indieKwId = await fetchKeywordId('independent film');
     if(indieKwId) params.with_keywords = params.with_keywords ? params.with_keywords+'|'+indieKwId : String(indieKwId);
   }
+
+  // OTT 선택 (직접 선택 안 했으면 건너뜀) — provider ID는 하드코딩 없이 loadProviderIds()로 실시간 조회한 값.
+  // 결과 화면을 "구독 중인 OTT" / "그 외"로 나눠 보여주기 위해, discover 자체는 OTT로 제한하지 않고
+  // 아래에서 OTT로 제한한 별도 조회 결과를 후보 풀에 합쳐서(부족하지 않게) 최종 분류만 여기서 해요.
+  // params를 여기서 복사해야 장르·러닝타임·개봉연도·영화 유형(위에서 다 설정된 상태)이 OTT
+  // 보강 조회에도 똑같이 반영돼요 — 예전엔 영화 유형 설정 "전에" 복사해서 단편/독립영화를
+  // 같이 고르면 OTT 보강 조회에는 그 조건이 빠지는 버그가 있었음.
+  const manualOttIds = (manual.ott||[]).map(k=> providerIds[k]).filter(Boolean);
+  const ottParams = manualOttIds.length
+    ? {...params, with_watch_providers: manualOttIds.join('|'), watch_region: state.country, with_watch_monetization_types: 'flatrate'}
+    : null;
 
   let results = (await tmdbDiscover(params)).filter(m=> m.id !== base.tmdbId);
 
@@ -2275,12 +2278,6 @@ async function runMode2Recommend(){
       params['primary_release_date.gte'] = mode2State.decade + '-01-01';
       params['primary_release_date.lte'] = (mode2State.decade + 9) + '-12-31';
     }
-    // OTT를 고르셨어도 discover 자체는 제한하지 않고, "구독 중" / "그 외" 분류용으로
-    // OTT로 제한한 후보를 별도 조회해서 풀에 보강만 해요 (모드1과 동일한 패턴)
-    const ottIds = mode2State.ott.map(k=>providerIds[k]).filter(Boolean);
-    const ottParams = ottIds.length
-      ? {...params, with_watch_providers: ottIds.join('|'), watch_region: state.country, with_watch_monetization_types: 'flatrate'}
-      : null;
     // "나만 안 본 것 같은 영화"/"아무도 안 본 것 같은 영화" — 대중성 축(vote_count·평점 기준)을 다르게 조회
     if(mode2State.fame==='mainstream'){
       params['vote_count.gte'] = 1000;
@@ -2292,6 +2289,16 @@ async function runMode2Recommend(){
       const indieKwId = await fetchKeywordId('independent film');
       if(indieKwId) params.with_keywords = params.with_keywords ? params.with_keywords+'|'+indieKwId : String(indieKwId);
     }
+
+    // OTT를 고르셨어도 discover 자체는 제한하지 않고, "구독 중" / "그 외" 분류용으로
+    // OTT로 제한한 후보를 별도 조회해서 풀에 보강만 해요 (모드1과 동일한 패턴). params를 여기서
+    // 복사해야 무드(장르)·러닝타임·개봉연도·대중성(fame, 위에서 다 설정된 상태)이 OTT 보강 조회에도
+    // 똑같이 반영돼요 — 예전엔 fame 설정 "전에" 복사해서 OTT+대중성을 같이 고르면 OTT 보강
+    // 조회엔 대중성 조건이 빠지는 버그가 있었음.
+    const ottIds = mode2State.ott.map(k=>providerIds[k]).filter(Boolean);
+    const ottParams = ottIds.length
+      ? {...params, with_watch_providers: ottIds.join('|'), watch_region: state.country, with_watch_monetization_types: 'flatrate'}
+      : null;
 
     let results = await tmdbDiscover(params);
     // OTT로 제한한 후보는 따로 들고 있다가 아래 pool 구성에서 맨 앞에 배치해요 — 그냥 results
