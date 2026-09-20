@@ -1458,19 +1458,20 @@ async function computeTmdbRecommendations(){
     }catch(e){}
   }
 
-  // OTT를 고르셨으면, 그 OTT로 제한한 후보도 별도로 더 뽑아 풀에 합쳐요 —
-  // 나중에 "구독 중인 OTT" 그룹이 비지 않도록 보강하는 용도예요 (아래에서 분류만 함)
+  // OTT를 고르셨으면, 그 OTT로 제한한 후보를 별도로 더 뽑아요. 그냥 results 뒤에 이어붙이면
+  // 인기도 높은 신작(아직 스트리밍 어디에도 없는 개봉 예정작 등)이 이미 앞자리를 다 채워서,
+  // 상세 조회 대상(top)에 OTT 후보가 아예 못 들어가는 문제가 있었음(구독 중 OTT 그룹이 텅 비고
+  // 스트리밍 정보 없는 영화만 나오던 버그의 원인). 그래서 따로 들고 있다가 아래에서 우선 배치함.
+  let ottResults = [];
   if(ottParams){
     try{
-      const ottResults = await tmdbDiscover(ottParams);
-      const seen = new Set(results.map(r=>r.id));
-      ottResults.forEach(m=>{ if(m.id!==base.tmdbId && !seen.has(m.id)){ results.push(m); seen.add(m.id); } });
+      ottResults = (await tmdbDiscover(ottParams)).filter(m=> m.id !== base.tmdbId);
     }catch(e){}
   }
 
   // 조건이 너무 좁아 결과가 부족하면 장르만 남기고 완화해서 재조회
   // (직접 고른 러닝타임·영화 유형·장르는 완화 단계에서도 계속 지켜요)
-  if(results.length < 4){
+  if(results.length + ottResults.length < 4){
     const loose = { sort_by:'popularity.desc', 'vote_count.gte':20, page:1 };
     if(params.with_genres) loose.with_genres = params.with_genres;
     else if(base.genreIds && base.genreIds.length) loose.with_genres = base.genreIds.join('|');
@@ -1487,8 +1488,14 @@ async function computeTmdbRecommendations(){
     more.forEach(m=>{ if(!seen.has(m.id)){ results.push(m); seen.add(m.id); } });
   }
 
-  // OTT를 고르셨으면 "구독 중" / "그 외" 두 그룹을 각각 채워야 해서 후보를 조금 더 넉넉히 봐요
-  const top = results.slice(0, manualOttIds.length ? 12 : 8);
+  // OTT를 고르셨으면 "구독 중"/"그 외" 두 그룹을 각각 채워야 하는데, OTT로 제한한 후보(ottResults)를
+  // 먼저 넣어서 상세 조회 대상에서 밀리지 않게 하고, 일반 후보(results)를 그 뒤에 섞어 "그 외" 그룹도
+  // 채울 수 있게 해요. OTT를 안 골랐으면 기존과 동일하게 results만 사용.
+  const seenPool = new Set();
+  const top = [];
+  ottResults.slice(0, 8).concat(results.slice(0, 8)).forEach(m=>{
+    if(!seenPool.has(m.id)){ top.push(m); seenPool.add(m.id); }
+  });
   const detailed = await Promise.all(top.map(async (c, idx)=>{
     const [credits, providers, ext, detail] = await Promise.all([
       apiGet('/movie/'+c.id+'/credits', {}).catch(()=>({crew:[],cast:[]})),
@@ -2287,14 +2294,14 @@ async function runMode2Recommend(){
     }
 
     let results = await tmdbDiscover(params);
+    // OTT로 제한한 후보는 따로 들고 있다가 아래 pool 구성에서 맨 앞에 배치해요 — 그냥 results
+    // 뒤에 붙이면 인기도 높은 일반 후보들이 이미 pool 자리를 다 차지해서 "구독 중인 OTT" 그룹이
+    // 비고 스트리밍 정보 없는 영화만 나오는 문제가 있었음(모드1과 동일 원인)
+    let ottResults = [];
     if(ottParams){
-      try{
-        const ottResults = await tmdbDiscover(ottParams);
-        const seen = new Set(results.map(r=>r.id));
-        ottResults.forEach(m=>{ if(!seen.has(m.id)){ results.push(m); seen.add(m.id); } });
-      }catch(e){}
+      try{ ottResults = await tmdbDiscover(ottParams); }catch(e){}
     }
-    if(results.length < 4){
+    if(results.length + ottResults.length < 4){
       const loose = { sort_by:'popularity.desc', 'vote_count.gte':20, page:1, with_genres: genreIds.join('|') };
       const more = await tmdbDiscover(loose);
       const seen = new Set(results.map(r=>r.id));
@@ -2303,9 +2310,14 @@ async function runMode2Recommend(){
 
     // "유명한 배우" / "신예 배우" 선호는 discover가 직접 지원하지 않아서, 후보를 넉넉히 뽑아
     // 캐스팅 인지도(cast 평균 popularity)로 재정렬한 뒤 상위 4개만 남겨요.
-    // OTT를 골랐으면 "구독 중"/"그 외" 두 그룹을 채워야 해서 후보를 더 넉넉히 봐요.
-    const poolSize = (mode2State.cast==='any' ? 4 : 10) + (ottIds.length ? 8 : 0);
-    const pool = results.slice(0, poolSize);
+    // OTT를 골랐으면 ottResults를 먼저 채워서 "구독 중인 OTT" 그룹이 상세 조회 대상에서 밀리지
+    // 않게 하고, 일반 후보를 그 뒤에 섞어 "그 외" 그룹도 채울 수 있게 해요.
+    const basePoolSize = mode2State.cast==='any' ? 4 : 10;
+    const seenPool = new Set();
+    const pool = [];
+    ottResults.slice(0,8).concat(results.slice(0, basePoolSize)).forEach(m=>{
+      if(!seenPool.has(m.id)){ pool.push(m); seenPool.add(m.id); }
+    });
     let cards = await Promise.all(pool.map(detailMovieForCard));
     if(mode2State.cast!=='any'){
       cards.sort((a,b)=> mode2State.cast==='famous'
