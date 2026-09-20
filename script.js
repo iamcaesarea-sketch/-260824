@@ -86,10 +86,6 @@ const I18N = {
     ottOptionHulu: '훌루',
     ottOptionMax: '맥스',
     ottOptionPrime: '아마존 프라임 비디오',
-    ottOptionUnext: 'U-NEXT',
-    ottOptionIqiyi: '아이치이',
-    ottOptionYouku: '유쿠',
-    ottOptionTencent: '텐센트 비디오',
     runtimeHourUnit: '시간',
     runtimeMinutesUnit: '분',
     saveBtn: '저장하기',
@@ -400,10 +396,6 @@ const I18N = {
     ottOptionHulu: 'Hulu',
     ottOptionMax: 'Max',
     ottOptionPrime: 'Amazon Prime Video',
-    ottOptionUnext: 'U-NEXT',
-    ottOptionIqiyi: 'iQIYI',
-    ottOptionYouku: 'Youku',
-    ottOptionTencent: 'Tencent Video',
     runtimeHourUnit: 'h',
     runtimeMinutesUnit: 'm',
     saveBtn: 'Save',
@@ -656,17 +648,11 @@ const OTT_CHIP_DEFS = {
   hulu: {key:'hulu', labelKey:'ottOptionHulu', matchNames:['Hulu']},
   max: {key:'max', labelKey:'ottOptionMax', matchNames:['Max','HBO Max']},
   prime: {key:'prime', labelKey:'ottOptionPrime', matchNames:['Amazon Prime Video','Prime Video']},
-  unext: {key:'unext', labelKey:'ottOptionUnext', matchNames:['U-NEXT']},
-  iqiyi: {key:'iqiyi', labelKey:'ottOptionIqiyi', matchNames:['iQIYI','iQiyi']},
-  youku: {key:'youku', labelKey:'ottOptionYouku', matchNames:['Youku']},
-  tencent: {key:'tencent', labelKey:'ottOptionTencent', matchNames:['Tencent Video','WeTV']},
 };
 const OTT_CHIPS_BY_COUNTRY = {
   KR: ['netflix','watcha','tving','wavve','disney','apple','prime'],
   US: ['netflix','disney','apple','hulu','max','prime'],
   GB: ['netflix','disney','apple','prime'],
-  JP: ['netflix','disney','apple','prime','unext'],
-  CN: ['iqiyi','youku','tencent'],
 };
 function currentOttChips(){
   return (OTT_CHIPS_BY_COUNTRY[state.country] || OTT_CHIPS_BY_COUNTRY.KR).map(k=> OTT_CHIP_DEFS[k]);
@@ -805,12 +791,12 @@ const ASPECT_KEYS = ['direction','script','originality','theme','miseEnScene','a
 const STEP3_ASPECT_KEYS = ['genre','direction','script','theme','miseEnScene','immersion'];
 const EXTRA_ASPECT_KEYS = ['originality','acting','editing','music'];
 /* 국가 선택이 화면 언어도 함께 결정해요 — 사이트엔 한/영 번역만 있어서, 한국 외 국가는
-   전부 영어 UI로 보여줘요(중국·일본어 번역은 아직 없음). OTT 목록·검색 결과 지역은
-   국가별로 정확히 반영돼요(watch_region). */
-const COUNTRY_LANG = { KR:'ko', CN:'en', JP:'en', US:'en', GB:'en' };
+   전부 영어 UI로 보여줘요. OTT 목록·검색 결과 지역은 국가별로 정확히 반영돼요(watch_region).
+   중국·일본은 번역도 없고 OTT provider 매칭도 확인 안 돼서 국가 목록에서 제외함(2026-09-20). */
+const COUNTRY_LANG = { KR:'ko', US:'en', GB:'en' };
 const COUNTRY_NAMES = {
-  ko: { KR:'한국', CN:'중국', JP:'일본', US:'미국', GB:'영국' },
-  en: { KR:'Korea', CN:'China', JP:'Japan', US:'United States', GB:'United Kingdom' },
+  ko: { KR:'한국', US:'미국', GB:'영국' },
+  en: { KR:'Korea', US:'United States', GB:'United Kingdom' },
 };
 let state = {
   movie:null, rating:0, reviewText:'',
