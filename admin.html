@@ -95,9 +95,9 @@ function modeOf(r){
   return r.mode === 'quiz' || r.mode === 'life' ? r.mode : 'similar';
 }
 function decadeStr(decade){
-  if(decade === 'classic') return '고전영화(1980년 이전)';
-  if(decade) return decade + '년대';
-  return '상관없음';
+  const list = Array.isArray(decade) ? decade : (decade!=null ? [decade] : []);
+  if(!list.length) return '상관없음';
+  return list.map(d=> d==='classic' ? '고전영화(1980년 이전)' : d+'년대').join(', ');
 }
 
 function moodStr(mood){
@@ -115,8 +115,8 @@ function filtersStr(f){
   const parts = [];
   if(f.genres && f.genres.length) parts.push('장르: '+f.genres.join(', '));
   if(f.runtime) parts.push('러닝타임 ≤'+f.runtime+'분');
-  if(f.decade === 'classic') parts.push('고전영화(1980년 이전)');
-  else if(f.decade) parts.push(f.decade+'년대');
+  const decStr = decadeStr(f.decades || f.decade);
+  if(decStr !== '상관없음') parts.push(decStr);
   if(f.type && f.type!=='all') parts.push('유형: '+(TYPE_LABEL[f.type]||f.type));
   if(f.ott && f.ott.length) parts.push('OTT: '+f.ott.join(', '));
   return parts.join(' · ') || '(선택 안 함)';
@@ -182,7 +182,7 @@ function renderModeCard(r){
       <div class="rc-quiz">
         <div><b>무드</b> ${moodStr(r.mood)}</div>
         <div><b>러닝타임</b> ${r.runtime ? '≤'+r.runtime+'분' : '상관없음'}</div>
-        <div><b>개봉연도</b> ${decadeStr(r.decade)}</div>
+        <div><b>개봉연도</b> ${decadeStr(r.decades || r.decade)}</div>
         <div><b>OTT</b> ${r.ott && r.ott.length ? r.ott.join(', ') : '상관없음'}</div>
         <div><b>대중성</b> ${FAME_LABEL[r.fame] || '상관없음'}</div>
         <div><b>캐스팅</b> ${CAST_LABEL[r.cast] || '상관없음'}</div>

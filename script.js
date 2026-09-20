@@ -199,9 +199,13 @@ const I18N = {
     mode3LabelStrength: '💪 당신이 갖고 있는 큰 힘은',
     mode3LabelLifeGoal: '🧭 당신은 이런 삶을 꿈꾸고 있어요',
     mode3ShareBtn: '📤 친구에게 공유해보기',
+    mode3SaveImageBtn: '🖼️ 이미지로 저장',
     mode3ShareText: (charName) => `저는 CineRec에서 인생 영화로 분석해봤더니 "${charName}" 유형이 나왔어요! 당신은 어떤 유형일까요?`,
+    mode3ShareCardEyebrow: '인생 영화로 나에 대해 분석하기',
+    mode3ShareCardFilm: (film) => `영화 <${film}>의 인물`,
     shareCopiedMsg: '링크가 복사됐어요! 카카오톡이나 메시지에 붙여넣어서 공유해보세요.',
     shareFailMsg: '공유하는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.',
+    imageSaveFailMsg: '이미지를 만드는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.',
     archetypes: {
       adventurer: {title:'모험가',
         personality:'가만히 있는 걸 못 견디는 타입이에요. 새로운 자극과 도전 앞에서 오히려 눈이 반짝이고, 망설임보다 행동이 먼저 나가는 사람이죠. 계획을 세우느라 시간을 쓰기보다는 일단 몸을 던지고 나서 부딪히며 배우는 쪽에 가까워요.',
@@ -511,9 +515,13 @@ const I18N = {
     mode3LabelStrength: '💪 The strength you carry is',
     mode3LabelLifeGoal: '🧭 This is the life you dream of',
     mode3ShareBtn: '📤 Share with a friend',
+    mode3SaveImageBtn: '🖼️ Save as image',
     mode3ShareText: (charName) => `I analyzed my taste in movies on CineRec and got the "${charName}" type! What type are you?`,
+    mode3ShareCardEyebrow: 'What My Favorite Movies Say About Me',
+    mode3ShareCardFilm: (film) => `from "${film}"`,
     shareCopiedMsg: 'Link copied! Paste it anywhere to share.',
     shareFailMsg: 'Something went wrong while sharing. Please try again.',
+    imageSaveFailMsg: 'Something went wrong while creating the image. Please try again.',
     archetypes: {
       adventurer: {title:'The Adventurer',
         personality:"You can't sit still. New thrills and challenges make your eyes light up, and you act before you hesitate. Rather than spend time planning, you'd rather jump in and learn by doing.",
@@ -810,7 +818,7 @@ let state = {
   movie:null, rating:0, reviewText:'',
   aspects: Object.fromEntries(ASPECT_KEYS.map(k=>[k,3])),
   lang:'ko', country:'KR', lastPositive:true,
-  manualFilters: { genres:[], runtime:null, type:'all', decade:null, ott:[] },
+  manualFilters: { genres:[], runtime:null, type:'all', decades:[], ott:[] },
 };
 let history = [];
 let savedRecs = [];
@@ -943,6 +951,7 @@ function applyStaticI18n(){
   $('#mode3Restart').textContent = t('mode3RestartBtn');
   $('#mode3RecLabel').textContent = t('mode3RecLabel');
   $('#mode3ShareBtn').textContent = t('mode3ShareBtn');
+  $('#mode3SaveImageBtn').textContent = t('mode3SaveImageBtn');
   if($('#mode3Root').classList.contains('show')) renderMode3PickedChips();
 }
 
@@ -1233,15 +1242,27 @@ function renderRefineStep(){
 
   const decadeBox = $('#decadeChips');
   decadeBox.innerHTML = '';
-  DECADE_OPTIONS.forEach(opt=>{
+  const decadeAnyChip = document.createElement('button');
+  decadeAnyChip.type = 'button';
+  decadeAnyChip.className = 'chip' + (state.manualFilters.decades.length===0 ? ' selected' : '');
+  decadeAnyChip.textContent = t('decadeOptionAny');
+  decadeAnyChip.onclick = ()=>{
+    state.manualFilters.decades = [];
+    decadeBox.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+    decadeAnyChip.classList.add('selected');
+  };
+  decadeBox.appendChild(decadeAnyChip);
+  DECADE_OPTIONS.filter(opt=> opt.value!==null).forEach(opt=>{
     const chip = document.createElement('button');
     chip.type = 'button';
-    chip.className = 'chip' + (state.manualFilters.decade===opt.value ? ' selected' : '');
+    chip.className = 'chip' + (state.manualFilters.decades.includes(opt.value) ? ' selected' : '');
     chip.textContent = t(opt.key);
     chip.onclick = ()=>{
-      state.manualFilters.decade = opt.value;
-      decadeBox.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
-      chip.classList.add('selected');
+      const i = state.manualFilters.decades.indexOf(opt.value);
+      if(i===-1) state.manualFilters.decades.push(opt.value);
+      else state.manualFilters.decades.splice(i,1);
+      chip.classList.toggle('selected');
+      decadeAnyChip.classList.toggle('selected', state.manualFilters.decades.length===0);
     };
     decadeBox.appendChild(chip);
   });
@@ -1296,7 +1317,7 @@ $('#toStep4').onclick = ()=>{
 };
 $('#back3').onclick = ()=> showStep(3);
 $('#skipRefine').onclick = ()=>{
-  state.manualFilters = { genres:[], runtime:null, type:'all', decade:null, ott:[] };
+  state.manualFilters = { genres:[], runtime:null, type:'all', decades:[], ott:[] };
   runRecommend();
 };
 $('#toStep5').onclick = ()=> runRecommend();
@@ -1351,6 +1372,24 @@ function getLikedDisliked(){
 async function tmdbDiscover(params){
   const data = await apiGet('/discover/movie', params);
   return data.results || [];
+}
+
+/* 개봉연도를 복수 선택할 수 있어서(고전영화+2020년대처럼 이어지지 않는 조합도 가능) — TMDB discover는
+   gte/lte 구간을 한 번에 하나만 받을 수 있어 한 번의 요청으로 표현이 안 돼요. 그래서 선택한 연대마다
+   따로 조회해서 합쳐요. 연대를 안 골랐으면(decadeRanges 비어있음) 기존과 동일하게 한 번만 조회해요. */
+function decadeDateRange(decadeValue){
+  if(decadeValue === 'classic') return {'primary_release_date.lte': '1979-12-31'};
+  return {'primary_release_date.gte': decadeValue+'-01-01', 'primary_release_date.lte': (decadeValue+9)+'-12-31'};
+}
+async function discoverAcrossDecades(baseParams, decadeRanges){
+  if(!decadeRanges || !decadeRanges.length) return tmdbDiscover(baseParams);
+  const seen = new Set();
+  const merged = [];
+  for(const range of decadeRanges){
+    const results = await tmdbDiscover({...baseParams, ...range});
+    results.forEach(m=>{ if(!seen.has(m.id)){ merged.push(m); seen.add(m.id); } });
+  }
+  return merged;
 }
 
 const keywordIdCache = {};
@@ -1438,13 +1477,10 @@ async function computeTmdbRecommendations(){
     params['with_runtime.lte'] = manual.runtime;
   }
 
-  // 개봉연도(연대) 선택 (직접 선택 안 했으면 건너뜀)
-  if(manual.decade === 'classic'){
-    params['primary_release_date.lte'] = '1979-12-31';
-  }else if(manual.decade){
-    params['primary_release_date.gte'] = manual.decade + '-01-01';
-    params['primary_release_date.lte'] = (manual.decade + 9) + '-12-31';
-  }
+  // 개봉연도(연대) 선택 — 복수 선택 가능. TMDB discover는 gte/lte 구간을 한 번에 하나만 받을 수
+  // 있어서(고전영화+2020년대처럼 이어지지 않는 조합은 한 번의 요청으로 표현이 안 됨), params엔 직접
+  // 안 넣고 decadeRanges로 따로 들고 있다가 discoverAcrossDecades()에서 연대마다 조회해서 합쳐요.
+  const decadeRanges = (manual.decades||[]).map(decadeDateRange);
 
   // 영화 유형 — 단편은 짧은 러닝타임으로, 독립영화는 TMDB 키워드로 근사해요
   if(manual.type==='short'){
@@ -1467,7 +1503,7 @@ async function computeTmdbRecommendations(){
     ? {...params, with_watch_providers: manualOttIds.join('|'), watch_region: state.country, with_watch_monetization_types: 'flatrate'}
     : null;
 
-  let results = (await tmdbDiscover(params)).filter(m=> m.id !== base.tmdbId);
+  let results = (await discoverAcrossDecades(params, decadeRanges)).filter(m=> m.id !== base.tmdbId);
 
   /* 별점이 0.5·1·4·4.5·5점처럼 뚜렷한(호불호가 분명한) 경우엔, TMDB의
      "이 영화를 본 사람들이 함께 본 영화"(recommendations) 데이터도 함께 섞어서
@@ -1495,25 +1531,21 @@ async function computeTmdbRecommendations(){
   let ottResults = [];
   if(ottParams){
     try{
-      ottResults = (await tmdbDiscover(ottParams)).filter(m=> m.id !== base.tmdbId);
+      ottResults = (await discoverAcrossDecades(ottParams, decadeRanges)).filter(m=> m.id !== base.tmdbId);
     }catch(e){}
   }
 
   // 조건이 너무 좁아 결과가 부족하면 장르만 남기고 완화해서 재조회
-  // (직접 고른 러닝타임·영화 유형·장르는 완화 단계에서도 계속 지켜요)
+  // (직접 고른 러닝타임·영화 유형·장르·개봉연도는 완화 단계에서도 계속 지켜요)
   if(results.length + ottResults.length < 4){
     const loose = { sort_by:'popularity.desc', 'vote_count.gte':20, page:1 };
     if(params.with_genres) loose.with_genres = params.with_genres;
     else if(base.genreIds && base.genreIds.length) loose.with_genres = base.genreIds.join('|');
     if(params['with_runtime.lte']) loose['with_runtime.lte'] = params['with_runtime.lte'];
-    if(params['primary_release_date.gte'] || params['primary_release_date.lte']){
-      if(params['primary_release_date.gte']) loose['primary_release_date.gte'] = params['primary_release_date.gte'];
-      if(params['primary_release_date.lte']) loose['primary_release_date.lte'] = params['primary_release_date.lte'];
-    }
     if(manual.type==='indie' || manual.type==='short' || selectedExtraGenres.length){
       if(params.with_keywords) loose.with_keywords = params.with_keywords;
     }
-    const more = (await tmdbDiscover(loose)).filter(m=> m.id !== base.tmdbId);
+    const more = (await discoverAcrossDecades(loose, decadeRanges)).filter(m=> m.id !== base.tmdbId);
     const seen = new Set(results.map(r=>r.id));
     more.forEach(m=>{ if(!seen.has(m.id)){ results.push(m); seen.add(m.id); } });
   }
@@ -1719,7 +1751,7 @@ function submitReviewToServer(){
       genres: genreLabels,
       runtime: state.manualFilters.runtime,
       type: state.manualFilters.type,
-      decade: state.manualFilters.decade,
+      decades: state.manualFilters.decades,
       ott: (state.manualFilters.ott||[]).map(k=>{
         const chip = OTT_CHIP_DEFS[k];
         return chip ? t(chip.labelKey) : k;
@@ -1979,7 +2011,7 @@ $('#backToStep4').onclick = ()=>{
 $('#restart').onclick = ()=>{
   state.movie=null; state.rating=0; state.reviewText='';
   state.aspects = Object.fromEntries(ASPECT_KEYS.map(k=>[k,3]));
-  state.manualFilters = { genres:[], runtime:null, type:'all', decade:null, ott:[] };
+  state.manualFilters = { genres:[], runtime:null, type:'all', decades:[], ott:[] };
   $('#search').value='';
   $('#reviewText').value='';
   $('#toStep2').disabled = true;
@@ -2090,7 +2122,7 @@ const MOOD_OPTIONS = [
 ];
 const FAME_VALUES = ['any','mainstream','hidden'];
 const CAST_VALUES = ['any','famous','newcomer'];
-let mode2State = { mood:[], runtime:null, decade:null, ott:[], fame:'any', cast:'any' };
+let mode2State = { mood:[], runtime:null, decades:[], ott:[], fame:'any', cast:'any' };
 let mode2Setup = false;
 
 function updateMode2SubmitState(){
@@ -2133,6 +2165,35 @@ function mode2RenderMultiChipGroup(container, options, getLabel, getValue, selec
   });
 }
 
+/* 개봉연도 — 04단계와 동일하게 복수 선택 가능 (겹치지 않는 연대를 동시에 골라도 되도록) */
+function renderMode2DecadeChips(){
+  const box = $('#mode2DecadeChips');
+  box.innerHTML = '';
+  const anyChip = document.createElement('button');
+  anyChip.type = 'button';
+  anyChip.className = 'chip' + (mode2State.decades.length===0 ? ' selected' : '');
+  anyChip.textContent = t('decadeOptionAny');
+  anyChip.onclick = ()=>{
+    mode2State.decades = [];
+    box.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+    anyChip.classList.add('selected');
+  };
+  box.appendChild(anyChip);
+  DECADE_OPTIONS.filter(opt=> opt.value!==null).forEach(opt=>{
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'chip' + (mode2State.decades.includes(opt.value) ? ' selected' : '');
+    chip.textContent = t(opt.key);
+    chip.onclick = ()=>{
+      const i = mode2State.decades.indexOf(opt.value);
+      if(i===-1) mode2State.decades.push(opt.value); else mode2State.decades.splice(i,1);
+      chip.classList.toggle('selected');
+      anyChip.classList.toggle('selected', mode2State.decades.length===0);
+    };
+    box.appendChild(chip);
+  });
+}
+
 /* OTT — 04단계와 동일하게, 하드코딩 없이 loadProviderIds()로 받아온 provider ID로 복수 선택 */
 function renderMode2OttChips(){
   const box = $('#mode2OttChips');
@@ -2172,10 +2233,7 @@ function renderMode2Quiz(){
     (opt)=> t(opt.key),
     (opt)=> mode2State.runtime===opt.value,
     (opt)=>{ mode2State.runtime = opt.value; });
-  mode2RenderChipGroup($('#mode2DecadeChips'), DECADE_OPTIONS,
-    (opt)=> t(opt.key),
-    (opt)=> mode2State.decade===opt.value,
-    (opt)=>{ mode2State.decade = opt.value; });
+  renderMode2DecadeChips();
   renderMode2OttChips();
   mode2RenderChipGroup($('#mode2FameChips'), FAME_VALUES,
     (v)=> t('fameOptions')[v],
@@ -2259,7 +2317,7 @@ function submitMode2ToServer(resultTitles){
     mode: 'quiz',
     mood: mode2State.mood,
     runtime: mode2State.runtime,
-    decade: mode2State.decade,
+    decades: mode2State.decades,
     ott: mode2State.ott,
     fame: mode2State.fame,
     cast: mode2State.cast,
@@ -2300,11 +2358,8 @@ async function runMode2Recommend(){
     const genreIds = [...new Set(moods.flatMap(m=>m.genres))];
     const params = { sort_by:'popularity.desc', 'vote_count.gte':50, page:1, with_genres: genreIds.join('|') };
     if(mode2State.runtime) params['with_runtime.lte'] = mode2State.runtime;
-    if(mode2State.decade==='classic') params['primary_release_date.lte'] = '1979-12-31';
-    else if(mode2State.decade){
-      params['primary_release_date.gte'] = mode2State.decade + '-01-01';
-      params['primary_release_date.lte'] = (mode2State.decade + 9) + '-12-31';
-    }
+    // 개봉연도 복수 선택 — params엔 직접 안 넣고 decadeRanges로 따로 들고 있다가 연대마다 조회해서 합쳐요
+    const decadeRanges = (mode2State.decades||[]).map(decadeDateRange);
     // "나만 안 본 것 같은 영화"/"아무도 안 본 것 같은 영화" — 대중성 축(vote_count·평점 기준)을 다르게 조회
     if(mode2State.fame==='mainstream'){
       params['vote_count.gte'] = 1000;
@@ -2327,17 +2382,17 @@ async function runMode2Recommend(){
       ? {...params, with_watch_providers: ottIds.join('|'), watch_region: state.country, with_watch_monetization_types: 'flatrate'}
       : null;
 
-    let results = await tmdbDiscover(params);
+    let results = await discoverAcrossDecades(params, decadeRanges);
     // OTT로 제한한 후보는 따로 들고 있다가 아래 pool 구성에서 맨 앞에 배치해요 — 그냥 results
     // 뒤에 붙이면 인기도 높은 일반 후보들이 이미 pool 자리를 다 차지해서 "구독 중인 OTT" 그룹이
     // 비고 스트리밍 정보 없는 영화만 나오는 문제가 있었음(모드1과 동일 원인)
     let ottResults = [];
     if(ottParams){
-      try{ ottResults = await tmdbDiscover(ottParams); }catch(e){}
+      try{ ottResults = await discoverAcrossDecades(ottParams, decadeRanges); }catch(e){}
     }
     if(results.length + ottResults.length < 4){
       const loose = { sort_by:'popularity.desc', 'vote_count.gte':20, page:1, with_genres: genreIds.join('|') };
-      const more = await tmdbDiscover(loose);
+      const more = await discoverAcrossDecades(loose, decadeRanges);
       const seen = new Set(results.map(r=>r.id));
       more.forEach(m=>{ if(!seen.has(m.id)){ results.push(m); seen.add(m.id); } });
     }
@@ -2421,7 +2476,7 @@ function setupMode2(){
     window.scrollTo({top:0, behavior:'smooth'});
   };
   $('#mode2Restart').onclick = ()=>{
-    mode2State = { mood:[], runtime:null, decade:null, ott:[], fame:'any', cast:'any' };
+    mode2State = { mood:[], runtime:null, decades:[], ott:[], fame:'any', cast:'any' };
     $('#mode2ResultPanel').style.display='none';
     $('#mode2QuizPanel').style.display='block';
     renderMode2Quiz();
@@ -2566,23 +2621,100 @@ function submitMode3ToServer(archetypeKey, archetypeTitle, charName){
   }).catch(()=>{});
 }
 
+/* 긴 캐릭터 분석 글을 카드에 다 넣으면 이미지가 너무 길어져서, 문장 단위로 앞부분만 잘라 보여줘요.
+   마침표+공백(". ") 기준으로 자르되, 너무 짧게 잘리면(예: "이런 것도 있어요." 같은 감탄사) 어색하니
+   최소 길이(minLen)를 넘는 첫 마침표에서 끊어요. */
+function excerptText(text, maxLen, minLen){
+  if(!text || text.length<=maxLen) return text||'';
+  const cut = text.slice(0, maxLen);
+  const lastPeriod = cut.lastIndexOf('. ');
+  return (lastPeriod>=minLen ? cut.slice(0,lastPeriod+1) : cut) + '…';
+}
+
+/* 결과를 이미지로 만들어서 공유·저장할 수 있게 해요 — 화면엔 안 보이는 전용 카드(.share-card)를
+   하나 만들어서 html2canvas로 캡처해요. 실제 결과 화면 전체(버튼·다른 섹션 포함)를 그대로 캡처하면
+   너무 길고 지저분해서, 공유용으로 딱 필요한 내용만 담은 별도 레이아웃을 씀. */
+function buildMode3ShareCardEl(){
+  const r = mode3LastResult;
+  const div = document.createElement('div');
+  div.className = 'share-card';
+  div.innerHTML = `
+    <div class="share-card-brand">CINEREC</div>
+    <div>
+      <div class="share-card-eyebrow">${t('mode3ShareCardEyebrow')}</div>
+      <div class="share-card-title">${t('mode3VerdictTitle')(r.charName)}</div>
+      <div class="share-card-film">${t('mode3ShareCardFilm')(r.charFilm)}</div>
+    </div>
+    <div class="share-card-blurb">${excerptText(r.charBlurb, 160, 40)}</div>
+    <div class="share-card-footer">cinereccc.vercel.app</div>
+  `;
+  return div;
+}
+async function generateMode3ShareImage(){
+  if(typeof html2canvas === 'undefined' || !mode3LastResult) return null;
+  const card = buildMode3ShareCardEl();
+  document.body.appendChild(card);
+  try{
+    if(document.fonts && document.fonts.ready) await document.fonts.ready;
+    const canvas = await html2canvas(card, {backgroundColor:null, scale:2});
+    return await new Promise(resolve=> canvas.toBlob(resolve, 'image/png'));
+  }finally{
+    card.remove();
+  }
+}
+
 /* 친구에게 공유하기 — 카카오 개발자 앱 키가 없어도 되도록 OS 공유 시트(navigator.share)를 사용해요.
-   모바일(Android/iOS)에서는 이 시트에 카카오톡이 설치돼 있으면 공유 대상으로 자동으로 떠요.
-   지원하지 않는 브라우저(대부분의 데스크톱)에서는 클립보드 복사로 대신해요. */
+   결과 요약 이미지를 먼저 만들어서, 공유 시트가 파일 공유를 지원하면(대부분의 모바일) 그 이미지와
+   함께 공유해요. 지원 안 하면 기존처럼 텍스트+링크로, 그마저도 안 되면 클립보드 복사로 대신해요. */
 async function shareMode3Result(){
   if(!mode3LastResult) return;
   const shareText = t('mode3ShareText')(mode3LastResult.charName);
   const shareUrl = 'https://cinereccc.vercel.app/';
+  let file = null;
+  try{
+    const blob = await generateMode3ShareImage();
+    if(blob) file = new File([blob], 'cinerec-result.png', {type:'image/png'});
+  }catch(e){}
+
+  if(file && navigator.canShare && navigator.canShare({files:[file]})){
+    try{ await navigator.share({ title: t('pageTitle'), text: shareText, url: shareUrl, files:[file] }); return; }
+    catch(e){ if(e && e.name==='AbortError') return; }
+  }
   if(navigator.share){
-    try{ await navigator.share({ title: t('pageTitle'), text: shareText, url: shareUrl }); }
-    catch(e){}
-    return;
+    try{ await navigator.share({ title: t('pageTitle'), text: shareText, url: shareUrl }); return; }
+    catch(e){ if(e && e.name==='AbortError') return; }
   }
   try{
     await navigator.clipboard.writeText(shareText + ' ' + shareUrl);
     alert(t('shareCopiedMsg'));
   }catch(e){
     alert(t('shareFailMsg'));
+  }
+}
+
+/* 이미지로 저장 — 공유 시트를 거치지 않고 바로 다운로드해요(데스크톱에서 특히 유용) */
+async function saveMode3ResultImage(){
+  if(!mode3LastResult) return;
+  const btn = $('#mode3SaveImageBtn');
+  const original = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = t('loadingNote');
+  try{
+    const blob = await generateMode3ShareImage();
+    if(!blob){ alert(t('imageSaveFailMsg')); return; }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'cinerec-'+(mode3LastResult.archetypeKey||'result')+'.png';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=> URL.revokeObjectURL(url), 5000);
+  }catch(e){
+    alert(t('imageSaveFailMsg'));
+  }finally{
+    btn.disabled = false;
+    btn.textContent = original;
   }
 }
 
@@ -2638,7 +2770,7 @@ async function runMode3Analyze(){
         </div>
       </div>
     `;
-    mode3LastResult = { archetypeKey, charName: char.name };
+    mode3LastResult = { archetypeKey, charName: char.name, charFilm: char.film, charBlurb: char.blurb };
     const list = $('#mode3RecList');
     list.innerHTML='';
     if(bucket){
@@ -2687,6 +2819,7 @@ function setupMode3(){
     window.scrollTo({top:0, behavior:'smooth'});
   };
   $('#mode3ShareBtn').onclick = shareMode3Result;
+  $('#mode3SaveImageBtn').onclick = saveMode3ResultImage;
   $('#mode3Restart').onclick = ()=>{
     mode3Picked = [];
     $('#mode3Search').value='';
