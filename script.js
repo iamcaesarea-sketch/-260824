@@ -202,7 +202,6 @@ const I18N = {
     mode3SaveImageBtn: '🖼️ 이미지로 저장',
     mode3ShareText: (charName) => `저는 CineRec에서 인생 영화로 분석해봤더니 "${charName}" 유형이 나왔어요! 당신은 어떤 유형일까요?`,
     mode3ShareCardEyebrow: '인생 영화로 나에 대해 분석하기',
-    mode3ShareCardFilm: (film) => `영화 <${film}>의 인물`,
     shareCopiedMsg: '링크가 복사됐어요! 카카오톡이나 메시지에 붙여넣어서 공유해보세요.',
     shareFailMsg: '공유하는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.',
     imageSaveFailMsg: '이미지를 만드는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.',
@@ -518,7 +517,6 @@ const I18N = {
     mode3SaveImageBtn: '🖼️ Save as image',
     mode3ShareText: (charName) => `I analyzed my taste in movies on CineRec and got the "${charName}" type! What type are you?`,
     mode3ShareCardEyebrow: 'What My Favorite Movies Say About Me',
-    mode3ShareCardFilm: (film) => `from "${film}"`,
     shareCopiedMsg: 'Link copied! Paste it anywhere to share.',
     shareFailMsg: 'Something went wrong while sharing. Please try again.',
     imageSaveFailMsg: 'Something went wrong while creating the image. Please try again.',
@@ -2621,45 +2619,47 @@ function submitMode3ToServer(archetypeKey, archetypeTitle, charName){
   }).catch(()=>{});
 }
 
-/* 긴 캐릭터 분석 글을 카드에 다 넣으면 이미지가 너무 길어져서, 문장 단위로 앞부분만 잘라 보여줘요.
-   마침표+공백(". ") 기준으로 자르되, 너무 짧게 잘리면(예: "이런 것도 있어요." 같은 감탄사) 어색하니
-   최소 길이(minLen)를 넘는 첫 마침표에서 끊어요. */
-function excerptText(text, maxLen, minLen){
-  if(!text || text.length<=maxLen) return text||'';
-  const cut = text.slice(0, maxLen);
-  const lastPeriod = cut.lastIndexOf('. ');
-  return (lastPeriod>=minLen ? cut.slice(0,lastPeriod+1) : cut) + '…';
-}
-
-/* 결과를 이미지로 만들어서 공유·저장할 수 있게 해요 — 화면엔 안 보이는 전용 카드(.share-card)를
-   하나 만들어서 html2canvas로 캡처해요. 실제 결과 화면 전체(버튼·다른 섹션 포함)를 그대로 캡처하면
-   너무 길고 지저분해서, 공유용으로 딱 필요한 내용만 담은 별도 레이아웃을 씀. */
-function buildMode3ShareCardEl(){
-  const r = mode3LastResult;
-  const div = document.createElement('div');
-  div.className = 'share-card';
-  div.innerHTML = `
-    <div class="share-card-brand">CINEREC</div>
-    <div>
-      <div class="share-card-eyebrow">${t('mode3ShareCardEyebrow')}</div>
-      <div class="share-card-title">${t('mode3VerdictTitle')(r.charName)}</div>
-      <div class="share-card-film">${t('mode3ShareCardFilm')(r.charFilm)}</div>
-    </div>
-    <div class="share-card-blurb">${excerptText(r.charBlurb, 160, 40)}</div>
-    <div class="share-card-footer">cinereccc.vercel.app</div>
-  `;
-  return div;
-}
+/* 결과를 이미지로 만들어서 공유·저장할 수 있게 해요 — 요약본을 따로 만드는 대신, 실제 결과 화면의
+   "공통점" 배너(#mode3Common)와 분석 박스(#mode3Verdict)를 그대로 복제해서 캡처해요(페이지 캡처처럼
+   전문이 다 나오게). 버튼·이전/다시 고르기·추천 영화 카드처럼 이미지에선 어차피 못 누르는 UI는
+   빼고, 위아래에 브랜드 표시만 살짝 붙여요. */
 async function generateMode3ShareImage(){
-  if(typeof html2canvas === 'undefined' || !mode3LastResult) return null;
-  const card = buildMode3ShareCardEl();
-  document.body.appendChild(card);
+  if(typeof html2canvas === 'undefined') return null;
+  const common = document.getElementById('mode3Common');
+  const verdict = document.getElementById('mode3Verdict');
+  if(!common || !verdict) return null;
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'share-capture';
+
+  const brand = document.createElement('div');
+  brand.className = 'share-capture-brand';
+  brand.textContent = 'CINEREC · ' + t('mode3ShareCardEyebrow');
+  wrapper.appendChild(brand);
+
+  const commonClone = common.cloneNode(true);
+  const verdictClone = verdict.cloneNode(true);
+  // #mode3Verdict의 padding/display는 id 선택자 CSS라 clone에서 id를 유지하면 중복 id가 생기니,
+  // 같은 값을 직접 인라인으로 적용해서 스타일은 그대로 가져가요.
+  verdictClone.removeAttribute('id');
+  verdictClone.style.display = 'block';
+  verdictClone.style.padding = '26px 22px';
+  commonClone.removeAttribute('id');
+  wrapper.appendChild(commonClone);
+  wrapper.appendChild(verdictClone);
+
+  const footer = document.createElement('div');
+  footer.className = 'share-capture-footer';
+  footer.textContent = 'cinereccc.vercel.app';
+  wrapper.appendChild(footer);
+
+  document.body.appendChild(wrapper);
   try{
     if(document.fonts && document.fonts.ready) await document.fonts.ready;
-    const canvas = await html2canvas(card, {backgroundColor:null, scale:2});
+    const canvas = await html2canvas(wrapper, {backgroundColor:'#0a0d12', scale:2});
     return await new Promise(resolve=> canvas.toBlob(resolve, 'image/png'));
   }finally{
-    card.remove();
+    wrapper.remove();
   }
 }
 
@@ -2770,7 +2770,7 @@ async function runMode3Analyze(){
         </div>
       </div>
     `;
-    mode3LastResult = { archetypeKey, charName: char.name, charFilm: char.film, charBlurb: char.blurb };
+    mode3LastResult = { archetypeKey, charName: char.name };
     const list = $('#mode3RecList');
     list.innerHTML='';
     if(bucket){

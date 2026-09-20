@@ -204,7 +204,7 @@ button:disabled{opacity:0.35; cursor:not-allowed; box-shadow:none; transform:non
 .result-other-section{margin-top:28px; padding-top:24px; border-top:2px solid var(--line);}
 #mode3Verdict{display:block; padding:26px 22px;}
 .mode3-verdict-title{font-size:21px; font-weight:800; color:var(--text); line-height:1.5; margin-bottom:14px;}
-.mode3-hl{color:var(--accent); font-weight:800;}
+.mode3-hl{color:#4da3ff; font-weight:800;}
 .mode3-char-blurb{
   margin:10px 0 2px; padding:16px 18px; border-radius:var(--radius-md);
   background:var(--bg); border:1px solid var(--line); line-height:1.8; color:var(--text-dim); font-size:13px;
@@ -219,23 +219,17 @@ button:disabled{opacity:0.35; cursor:not-allowed; box-shadow:none; transform:non
 }
 .mode3-common b{color:var(--text);}
 
-/* 공유용 결과 카드 — 화면엔 안 보이고(position:fixed로 화면 밖에 배치) html2canvas로 캡처해서
-   이미지로 저장하거나 공유할 때만 쓰여요. 카드 자체는 CineRec 브랜드 톤(다크+마룬)을 그대로 씀 */
-.share-card{
-  position:fixed; left:-9999px; top:0; width:600px; padding:56px 44px; box-sizing:border-box;
+/* 결과 이미지 저장/공유용 캡처 래퍼 — 화면엔 안 보이고(position:fixed로 화면 밖에 배치)
+   #mode3Common·#mode3Verdict를 그대로 복제해 넣은 뒤 html2canvas로 캡처할 때만 쓰여요.
+   내용 자체 스타일(.mode3-common, .verdict, .mode3-trait 등)은 기존 클래스를 그대로 물려받고,
+   여긴 위아래 브랜드 표시와 여백만 담당해요. */
+.share-capture{
+  position:fixed; left:-9999px; top:0; width:680px; box-sizing:border-box;
   background:linear-gradient(160deg, #0a0d12 0%, #1a0708 100%); font-family:'Pretendard', sans-serif;
-  display:flex; flex-direction:column; gap:28px; color:var(--text);
+  padding:40px 32px 48px; color:var(--text);
 }
-.share-card-brand{font-size:15px; font-weight:800; letter-spacing:0.3em; color:var(--text-dim);}
-.share-card-eyebrow{font-size:14px; color:var(--text-dim); margin-bottom:10px;}
-.share-card-title{font-size:32px; font-weight:800; line-height:1.5;}
-.share-card-title .mode3-hl{color:var(--accent);}
-.share-card-film{font-size:15px; color:var(--text-dim); margin-top:8px;}
-.share-card-blurb{
-  margin-top:24px; padding:22px 24px; border-radius:var(--radius-md);
-  background:rgba(255,255,255,0.04); border:1px solid var(--line); line-height:1.85; font-size:15px; color:var(--text-dim);
-}
-.share-card-footer{font-size:13px; color:var(--text-dim); letter-spacing:0.05em; text-align:right;}
+.share-capture-brand{font-size:13px; font-weight:800; letter-spacing:0.15em; color:var(--text-dim); margin-bottom:24px;}
+.share-capture-footer{margin-top:32px; font-size:13px; color:var(--text-dim); letter-spacing:0.05em; text-align:right;}
 
 .ticket{
   position:relative; display:flex; flex-direction:column; background:var(--bg-alt); border:2px solid var(--line); border-radius:var(--radius-lg);
