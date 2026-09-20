@@ -119,6 +119,8 @@ const I18N = {
     streamingNone: '스트리밍 정보 없음',
     imdbLinkText: 'IMDB에서 보기 ↗',
     disclaimerText: (countryName) => `※ 영화 목록·감독/각본/편집/음악/배우·OTT 제공처(${countryName})·IMDB 링크는 전부 서버를 통해 실시간으로 받아온 데이터예요. "주제"와 "독창성"은 전용 데이터가 없어서 키워드 유사도로 근사했어요.`,
+    resultOttSectionTitle: (names) => `🍿 ${names}에서 볼 수 있어요`,
+    resultOtherSectionTitle: (names) => `${names}엔 없지만, 이런 영화는 어떠세요?`,
     restartBtn: '다른 영화 리뷰하기',
     recsGalleryBtn: '📝 추천 받았던 영화',
     recsSortDate: '날짜별로 보기',
@@ -398,6 +400,8 @@ const I18N = {
     streamingNone: 'No streaming info',
     imdbLinkText: 'View on IMDB ↗',
     disclaimerText: (countryName) => `※ Movie listings, director/writer/editor/composer/cast, OTT availability (${countryName}), and IMDB links are all fetched live from the server. "Theme" and "Originality" have no dedicated data, so they're approximated with keyword similarity.`,
+    resultOttSectionTitle: (names) => `🍿 Available on ${names}`,
+    resultOtherSectionTitle: (names) => `Not on ${names}, but how about these?`,
     restartBtn: 'Review Another Movie',
     recsGalleryBtn: '📝 Movies Recommended to You',
     recsSortDate: 'Sort by date',
@@ -633,6 +637,17 @@ const OTT_CHIPS_BY_COUNTRY = {
 };
 function currentOttChips(){
   return (OTT_CHIPS_BY_COUNTRY[state.country] || OTT_CHIPS_BY_COUNTRY.KR).map(k=> OTT_CHIP_DEFS[k]);
+}
+/* 결과 화면에서 "구독 중인 OTT" / "그 외" 두 그룹으로 나누기 위한 헬퍼 —
+   discover 자체를 OTT로 제한하지 않고, 후보마다 실시간 조회한 providers(이름 배열)를
+   matchNames와 대조해서 분류해요. */
+function selectedOttLabel(keys){
+  return (keys||[]).map(k=> OTT_CHIP_DEFS[k] && t(OTT_CHIP_DEFS[k].labelKey)).filter(Boolean).join(', ');
+}
+function movieOnSelectedOtt(providerNames, keys){
+  if(!keys || !keys.length) return false;
+  const allowed = keys.flatMap(k=> (OTT_CHIP_DEFS[k]&&OTT_CHIP_DEFS[k].matchNames)||[]).map(n=>n.toLowerCase());
+  return (providerNames||[]).some(p=> allowed.includes((p||'').toLowerCase()));
 }
 
 async function loadProviderIds(){
@@ -1404,13 +1419,13 @@ async function computeTmdbRecommendations(){
     params['primary_release_date.lte'] = (manual.decade + 9) + '-12-31';
   }
 
-  // OTT 선택 (직접 선택 안 했으면 건너뜀) — provider ID는 하드코딩 없이 loadProviderIds()로 실시간 조회한 값
+  // OTT 선택 (직접 선택 안 했으면 건너뜀) — provider ID는 하드코딩 없이 loadProviderIds()로 실시간 조회한 값.
+  // 결과 화면을 "구독 중인 OTT" / "그 외"로 나눠 보여주기 위해, discover 자체는 OTT로 제한하지 않고
+  // 아래에서 OTT로 제한한 별도 조회 결과를 후보 풀에 합쳐서(부족하지 않게) 최종 분류만 여기서 해요.
   const manualOttIds = (manual.ott||[]).map(k=> providerIds[k]).filter(Boolean);
-  if(manualOttIds.length){
-    params.with_watch_providers = manualOttIds.join('|');
-    params.watch_region = state.country;
-    params.with_watch_monetization_types = 'flatrate';
-  }
+  const ottParams = manualOttIds.length
+    ? {...params, with_watch_providers: manualOttIds.join('|'), watch_region: state.country, with_watch_monetization_types: 'flatrate'}
+    : null;
 
   // 영화 유형 — 단편은 짧은 러닝타임으로, 독립영화는 TMDB 키워드로 근사해요
   if(manual.type==='short'){
@@ -1443,6 +1458,16 @@ async function computeTmdbRecommendations(){
     }catch(e){}
   }
 
+  // OTT를 고르셨으면, 그 OTT로 제한한 후보도 별도로 더 뽑아 풀에 합쳐요 —
+  // 나중에 "구독 중인 OTT" 그룹이 비지 않도록 보강하는 용도예요 (아래에서 분류만 함)
+  if(ottParams){
+    try{
+      const ottResults = await tmdbDiscover(ottParams);
+      const seen = new Set(results.map(r=>r.id));
+      ottResults.forEach(m=>{ if(m.id!==base.tmdbId && !seen.has(m.id)){ results.push(m); seen.add(m.id); } });
+    }catch(e){}
+  }
+
   // 조건이 너무 좁아 결과가 부족하면 장르만 남기고 완화해서 재조회
   // (직접 고른 러닝타임·영화 유형·장르는 완화 단계에서도 계속 지켜요)
   if(results.length < 4){
@@ -1457,17 +1482,13 @@ async function computeTmdbRecommendations(){
     if(manual.type==='indie' || manual.type==='short' || selectedExtraGenres.length){
       if(params.with_keywords) loose.with_keywords = params.with_keywords;
     }
-    if(params.with_watch_providers){
-      loose.with_watch_providers = params.with_watch_providers;
-      loose.watch_region = params.watch_region;
-      loose.with_watch_monetization_types = params.with_watch_monetization_types;
-    }
     const more = (await tmdbDiscover(loose)).filter(m=> m.id !== base.tmdbId);
     const seen = new Set(results.map(r=>r.id));
     more.forEach(m=>{ if(!seen.has(m.id)){ results.push(m); seen.add(m.id); } });
   }
 
-  const top = results.slice(0, 8);
+  // OTT를 고르셨으면 "구독 중" / "그 외" 두 그룹을 각각 채워야 해서 후보를 조금 더 넉넉히 봐요
+  const top = results.slice(0, manualOttIds.length ? 12 : 8);
   const detailed = await Promise.all(top.map(async (c, idx)=>{
     const [credits, providers, ext, detail] = await Promise.all([
       apiGet('/movie/'+c.id+'/credits', {}).catch(()=>({crew:[],cast:[]})),
@@ -1516,7 +1537,7 @@ async function computeTmdbRecommendations(){
   });
 
   detailed.sort((a,b)=> b.score-a.score);
-  const list = detailed.slice(0,4).map(d=>({
+  const toCard = d=>({
     movie:{
       id: d.c.id, title:d.c.title, year:(d.c.release_date||'').slice(0,4)||'?',
       director: d.director || t('unknownDirector'), actors:d.actors||[],
@@ -1528,8 +1549,60 @@ async function computeTmdbRecommendations(){
       ott: d.providers,
     },
     score:d.score, reasons:d.reasons, predictedRating:d.predictedRating,
-  }));
-  return {list, liked, disliked};
+  });
+
+  // OTT를 골랐으면 "구독 중인 OTT" / "그 외" 두 그룹으로 나눠서 반환해요
+  let list, otherList = [];
+  if(manualOttIds.length){
+    const onOtt = detailed.filter(d=> movieOnSelectedOtt(d.providers, manual.ott));
+    const offOtt = detailed.filter(d=> !movieOnSelectedOtt(d.providers, manual.ott));
+    list = onOtt.slice(0,4).map(toCard);
+    otherList = offOtt.slice(0,4).map(toCard);
+  }else{
+    list = detailed.slice(0,4).map(toCard);
+  }
+  return {list, otherList, liked, disliked, ottKeys: manual.ott||[]};
+}
+
+/* .ticket 카드 마크업 — "구독 중인 OTT" 섹션과 "그 외" 섹션에서 동일하게 재사용해요 */
+function buildResultTicket(movie, reasons, predictedRating){
+  const t2 = document.createElement('div');
+  t2.className='ticket';
+  const posterStyle = movie.poster ? `style="background-image:url('${movie.poster}')"` : '';
+  t2.innerHTML = `
+    <div class="top">
+      <div class="poster ${movie.poster?'':'noimg'}" ${posterStyle}></div>
+      <div class="head">
+        <span class="year">${movie.year}${movie.runtime ? ' · '+formatRuntime(movie.runtime) : ''}</span>
+        <h3><a href="${movie.imdbUrl}" target="_blank" rel="noopener">${movie.title}</a></h3>
+        <div class="credits"><b>${t('director')}</b> ${movie.director || t('unknownDirector')}${movie.actors && movie.actors.length ? `　<b>${t('cast')}</b> ${movie.actors.join(', ')}` : ''}</div>
+      </div>
+    </div>
+    <div class="full">
+      ${movie.overview ? `<div class="plot">${truncateOverview(movie.overview, 160)}</div>` : ''}
+      <div class="predicted"><b>${t('predictedRatingLabel')}</b> ${starGlyphs(predictedRating)} (${predictedRating})</div>
+      <div class="why"><b>${t('reasonLabel')}</b> · ${reasons.slice(0,3).join(' · ')}</div>
+      <div class="ott-badges">
+        ${movie.ott && movie.ott.length
+          ? movie.ott.map(o=>`<span class="ott-badge">${o}</span>`).join('')
+          : `<span class="ott-badge none">${t('streamingNone')}</span>`}
+      </div>
+      <div class="ticket-actions">
+        <a class="imdb-link" href="${movie.imdbUrl}" target="_blank" rel="noopener">${t('imdbLinkText')}</a>
+        <button type="button" class="save-btn">${t('saveBtn')}</button>
+      </div>
+    </div>
+  `;
+  const saveBtnEl = t2.querySelector('.save-btn');
+  saveBtnEl.onclick = ()=>{
+    saveRecToGallery(movie, reasons);
+    saveRecs();
+    renderRecsGallery();
+    saveBtnEl.textContent = t('savedBtn');
+    saveBtnEl.classList.add('saved');
+    saveBtnEl.disabled = true;
+  };
+  return t2;
 }
 
 /* =========================================================
@@ -1556,45 +1629,29 @@ function renderResult(result, positive){
   if(result.list.length===0){
     list.innerHTML = `<div class="sub">${t('noResultsFound')}</div>`;
   }
-  result.list.forEach(({movie, reasons, predictedRating})=>{
-    const t2 = document.createElement('div');
-    t2.className='ticket';
-    const posterStyle = movie.poster ? `style="background-image:url('${movie.poster}')"` : '';
-    t2.innerHTML = `
-      <div class="top">
-        <div class="poster ${movie.poster?'':'noimg'}" ${posterStyle}></div>
-        <div class="head">
-          <span class="year">${movie.year}${movie.runtime ? ' · '+formatRuntime(movie.runtime) : ''}</span>
-          <h3><a href="${movie.imdbUrl}" target="_blank" rel="noopener">${movie.title}</a></h3>
-          <div class="credits"><b>${t('director')}</b> ${movie.director || t('unknownDirector')}${movie.actors && movie.actors.length ? `　<b>${t('cast')}</b> ${movie.actors.join(', ')}` : ''}</div>
-        </div>
-      </div>
-      <div class="full">
-        ${movie.overview ? `<div class="plot">${truncateOverview(movie.overview, 160)}</div>` : ''}
-        <div class="predicted"><b>${t('predictedRatingLabel')}</b> ${starGlyphs(predictedRating)} (${predictedRating})</div>
-        <div class="why"><b>${t('reasonLabel')}</b> · ${reasons.slice(0,3).join(' · ')}</div>
-        <div class="ott-badges">
-          ${movie.ott && movie.ott.length
-            ? movie.ott.map(o=>`<span class="ott-badge">${o}</span>`).join('')
-            : `<span class="ott-badge none">${t('streamingNone')}</span>`}
-        </div>
-        <div class="ticket-actions">
-          <a class="imdb-link" href="${movie.imdbUrl}" target="_blank" rel="noopener">${t('imdbLinkText')}</a>
-          <button type="button" class="save-btn">${t('saveBtn')}</button>
-        </div>
-      </div>
-    `;
-    const saveBtnEl = t2.querySelector('.save-btn');
-    saveBtnEl.onclick = ()=>{
-      saveRecToGallery(movie, reasons);
-      saveRecs();
-      renderRecsGallery();
-      saveBtnEl.textContent = t('savedBtn');
-      saveBtnEl.classList.add('saved');
-      saveBtnEl.disabled = true;
-    };
-    list.appendChild(t2);
-  });
+  result.list.forEach(({movie, reasons, predictedRating})=> list.appendChild(buildResultTicket(movie, reasons, predictedRating)));
+
+  // OTT를 고르셨으면 결과를 "구독 중인 OTT" / "그 외" 두 그룹으로 나눠 보여줘요
+  const ottTitleEl = $('#resultOttTitle');
+  const otherSection = $('#resultOtherSection');
+  const otherList = $('#resultListOther');
+  const ottKeys = result.ottKeys || [];
+  otherList.innerHTML = '';
+  if(ottKeys.length){
+    const ottNames = selectedOttLabel(ottKeys);
+    ottTitleEl.textContent = t('resultOttSectionTitle')(ottNames);
+    ottTitleEl.style.display = '';
+    if((result.otherList||[]).length){
+      $('#resultOtherTitle').textContent = t('resultOtherSectionTitle')(ottNames);
+      result.otherList.forEach(({movie, reasons, predictedRating})=> otherList.appendChild(buildResultTicket(movie, reasons, predictedRating)));
+      otherSection.style.display = '';
+    }else{
+      otherSection.style.display = 'none';
+    }
+  }else{
+    ottTitleEl.style.display = 'none';
+    otherSection.style.display = 'none';
+  }
 
   $('#disclaimerText').textContent = t('disclaimerText')(COUNTRY_NAMES[state.lang][state.country] || state.country);
 
@@ -2211,12 +2268,12 @@ async function runMode2Recommend(){
       params['primary_release_date.gte'] = mode2State.decade + '-01-01';
       params['primary_release_date.lte'] = (mode2State.decade + 9) + '-12-31';
     }
+    // OTT를 고르셨어도 discover 자체는 제한하지 않고, "구독 중" / "그 외" 분류용으로
+    // OTT로 제한한 후보를 별도 조회해서 풀에 보강만 해요 (모드1과 동일한 패턴)
     const ottIds = mode2State.ott.map(k=>providerIds[k]).filter(Boolean);
-    if(ottIds.length){
-      params.with_watch_providers = ottIds.join('|');
-      params.watch_region = state.country;
-      params.with_watch_monetization_types = 'flatrate';
-    }
+    const ottParams = ottIds.length
+      ? {...params, with_watch_providers: ottIds.join('|'), watch_region: state.country, with_watch_monetization_types: 'flatrate'}
+      : null;
     // "나만 안 본 것 같은 영화"/"아무도 안 본 것 같은 영화" — 대중성 축(vote_count·평점 기준)을 다르게 조회
     if(mode2State.fame==='mainstream'){
       params['vote_count.gte'] = 1000;
@@ -2230,21 +2287,24 @@ async function runMode2Recommend(){
     }
 
     let results = await tmdbDiscover(params);
+    if(ottParams){
+      try{
+        const ottResults = await tmdbDiscover(ottParams);
+        const seen = new Set(results.map(r=>r.id));
+        ottResults.forEach(m=>{ if(!seen.has(m.id)){ results.push(m); seen.add(m.id); } });
+      }catch(e){}
+    }
     if(results.length < 4){
       const loose = { sort_by:'popularity.desc', 'vote_count.gte':20, page:1, with_genres: genreIds.join('|') };
-      if(params.with_watch_providers){
-        loose.with_watch_providers = params.with_watch_providers;
-        loose.watch_region = params.watch_region;
-        loose.with_watch_monetization_types = params.with_watch_monetization_types;
-      }
       const more = await tmdbDiscover(loose);
       const seen = new Set(results.map(r=>r.id));
       more.forEach(m=>{ if(!seen.has(m.id)){ results.push(m); seen.add(m.id); } });
     }
 
     // "유명한 배우" / "신예 배우" 선호는 discover가 직접 지원하지 않아서, 후보를 넉넉히 뽑아
-    // 캐스팅 인지도(cast 평균 popularity)로 재정렬한 뒤 상위 4개만 남겨요
-    const poolSize = mode2State.cast==='any' ? 4 : 10;
+    // 캐스팅 인지도(cast 평균 popularity)로 재정렬한 뒤 상위 4개만 남겨요.
+    // OTT를 골랐으면 "구독 중"/"그 외" 두 그룹을 채워야 해서 후보를 더 넉넉히 봐요.
+    const poolSize = (mode2State.cast==='any' ? 4 : 10) + (ottIds.length ? 8 : 0);
     const pool = results.slice(0, poolSize);
     let cards = await Promise.all(pool.map(detailMovieForCard));
     if(mode2State.cast!=='any'){
@@ -2252,7 +2312,15 @@ async function runMode2Recommend(){
         ? (b.castAvgPopularity||0) - (a.castAvgPopularity||0)
         : (a.castAvgPopularity||0) - (b.castAvgPopularity||0));
     }
-    cards = cards.slice(0,4);
+
+    // OTT를 골랐으면 결과를 "구독 중인 OTT" / "그 외" 두 그룹으로 나눠서 보여줘요
+    let otherCards = [];
+    if(ottIds.length){
+      otherCards = cards.filter(c=> !movieOnSelectedOtt(c.ott, mode2State.ott)).slice(0,4);
+      cards = cards.filter(c=> movieOnSelectedOtt(c.ott, mode2State.ott)).slice(0,4);
+    }else{
+      cards = cards.slice(0,4);
+    }
 
     const list = $('#mode2ResultList');
     list.innerHTML='';
@@ -2261,7 +2329,28 @@ async function runMode2Recommend(){
     }else{
       cards.forEach(movie=> list.appendChild(renderSimpleTicketCard(movie, buildMode2Reasons(movie, moods))));
     }
-    submitMode2ToServer(cards.map(c=>c.title));
+
+    const ottTitleEl = $('#mode2ResultOttTitle');
+    const otherSection = $('#mode2ResultOtherSection');
+    const otherList = $('#mode2ResultListOther');
+    otherList.innerHTML = '';
+    if(ottIds.length){
+      const ottNames = selectedOttLabel(mode2State.ott);
+      ottTitleEl.textContent = t('resultOttSectionTitle')(ottNames);
+      ottTitleEl.style.display = '';
+      if(otherCards.length){
+        $('#mode2ResultOtherTitle').textContent = t('resultOtherSectionTitle')(ottNames);
+        otherCards.forEach(movie=> otherList.appendChild(renderSimpleTicketCard(movie, buildMode2Reasons(movie, moods))));
+        otherSection.style.display = '';
+      }else{
+        otherSection.style.display = 'none';
+      }
+    }else{
+      ottTitleEl.style.display = 'none';
+      otherSection.style.display = 'none';
+    }
+
+    submitMode2ToServer([...cards, ...otherCards].map(c=>c.title));
     $('#mode2QuizPanel').style.display='none';
     $('#mode2ResultPanel').style.display='block';
     window.scrollTo({top:0, behavior:'smooth'});

@@ -23,7 +23,7 @@
   gtag('config', 'G-QWPLQLJECT');
 </script>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-<link rel="stylesheet" href="style.css?v=40">
+<link rel="stylesheet" href="style.css?v=41">
 </head>
 <body>
 
@@ -193,7 +193,12 @@
   <section class="panel" id="panel-5" style="display:none;">
     <h2 id="step5Title">이런 영화는 어떠세요?</h2>
     <div class="verdict" id="verdictBox"></div>
+    <h3 class="result-ott-title" id="resultOttTitle" style="display:none;"></h3>
     <div id="resultList"></div>
+    <div class="result-other-section" id="resultOtherSection" style="display:none;">
+      <h3 class="result-ott-title" id="resultOtherTitle"></h3>
+      <div id="resultListOther"></div>
+    </div>
     <div class="btn-row">
       <button class="ghost" id="backToStep4">이전</button>
       <button class="ghost" id="restart">다른 영화 리뷰하기</button>
@@ -285,7 +290,12 @@
 
   <section class="panel" id="mode2ResultPanel" style="display:none;">
     <h2 id="mode2ResultTitle">이런 영화 어때요?</h2>
+    <h3 class="result-ott-title" id="mode2ResultOttTitle" style="display:none;"></h3>
     <div id="mode2ResultList"></div>
+    <div class="result-other-section" id="mode2ResultOtherSection" style="display:none;">
+      <h3 class="result-ott-title" id="mode2ResultOtherTitle"></h3>
+      <div id="mode2ResultListOther"></div>
+    </div>
     <div class="btn-row">
       <button class="ghost" id="mode2Back">이전</button>
       <button class="ghost" id="mode2Restart">다시 고르기</button>
@@ -352,6 +362,6 @@
 </main>
 </div>
 
-<script src="script.js?v=32"></script>
+<script src="script.js?v=33"></script>
 </body>
 </html>
